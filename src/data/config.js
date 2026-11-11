@@ -12,6 +12,20 @@ Game.data.config = {
     speedFactor: 1.25,  // a játékos sebességéhez képest
   },
 
+  // Közreműködők (a menü "Mitwirkende" képernyője). url nélkül csak a név jelenik meg.
+  credits: {
+    art: [
+      { name: 'Pixel Crawler', by: 'Anokolisa', url: 'https://www.patreon.com/Anokolisa' },
+      { name: '16x16 Weapon RPG Icons', by: 'Shade' },
+      { name: 'Items16', by: 'Glionox' },
+      { name: 'Modern Interiors', by: 'LimeZu', url: 'https://limezu.itch.io/moderninteriors' },
+    ],
+    code: [
+      { name: 'Phaser 3', by: 'Phaser Studio', url: 'https://phaser.io' },
+      { name: 'EasyStar.js', by: 'Bryce Neal', url: 'https://easystarjs.com' },
+    ],
+  },
+
   // Rarity létra alulról felfelé. A nevek a strings.js-ben: rarity.<id>
   rarities: [
     { id: 'common1',   color: '#b8b8b8' },

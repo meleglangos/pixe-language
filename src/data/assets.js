@@ -57,6 +57,58 @@
     bones_a: ['pc_skel_death', 7 * 96 + 37, 50, 17, 14],
     bones_b: ['pc_skel_death', 6 * 96 + 37, 53, 17, 11],
   };
+  // ---------- bánya ----------
+  Object.assign(frames, {
+    // Wall_Tiles.png, szürke sziklakészlet: perem (a "gödör" 6x6-os mintájából) + rétegzett sziklafal
+    rock_top_l: t('pc_walls', 7, 19), rock_top_0: t('pc_walls', 8, 19), rock_top_1: t('pc_walls', 9, 19), rock_top_r: t('pc_walls', 10, 19),
+    rock_bot_l: t('pc_walls', 7, 24), rock_bot_0: t('pc_walls', 8, 24), rock_bot_1: t('pc_walls', 9, 24), rock_bot_r: t('pc_walls', 10, 24),
+    rock_left_t: t('pc_walls', 6, 20), rock_left_0: t('pc_walls', 6, 21), rock_left_1: t('pc_walls', 6, 22), rock_left_b: t('pc_walls', 6, 23),
+    rock_right_t: t('pc_walls', 11, 20), rock_right_0: t('pc_walls', 11, 21), rock_right_1: t('pc_walls', 11, 22), rock_right_b: t('pc_walls', 11, 23),
+    rock_in_tl: t('pc_walls', 7, 20), rock_in_tr: t('pc_walls', 10, 20), rock_in_bl: t('pc_walls', 7, 23), rock_in_br: t('pc_walls', 10, 23),
+    rock_fill: t('pc_walls', 8, 2),
+    rock_face_a0: t('pc_walls', 6, 16), rock_face_a1: t('pc_walls', 7, 16), rock_face_a2: t('pc_walls', 8, 16),
+    rock_face_b0: t('pc_walls', 6, 17), rock_face_b1: t('pc_walls', 7, 17), rock_face_b2: t('pc_walls', 8, 17),
+    // Furniture.png: sínek, pallók, lámpák, gerendák
+    rail_h: t('pc_furniture', 2, 39), rail_v: t('pc_furniture', 0, 41),
+    lamp_post: ['pc_furniture', 147, 448, 43, 46],
+    lantern: ['pc_furniture', 179, 482, 9, 14],
+    rope_post: ['pc_furniture', 148, 422, 8, 23],
+    timber_frame: ['pc_furniture', 144, 656, 54, 80],
+    // Resources.png
+    coal_pile: ['pc_resources', 11, 20, 31, 18],
+    coal_lump: ['pc_resources', 49, 17, 14, 11],
+    crate_empty: ['pc_resources', 0, 157, 15, 19],
+    crate_coal: ['pc_resources', 16, 156, 15, 20],
+    wood_post: ['pc_resources', 5, 80, 6, 32],
+    wood_beam: ['pc_resources', 16, 85, 32, 6],
+    wood_plank: ['pc_resources', 32, 68, 32, 7],
+    log_pile: ['pc_resources', 20, 97, 22, 13],
+    // Rocks.png
+    rock_big_a: ['pc_rocks', 98, 19, 28, 43],
+    rock_big_b: ['pc_rocks', 131, 19, 26, 27],
+    rock_mid_a: ['pc_rocks', 161, 19, 14, 11],
+    rock_mid_b: ['pc_rocks', 176, 17, 16, 14],
+    rock_small_a: ['pc_rocks', 144, 51, 15, 10],
+    rock_small_b: ['pc_rocks', 177, 68, 11, 9],
+    rock_small_c: ['pc_rocks', 161, 100, 11, 9],
+    pebble: ['pc_rocks', 132, 85, 8, 6],
+    ore_copper: ['pc_rocks', 101, 119, 7, 4], ore_silver: ['pc_rocks', 101, 151, 7, 4], ore_gold: ['pc_rocks', 101, 183, 7, 4],
+    ore_copper_b: ['pc_rocks', 132, 119, 7, 4], ore_silver_b: ['pc_rocks', 132, 151, 7, 4], ore_gold_b: ['pc_rocks', 132, 183, 7, 4],
+    crystal_big: ['pc_rocks', 146, 279, 12, 25],
+    crystal_mid: ['pc_rocks', 164, 284, 8, 20],
+    crystal_mid_b: ['pc_rocks', 179, 285, 10, 19],
+    crystal_small: ['pc_rocks', 197, 296, 6, 8],
+    // Tools.png
+    sledgehammer: ['pc_tools', 0, 64, 16, 16],
+    anvil: ['pc_tools', 148, 93, 26, 19],
+  });
+  for (let i = 0; i < 9; i++) {
+    // a minta felső sora átmenet-csempe (lyukas), ezért csak a két teli sort használjuk
+    frames['cobble_' + i] = t('pc_floors', 6 + ((i + Math.floor(i / 3)) % 3), 10 + (Math.floor(i / 3) % 2));
+    frames['dirt_' + i] = t('pc_floors', 11 + ((i + Math.floor(i / 3)) % 3), 10 + (Math.floor(i / 3) % 2));
+    frames['planks_' + i] = t('pc_furniture', 1 + (i % 3), 35 + Math.floor(i / 3));
+  }
+
   // 3x3-as padlóminta
   for (let i = 0; i < 9; i++) frames['floor_' + i] = t('pc_dungeon', 4 + (i % 3), Math.floor(i / 3));
   // víz: 4 képkocka, mindegyikből egy 3x3-as belső rész
@@ -64,6 +116,7 @@
 
   const strip = (path, frameWidth, frameHeight, frameRate) => ({ url: PC + path, frameWidth, frameHeight, frameRate });
   const mob = name => strip('Entities/Mobs/Skeleton Crew/Skeleton - ' + name + '/Idle/Idle-Sheet.png', 32, 32, 6);
+  const orc = name => strip('Entities/Mobs/Orc Crew/' + name + '/Idle/Idle-Sheet.png', 32, 32, 6);
 
   Game.data.assets = {
     files: {
@@ -72,6 +125,11 @@
       pc_dprops: PC + 'Environment/Props/Static/Dungeon_Props.png',
       pc_furniture: PC + 'Environment/Props/Static/Furniture.png',
       pc_skel_death: PC + 'Entities/Mobs/Skeleton Crew/Skeleton - Base/Death/Death-Sheet.png',
+      pc_walls: PC + 'Environment/Tilesets/Wall_Tiles.png',
+      pc_floors: PC + 'Environment/Tilesets/Floors_Tiles.png',
+      pc_rocks: PC + 'Environment/Props/Static/Rocks.png',
+      pc_resources: PC + 'Environment/Props/Static/Resources.png',
+      pc_tools: PC + 'Environment/Props/Static/Tools.png',
     },
     frames,
 
@@ -82,6 +140,11 @@
       skel_rogue_idle: mob('Rogue'),
       skel_warrior_idle: mob('Warrior'),
       skel_mage_idle: mob('Mage'),
+      orc_idle: orc('Orc'),
+      orc_rogue_idle: orc('Orc - Rogue'),
+      orc_warrior_idle: orc('Orc - Warrior'),
+      orc_shaman_idle: orc('Orc - Shaman'),
+      furnace: strip('Environment/Structures/Stations/Furnace/Stone_02-Sheet.png', 48, 64, 6),
       fire_big: strip('Environment/Structures/Stations/Bonfire/Fire_01-Sheet.png', 32, 48, 9),
       fire_small: strip('Environment/Structures/Stations/Bonfire/Fire_02-Sheet.png', 32, 48, 9),
       brazier: strip('Environment/Structures/Stations/Bonfire/Bonfire_01-Sheet.png', 32, 32, 7),
@@ -118,7 +181,7 @@
     // Kulcsok: tile_grass_0..2, tile_darkgrass_0..2, tile_flowers_0..1, tile_rocky_0..1, tile_sand_0..1,
     //   tile_path_0..1, tile_water_0..1, obj_tree_oak, obj_tree_pine, obj_tree_dead, obj_rock, obj_bush,
     //   obj_grave, obj_crystal, poi_home, poi_shop, poi_cave, poi_mine, poi_crypt, poi_tower,
-    //   fx_shadow, fx_marker, fx_heart, fx_light
+    //   fx_shadow, fx_marker, fx_heart, fx_light (+ fx_light_cyan/pink/green/amber/white), fx_hole, fx_dot, fx_spark
     images: {},
   };
 })();

@@ -34,6 +34,7 @@ Game.data.strings = {
   'menu.export':       { de: 'Spielstand exportieren', hu: 'Mentés exportálása' },
   'menu.import':       { de: 'Spielstand importieren', hu: 'Mentés importálása' },
   'menu.reset':        { de: 'Neues Spiel beginnen', hu: 'Új játék kezdése' },
+  'menu.credits':      { de: 'Mitwirkende', hu: 'Közreműködők' },
   'menu.controls':     { de: 'Steuerung', hu: 'Irányítás' },
   'menu.controlsText': {
     de: 'Klicke oder tippe auf die Karte, um zu laufen. WASD und die Pfeiltasten funktionieren auch.',
@@ -43,6 +44,13 @@ Game.data.strings = {
     de: 'Das Spiel speichert automatisch auf diesem Gerät.',
     hu: 'A játék automatikusan ment erre az eszközre.',
   },
+
+  // Közreműködők
+  'credits.title':   { de: 'Mitwirkende', hu: 'Közreműködők' },
+  'credits.intro':   { de: 'Dieses Spiel verwendet Grafiken und Bibliotheken von:', hu: 'Ez a játék az alábbi alkotók grafikáit és könyvtárait használja:' },
+  'credits.art':     { de: 'Grafik', hu: 'Grafika' },
+  'credits.code':    { de: 'Technik', hu: 'Technika' },
+  'credits.thanks':  { de: 'Vielen Dank an alle!', hu: 'Köszönet mindenkinek!' },
 
   // Export
   'export.title':  { de: 'Spielstand exportieren', hu: 'Mentés exportálása' },
@@ -125,6 +133,9 @@ Game.data.strings = {
   'dungeon.exitName': { de: 'Die Tür nach draußen', hu: 'A kifelé vezető ajtó' },
   'dungeon.exitDesc': { de: 'Sie führt zurück an die Oberfläche.', hu: 'Visszavezet a felszínre.' },
 
+  'dungeon.mineExitName': { de: 'Der Stollen nach draußen', hu: 'A kifelé vezető tárna' },
+  'dungeon.mineExitDesc': { de: 'Am Ende des Stollens schimmert Tageslicht.', hu: 'A tárna végén napfény dereng.' },
+
   // Szörnyek
   'mob.type': { de: 'Monster', hu: 'Szörny' },
   'mob.skeleton.name': { de: 'Das Skelett', hu: 'A csontváz' },
@@ -133,6 +144,13 @@ Game.data.strings = {
   'mob.skeleton_rogue.desc': { de: 'Unter der roten Kapuze starren dich leere Augen an.', hu: 'A piros csuklya alól üres szemek merednek rád.' },
   'mob.skeleton_warrior.name': { de: 'Der Skelett-Krieger', hu: 'A csontváz harcos' },
   'mob.skeleton_warrior.desc': { de: 'Seine Rüstung ist alt, aber immer noch stabil.', hu: 'A páncélja régi, de még mindig erős.' },
+
+  'mob.orc.name': { de: 'Der Ork', hu: 'Az ork' },
+  'mob.orc.desc': { de: 'Er bewacht die Loren und knurrt leise.', hu: 'A csilléket őrzi, és halkan morog.' },
+  'mob.orc_rogue.name': { de: 'Der Ork-Späher', hu: 'Az ork felderítő' },
+  'mob.orc_rogue.desc': { de: 'Niemand überquert die Brücke, ohne dass er es merkt.', hu: 'Senki sem kel át a hídon úgy, hogy ő ne venné észre.' },
+  'mob.orc_warrior.name': { de: 'Der Ork-Krieger', hu: 'Az ork harcos' },
+  'mob.orc_warrior.desc': { de: 'Er hat sein Lager am unterirdischen See aufgeschlagen.', hu: 'A földalatti tó partján vert tábort.' },
 
   // Láda
   'chest.type':      { de: 'Schatz', hu: 'Kincs' },

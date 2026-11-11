@@ -26,6 +26,7 @@
         const [file, x, y, w, h] = a.frames[name];
         if (this.textures.exists(file)) this.textures.get(file).add(name, 0, x, y, w, h);
       });
+      Game.gfx.buildDerived(this);
       Game.gfx.generateMissing(this);
       this.scene.start('World');
     }

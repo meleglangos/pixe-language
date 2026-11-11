@@ -276,15 +276,35 @@
       ctx.globalCompositeOperation = 'destination-out'; ell(ctx, '#000', 8, 9, 4.8, 3); ctx.globalCompositeOperation = 'source-over';
     },
   };
-  // puha fényfolt (fáklyákhoz, ADD keveréssel)
-  images.fx_light = {
-    w: 64, h: 64,
+  // puha fényfoltok (ADD keveréssel): fáklyák, kristályok, lámpák
+  const LIGHTS = {
+    fx_light: [255, 150, 70], fx_light_amber: [255, 190, 90], fx_light_cyan: [70, 200, 255],
+    fx_light_pink: [240, 90, 230], fx_light_green: [90, 240, 150], fx_light_white: [200, 220, 255], fx_light_gold: [255, 225, 130],
+  };
+  Object.keys(LIGHTS).forEach(key => {
+    const [r, g, b] = LIGHTS[key];
+    images[key] = {
+      w: 64, h: 64,
+      draw(ctx) {
+        const gr = ctx.createRadialGradient(32, 32, 2, 32, 32, 32);
+        gr.addColorStop(0, 'rgba(' + [Math.min(255, r + 40), Math.min(255, g + 40), Math.min(255, b + 40)] + ',0.55)');
+        gr.addColorStop(0.45, 'rgba(' + [r, g, b] + ',0.22)');
+        gr.addColorStop(1, 'rgba(' + [r, g, b] + ',0)');
+        ctx.fillStyle = gr; ctx.fillRect(0, 0, 64, 64);
+      },
+    };
+  });
+  // "lyuk" a sötétségbe: lépcsőzetes (pixel art-os) fénykör
+  images.fx_hole = {
+    w: 128, h: 128,
     draw(ctx) {
-      const g = ctx.createRadialGradient(32, 32, 2, 32, 32, 32);
-      g.addColorStop(0, 'rgba(255,190,110,0.55)'); g.addColorStop(0.45, 'rgba(255,130,60,0.22)'); g.addColorStop(1, 'rgba(255,90,30,0)');
-      ctx.fillStyle = g; ctx.fillRect(0, 0, 64, 64);
+      [64, 56, 48, 40, 32].forEach(r => disc(ctx, 'rgba(255,255,255,0.3)', 64, 64, r));
+      disc(ctx, '#ffffff', 64, 64, 24);
     },
   };
+  images.fx_dot = { w: 2, h: 2, draw(ctx) { R(ctx, '#ffffff', 0, 0, 2, 2); } };
+  images.fx_spark = { w: 5, h: 5, draw(ctx) { R(ctx, '#ffffff', 2, 0, 1, 5); R(ctx, '#ffffff', 0, 2, 5, 1); } };
+
   images.fx_heart = sprite(9, 9, ctx => {
     R(ctx, '#ff5a7a', 1, 2, 3, 3); R(ctx, '#ff5a7a', 5, 2, 3, 3); R(ctx, '#ff5a7a', 2, 1, 1, 1); R(ctx, '#ff5a7a', 6, 1, 1, 1);
     R(ctx, '#ff5a7a', 2, 5, 5, 1); R(ctx, '#ff5a7a', 3, 6, 3, 1); R(ctx, '#ff5a7a', 4, 7, 1, 1); R(ctx, '#ff5a7a', 4, 3, 1, 2);
@@ -372,6 +392,57 @@
   // ---------- regisztráció ----------
   Game.gfx.decorateGround = decorateGround;
   Game.gfx.ell = ell;
+
+  // A csomagok képeiből összerakott / átszínezett textúrák (a BootScene hívja a betöltés után).
+  Game.gfx.buildDerived = function (scene) {
+    const tm = scene.textures, A = Game.data.assets;
+    const src = name => { const f = A.frames[name]; return { img: tm.get(f[0]).getSourceImage(), x: f[1], y: f[2], w: f[3], h: f[4] }; };
+    const put = (ctx, name, dx, dy, flip) => {
+      const f = src(name);
+      if (flip) { ctx.save(); ctx.translate(dx + f.w, dy); ctx.scale(-1, 1); ctx.drawImage(f.img, f.x, f.y, f.w, f.h, 0, 0, f.w, f.h); ctx.restore(); }
+      else ctx.drawImage(f.img, f.x, f.y, f.w, f.h, dx, dy, f.w, f.h);
+    };
+
+    // Kristályok több színben: a csomag kék kristálya átszínezve (árnyalat-csere, a fényesség marad).
+    const hues = { pink: '#ff40e0', green: '#30ff90', amber: '#ffb020' };
+    ['crystal_big', 'crystal_mid', 'crystal_mid_b', 'crystal_small'].forEach(name => {
+      const f = src(name);
+      ['blue'].concat(Object.keys(hues)).forEach(color => {
+        const key = name + '_' + color;
+        if (tm.exists(key)) return;
+        const tex = tm.createCanvas(key, f.w, f.h), c = tex.getContext();
+        put(c, name, 0, 0);
+        if (hues[color]) {
+          c.globalCompositeOperation = 'hue'; c.fillStyle = hues[color]; c.fillRect(0, 0, f.w, f.h);
+          c.globalCompositeOperation = 'destination-in'; put(c, name, 0, 0);
+          c.globalCompositeOperation = 'source-over';
+        }
+        tex.refresh();
+      });
+    });
+
+    // Lámpaoszlop: a kivágásba belelóg egy külön álló lámpás, azt levágjuk.
+    if (!tm.exists('lamp_post')) {
+      const tex = tm.createCanvas('lamp_post', 43, 46), c = tex.getContext();
+      put(c, 'lamp_post', 0, 0); c.clearRect(28, 30, 15, 16);
+      tex.refresh();
+    }
+
+    // A bánya bejárata a világtérképen: sziklák, gerendakeret, kristályok, lámpás.
+    if (!tm.exists('poi_mine')) {
+      const tex = tm.createCanvas('poi_mine', 48, 56), c = tex.getContext();
+      put(c, 'rock_big_a', -2, 10); put(c, 'rock_big_a', 22, 10, true); put(c, 'rock_big_b', 11, 4);
+      put(c, 'rock_mid_b', 0, 40); put(c, 'rock_mid_b', 33, 41, true);
+      c.fillStyle = '#0d0f14'; c.fillRect(15, 26, 18, 30); c.fillRect(17, 24, 14, 2);
+      put(c, 'wood_post', 12, 24); put(c, 'wood_post', 30, 24); put(c, 'wood_beam', 8, 20);
+      put(c, 'lantern', 20, 27);
+      c.drawImage(tm.get('crystal_mid_blue').getSourceImage(), 3, 30);
+      c.drawImage(tm.get('crystal_small_pink').getSourceImage(), 39, 44);
+      c.drawImage(tm.get('crystal_small_blue').getSourceImage(), 10, 46);
+      c.fillStyle = 'rgba(20,30,20,0.25)'; c.globalCompositeOperation = 'destination-over'; c.fillRect(2, 53, 44, 3); c.globalCompositeOperation = 'source-over';
+      tex.refresh();
+    }
+  };
 
   // Egy névvel ellátott kivágás (assets.js: frames) rajzolása canvasra.
   Game.gfx.drawFrame = function (scene, ctx, name, dx, dy) {

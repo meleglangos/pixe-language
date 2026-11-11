@@ -18,6 +18,7 @@
           ui.el('div', 'menu-list', [
             ui.btn('menu.export', menu.exportDialog),
             ui.btn('menu.import', menu.importDialog),
+            ui.btn('menu.credits', menu.creditsDialog),
             ui.btn('menu.reset', menu.resetDialog, 'danger'),
           ]),
           ui.el('h3', '', [ui.tx('menu.controls')]),
@@ -84,6 +85,20 @@
           ui.btn('common.cancel', menu.open),
         ],
       });
+    },
+
+    creditsDialog() {
+      const c = Game.data.config.credits;
+      const list = items => ui.el('ul', 'credits', items.map(it => ui.el('li', '', [
+        ui.el('strong', '', [it.name]), ' – ' + it.by,
+        ...(it.url ? [ui.el('br'), ui.el('a', '', [it.url])] : []),
+      ])));
+      const panel = ui.modal({
+        title: 'credits.title',
+        body: [p('credits.intro'), ui.el('h3', '', [ui.tx('credits.art')]), list(c.art), ui.el('h3', '', [ui.tx('credits.code')]), list(c.code), p('credits.thanks')],
+        buttons: [ui.btn('common.back', menu.open, 'primary')],
+      });
+      panel.querySelectorAll('a').forEach(a => { a.href = a.textContent; a.target = '_blank'; a.rel = 'noopener'; });
     },
 
     intro() {

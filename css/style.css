@@ -141,3 +141,8 @@ html, body {
   .hud { font-size: 15px; }
   .bar { width: 56px; }
 }
+
+/* közreműködők */
+.credits { margin: 4px 0 8px; padding-left: 20px; font-size: 15px; }
+.credits li { margin-bottom: 5px; }
+.credits a { color: #2f5d96; word-break: break-all; font-size: 14px; }
