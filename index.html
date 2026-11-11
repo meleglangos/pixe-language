@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Das Deutsch-Abenteuer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="game"></div>
+<div id="ui"></div>
+
+<!-- Könyvtárak (CDN) -->
+<script src="https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/easystarjs@0.4.4/bin/easystar-0.4.4.min.js"></script>
+
+<!-- Mag -->
+<script src="src/core/game.js"></script>
+
+<!-- Adatok: ezeket lehet bővíteni a játéklogika módosítása nélkül -->
+<script src="src/data/config.js"></script>
+<script src="src/data/strings.js"></script>
+<script src="src/data/tiles.js"></script>
+<script src="src/data/assets.js"></script>
+<script src="src/data/map.js"></script>
+
+<!-- Logika -->
+<script src="src/core/i18n.js"></script>
+<script src="src/core/save.js"></script>
+<script src="src/gfx/placeholders.js"></script>
+<script src="src/world/grid.js"></script>
+<script src="src/world/character.js"></script>
+<script src="src/ui/ui.js"></script>
+<script src="src/ui/hud.js"></script>
+<script src="src/ui/menu.js"></script>
+<script src="src/scenes/BootScene.js"></script>
+<script src="src/scenes/WorldScene.js"></script>
+<script src="src/main.js"></script>
+</body>
+</html>
