@@ -14,6 +14,14 @@
       ]);
       const menu = ui.el('div', 'hud-menu', [ui.btn('hud.menu', () => Game.menu.open())]);
       ui.root.append(hud, menu);
+      // dungeonben: a hely neve + kijárat gomb
+      let bar = null;
+      Game.events.on('scene', info => {
+        if (bar) { bar.remove(); bar = null; }
+        if (info.key !== 'Dungeon') return;
+        bar = ui.el('div', 'place-bar panel', [ui.el('span', 'place-name', [ui.tx(info.name)]), ui.btn('dungeon.exit', info.exit)]);
+        ui.root.append(bar);
+      });
       Game.events.on('state', Game.hud.refresh);
       Game.hud.refresh();
     },

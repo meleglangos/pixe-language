@@ -119,6 +119,29 @@ Game.data.strings = {
     hu: 'A torony legtetején vár rád valaki.',
   },
 
+  // Dungeon
+  'poi.type.exit':    { de: 'Ausgang', hu: 'Kijárat' },
+  'dungeon.exit':     { de: 'Verlassen', hu: 'Kilépés' },
+  'dungeon.exitName': { de: 'Die Tür nach draußen', hu: 'A kifelé vezető ajtó' },
+  'dungeon.exitDesc': { de: 'Sie führt zurück an die Oberfläche.', hu: 'Visszavezet a felszínre.' },
+
+  // Szörnyek
+  'mob.type': { de: 'Monster', hu: 'Szörny' },
+  'mob.skeleton.name': { de: 'Das Skelett', hu: 'A csontváz' },
+  'mob.skeleton.desc': { de: 'Es klappert leise mit den Knochen.', hu: 'Halkan zörög a csontjaival.' },
+  'mob.skeleton_rogue.name': { de: 'Der Skelett-Schurke', hu: 'A csontváz zsivány' },
+  'mob.skeleton_rogue.desc': { de: 'Unter der roten Kapuze starren dich leere Augen an.', hu: 'A piros csuklya alól üres szemek merednek rád.' },
+  'mob.skeleton_warrior.name': { de: 'Der Skelett-Krieger', hu: 'A csontváz harcos' },
+  'mob.skeleton_warrior.desc': { de: 'Seine Rüstung ist alt, aber immer noch stabil.', hu: 'A páncélja régi, de még mindig erős.' },
+
+  // Láda
+  'chest.type':      { de: 'Schatz', hu: 'Kincs' },
+  'chest.name':      { de: 'Die Schatztruhe', hu: 'A kincsesláda' },
+  'chest.desc':      { de: 'Was wohl darin ist?', hu: 'Vajon mi lehet benne?' },
+  'chest.open':      { de: 'Öffnen', hu: 'Kinyitás' },
+  'chest.empty':     { de: 'Die Truhe ist leer.', hu: 'A láda üres.' },
+  'chest.emptyDesc': { de: 'Leer – nur ein bisschen Staub.', hu: 'Üres – csak egy kis por van benne.' },
+
   // Rarity fokozatok (a 2. szakasztól használjuk)
   'rarity.common1':   { de: 'Gewöhnlich I', hu: 'Közönséges I' },
   'rarity.common2':   { de: 'Gewöhnlich II', hu: 'Közönséges II' },

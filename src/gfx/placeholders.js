@@ -276,6 +276,15 @@
       ctx.globalCompositeOperation = 'destination-out'; ell(ctx, '#000', 8, 9, 4.8, 3); ctx.globalCompositeOperation = 'source-over';
     },
   };
+  // puha fényfolt (fáklyákhoz, ADD keveréssel)
+  images.fx_light = {
+    w: 64, h: 64,
+    draw(ctx) {
+      const g = ctx.createRadialGradient(32, 32, 2, 32, 32, 32);
+      g.addColorStop(0, 'rgba(255,190,110,0.55)'); g.addColorStop(0.45, 'rgba(255,130,60,0.22)'); g.addColorStop(1, 'rgba(255,90,30,0)');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, 64, 64);
+    },
+  };
   images.fx_heart = sprite(9, 9, ctx => {
     R(ctx, '#ff5a7a', 1, 2, 3, 3); R(ctx, '#ff5a7a', 5, 2, 3, 3); R(ctx, '#ff5a7a', 2, 1, 1, 1); R(ctx, '#ff5a7a', 6, 1, 1, 1);
     R(ctx, '#ff5a7a', 2, 5, 5, 1); R(ctx, '#ff5a7a', 3, 6, 3, 1); R(ctx, '#ff5a7a', 4, 7, 1, 1); R(ctx, '#ff5a7a', 4, 3, 1, 2);
@@ -358,10 +367,19 @@
     }
   }
 
-  const sheets = { player: drawGirl, pet: drawDog };
+  const sheets = { player_placeholder: drawGirl, pet: drawDog };
 
   // ---------- regisztráció ----------
   Game.gfx.decorateGround = decorateGround;
+  Game.gfx.ell = ell;
+
+  // Egy névvel ellátott kivágás (assets.js: frames) rajzolása canvasra.
+  Game.gfx.drawFrame = function (scene, ctx, name, dx, dy) {
+    const f = Game.data.assets.frames[name];
+    if (!f || !scene.textures.exists(f[0])) return;
+    ctx.drawImage(scene.textures.get(f[0]).getSourceImage(), f[1], f[2], f[3], f[4], dx, dy, f[3], f[4]);
+  };
+
 
   Game.gfx.generateMissing = function (scene) {
     const tm = scene.textures;
@@ -373,7 +391,7 @@
       tex.refresh();
     }
     for (const key of Object.keys(sheets)) {
-      if (tm.exists(key)) continue;
+      if (tm.exists(key) || !Game.data.assets.sheets[key]) continue;
       const def = Game.data.assets.sheets[key];
       const fw = def.frameWidth, fh = def.frameHeight, cols = 4;
       const tex = tm.createCanvas(key, fw * cols, fh * def.rows.length);

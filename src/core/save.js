@@ -3,7 +3,22 @@
 // a régi mentésekbe a migrate() automatikusan pótolja.
 (function () {
   const cfg = Game.data.config;
-  const VERSION = 1;
+  // A mentés formátumának verziója. Ha a szerkezet változik: növeld, és írj hozzá migrációt lent.
+  //   v1: 1. szakasz (pozíció, HP, arany, üres inventory/gear/dungeons)
+  //   v2: dungeons[id] = { visits, clears }
+  const VERSION = 2;
+
+  // migrations[n]: az n. verziójú mentést alakítja (n+1)-esre.
+  const migrations = {
+    1(s) {
+      const old = s.dungeons && typeof s.dungeons === 'object' && !Array.isArray(s.dungeons) ? s.dungeons : {};
+      s.dungeons = {};
+      Object.keys(old).forEach(id => {
+        const d = old[id] && typeof old[id] === 'object' ? old[id] : {};
+        s.dungeons[id] = { visits: Number(d.visits) || 0, clears: Number(d.clears) || 0 };
+      });
+    },
+  };
 
   function defaults() {
     const spawn = Game.data.map.spawn;
@@ -14,7 +29,7 @@
       gold: 0,
       inventory: [],                       // 3. szakasz
       gear: { weapon: null, armor: null }, // 3. szakasz
-      dungeons: {},                        // teljesített dungeonök: { id: { clears: n } }
+      dungeons: {},                        // { id: { visits: n, clears: n } }
       surprises: [],                       // megszerzett meglepetés-lootok
       flags: { introSeen: false },
     };
@@ -37,8 +52,9 @@
 
   function migrate(raw) {
     if (!isObj(raw) || typeof raw.v !== 'number' || raw.v > VERSION) return null;
+    if (raw.v < 1 || raw.v !== Math.floor(raw.v)) return null;
+    for (let v = raw.v; v < VERSION; v++) if (migrations[v]) migrations[v](raw);
     const s = fill(raw, defaults());
-    // if (s.v < 2) { ...későbbi átalakítások... }
     s.v = VERSION;
     const num = (v, lo, hi, fb) => (Number.isFinite(v) ? Math.min(hi, Math.max(lo, v)) : fb);
     s.player.maxHp = num(s.player.maxHp, 1, 9999, cfg.player.maxHp);

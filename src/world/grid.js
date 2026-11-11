@@ -1,33 +1,39 @@
-// A térkép rácsa: járhatóság, ütközés, útkeresés (EasyStar.js).
+// Egy térkép rácsa: járhatóság, ütközés, útkeresés (EasyStar.js).
 (function () {
   const HALF_W = 4, BOX_H = 5; // a karakter "lábnyoma" pixelben (a talppont körül)
 
   class Grid {
-    constructor(map) {
-      this.map = map;
-      this.ts = map.tileSize;
-      this.w = map.width;
-      this.h = map.height;
-      const tiles = Game.data.tiles, objs = Game.data.objectTypes;
+    // cells: 2D tömb, 0 = járható, 1 = fal
+    constructor(cells, tileSize) {
+      this.cells = cells;
+      this.ts = tileSize;
+      this.h = cells.length;
+      this.w = cells[0].length;
+      // Kattintható, de nem járható mezők: 'x,y' -> { spots: [{x,y}], onReach }
+      this.redirect = {};
+      this.rebuild();
+    }
 
-      // 0 = járható, 1 = fal
-      this.cells = [];
-      for (let y = 0; y < this.h; y++) {
+    // A világtérkép rácsa a map.js alapján.
+    static fromOverworld(map) {
+      const tiles = Game.data.tiles, objs = Game.data.objectTypes;
+      const cells = [];
+      for (let y = 0; y < map.height; y++) {
         const row = [];
-        for (let x = 0; x < this.w; x++) {
+        for (let x = 0; x < map.width; x++) {
           const t = tiles[map.legend.ground[map.ground[y][x]]];
           const o = objs[map.legend.objects[map.objects[y][x]]];
           row.push(!t || !t.walkable || (o && o.blocks) ? 1 : 0);
         }
-        this.cells.push(row);
+        cells.push(row);
       }
-      // épületek lábnyoma
-      this.poiAt = {};
-      map.pois.forEach(p => {
-        this.footprint(p).forEach(([x, y]) => { this.cells[y][x] = 1; this.poiAt[x + ',' + y] = p; });
-        this.poiAt[p.x + ',' + p.y] = p;
-      });
+      const grid = new Grid(cells, map.tileSize);
+      map.pois.forEach(p => grid.footprint(p).forEach(([x, y]) => grid.block(x, y, true)));
+      return grid;
+    }
 
+    // Az útkeresőt a cellák változása után frissíteni kell.
+    rebuild() {
       this.easystar = new EasyStar.js();
       this.easystar.setGrid(this.cells);
       this.easystar.setAcceptableTiles([0]);
@@ -36,6 +42,9 @@
       this.easystar.enableSync();
     }
 
+    block(x, y, blocked) { if (this.inside(x, y)) this.cells[y][x] = blocked ? 1 : 0; }
+
+    // Egy világtérképi épület lábnyoma (3 széles, 2 magas, az ajtó fölött).
     footprint(poi) {
       const out = [];
       for (let y = poi.y - 2; y <= poi.y - 1; y++) for (let x = poi.x - 1; x <= poi.x + 1; x++) out.push([x, y]);
@@ -69,7 +78,7 @@
       return result && result.length ? result : null;
     }
 
-    // A legközelebbi járható mező (ha valaki fára, vízre kattint).
+    // A legközelebbi járható mező (ha valaki falra, vízre kattint).
     nearestWalkable(tx, ty, maxR) {
       if (this.walkable(tx, ty)) return { x: tx, y: ty };
       let best = null, bestD = Infinity;

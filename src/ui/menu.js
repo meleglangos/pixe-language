@@ -5,7 +5,9 @@
 
   // A világ újraindítása az aktuális Game.state alapján (import / új játék után).
   function restartWorld() {
-    Game.phaser.scene.getScene('World').scene.restart();
+    const sm = Game.phaser.scene;
+    if (sm.isActive('Dungeon')) sm.stop('Dungeon');
+    sm.start('World');
   }
 
   const menu = Game.menu = {

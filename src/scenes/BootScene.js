@@ -5,14 +5,27 @@
 
     preload() {
       const a = Game.data.assets;
-      Object.keys(a.images).forEach(key => this.load.image(key, a.images[key]));
+      const url = p => encodeURI(p);
+      this.load.on('loaderror', file => console.error('Nem sikerült betölteni:', file.key, file.url));
+      Object.keys(a.images).forEach(key => this.load.image(key, url(a.images[key])));
+      Object.keys(a.files).forEach(key => this.load.image(key, url(a.files[key])));
+      Object.keys(a.strips).forEach(key => {
+        const s = a.strips[key];
+        this.load.spritesheet(key, url(s.url), { frameWidth: s.frameWidth, frameHeight: s.frameHeight });
+      });
       Object.keys(a.sheets).forEach(key => {
         const s = a.sheets[key];
-        if (s.url) this.load.spritesheet(key, s.url, { frameWidth: s.frameWidth, frameHeight: s.frameHeight });
+        if (s.url) this.load.spritesheet(key, url(s.url), { frameWidth: s.frameWidth, frameHeight: s.frameHeight });
       });
     }
 
     create() {
+      const a = Game.data.assets;
+      // névvel ellátott kivágások: this.add.image(x, y, fájlkulcs, név)
+      Object.keys(a.frames).forEach(name => {
+        const [file, x, y, w, h] = a.frames[name];
+        if (this.textures.exists(file)) this.textures.get(file).add(name, 0, x, y, w, h);
+      });
       Game.gfx.generateMissing(this);
       this.scene.start('World');
     }

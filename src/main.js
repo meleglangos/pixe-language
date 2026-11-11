@@ -17,7 +17,9 @@
       pixelArt: true,
       roundPixels: true,
       scale: { mode: Phaser.Scale.RESIZE, width: '100%', height: '100%' },
-      scene: [Game.scenes.Boot, Game.scenes.World],
+      scene: [Game.scenes.Boot, Game.scenes.World, Game.scenes.Dungeon],
+      // file:// alól (dupla kattintás az index.html-re) a böngésző nem engedi a képeket WebGL-be tölteni:
+      ...(location.protocol === 'file:' ? { type: Phaser.CANVAS, loader: { imageLoadType: 'HTMLImageElement' } } : {}),
     });
 
     // mentés, amikor a lap háttérbe kerül vagy bezárul

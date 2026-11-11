@@ -84,18 +84,18 @@
     toastTimer = setTimeout(() => { if (bubbleFor && el.contains(bubbleFor)) hideBubble(); el.remove(); }, 3200);
   };
 
-  // ---------- helyszín-panel (alul) ----------
-  ui.poiPrompt = {
+  // ---------- alsó panel: helyszín, szörny, láda... ----------
+  // cfg: { type, name, desc: szövegkulcsok, action: { key, fn } | null }
+  ui.prompt = {
     el: null,
-    show(poi) {
+    show(cfg) {
       this.hide();
-      const type = Game.data.poiTypes[poi.type] || {};
       const kids = [
-        ui.el('div', 'poi-type', [ui.tx('poi.type.' + poi.type)]),
-        ui.el('div', 'poi-name', [ui.tx('poi.' + poi.id + '.name')]),
-        ui.el('div', 'poi-desc', [ui.tx('poi.' + poi.id + '.desc')]),
+        ui.el('div', 'poi-type', [ui.tx(cfg.type)]),
+        ui.el('div', 'poi-name', [ui.tx(cfg.name)]),
+        ui.el('div', 'poi-desc', [ui.tx(cfg.desc)]),
       ];
-      if (type.enterable) kids.push(ui.el('div', 'poi-actions', [ui.btn('poi.enter', () => Game.poi.enter(poi), 'primary')]));
+      if (cfg.action) kids.push(ui.el('div', 'poi-actions', [ui.btn(cfg.action.key, cfg.action.fn, 'primary')]));
       this.el = ui.el('div', 'poi-prompt panel', kids);
       ui.root.append(this.el);
     },

@@ -3,18 +3,31 @@
 (function () {
   const DIRS = ['down', 'left', 'right', 'up'];
 
-  // Animációk létrehozása az assets.js leírása alapján: "<sheet>:<anim>:<irány>"
-  function ensureAnims(scene, sheetKey, textureKey) {
+  // Animáció egy csíkból (assets.js: strips). A kulcsa maga a csík kulcsa.
+  function stripAnim(scene, stripKey, repeat) {
+    if (!scene.anims.exists(stripKey)) {
+      const def = Game.data.assets.strips[stripKey];
+      scene.anims.create({
+        key: stripKey, frameRate: def.frameRate, repeat: repeat === undefined ? -1 : repeat,
+        frames: scene.anims.generateFrameNumbers(stripKey, {}),
+      });
+    }
+    return stripKey;
+  }
+  Game.gfx.stripAnim = stripAnim;
+
+  // 'rows' módú sheet animációi: "<sheet>:<anim>:<irány>"
+  function ensureRowAnims(scene, sheetKey) {
     const def = Game.data.assets.sheets[sheetKey];
-    const cols = Game.gfx.sheetCols(scene, textureKey);
+    const cols = Game.gfx.sheetCols(scene, sheetKey);
     def.rows.forEach((dir, row) => {
       Object.keys(def.anims).forEach(name => {
-        const key = textureKey + ':' + name + ':' + dir;
+        const key = sheetKey + ':' + name + ':' + dir;
         if (scene.anims.exists(key)) return;
         const a = def.anims[name];
         scene.anims.create({
           key, frameRate: a.frameRate, repeat: -1,
-          frames: a.frames.map(c => ({ key: textureKey, frame: row * cols + c })),
+          frames: a.frames.map(c => ({ key: sheetKey, frame: row * cols + c })),
         });
       });
     });
@@ -25,16 +38,23 @@
       this.scene = scene;
       this.sheetKey = sheetKey;
       this.def = Game.data.assets.sheets[sheetKey];
-      this.dir = 'down';
+      this.side = this.def.mode === 'side';
+      this.dir = 'down';     // merre néz (mentéshez, irányításhoz)
+      this.hdir = 'right';   // utolsó vízszintes irány ('side' módban ez dönti el a tükrözést)
       this.moving = false;
       this.layers = {};
 
-      ensureAnims(scene, sheetKey, sheetKey);
+      let texture = sheetKey;
+      if (this.side) {
+        Object.keys(this.def.anims).forEach(name => stripAnim(scene, this.def.anims[name]));
+        texture = this.def.anims.idle;
+      } else ensureRowAnims(scene, sheetKey);
+
       const originY = this.def.footY / this.def.frameHeight;
       this.shadow = scene.add.image(0, 0, 'fx_shadow').setOrigin(0.5, 0.5);
-      this.body = scene.add.sprite(0, 0, sheetKey, 0).setOrigin(0.5, originY);
+      this.body = scene.add.sprite(0, 0, texture, 0).setOrigin(0.5, originY);
       this.container = scene.add.container(x, y, [this.shadow, this.body]);
-      this.container.setSize(this.def.frameWidth, this.def.frameHeight);
+      this.container.setSize(16, 16);
       this.play();
       this.syncDepth();
     }
@@ -44,7 +64,7 @@
     setPosition(x, y) { this.container.setPosition(x, y); this.syncDepth(); }
     syncDepth() { this.container.setDepth(this.container.y); }
 
-    // Felszerelés-réteg a test fölé (ugyanolyan elrendezésű spritesheet). textureKey = null -> levétel.
+    // Felszerelés-réteg a test fölé (a testtel azonos elrendezésű sheet). textureKey = null -> levétel.
     setLayer(name, textureKey) {
       if (this.layers[name]) { this.layers[name].destroy(); delete this.layers[name]; }
       if (!textureKey || !this.scene.textures.exists(textureKey)) return;
@@ -62,23 +82,30 @@
         const h = dx < 0 ? 'left' : 'right', v = dy < 0 ? 'up' : 'down';
         dir = this.dir === h || this.dir === v ? this.dir : h;
       }
+      if (Math.abs(dx) > 0.01) this.hdir = dx < 0 ? 'left' : 'right';
       this.face(dir);
     }
     face(dir) {
-      if (DIRS.indexOf(dir) < 0 || dir === this.dir) return;
-      this.dir = dir; this.play();
+      if (DIRS.indexOf(dir) < 0) return;
+      if (dir === 'left' || dir === 'right') this.hdir = dir;
+      this.dir = dir;
+      this.play();
     }
     setMoving(moving) {
       if (moving === this.moving) return;
       this.moving = moving; this.play();
     }
     play() {
-      this.body.play(this.sheetKey + ':' + (this.moving ? 'walk' : 'idle') + ':' + this.dir, true);
+      const name = this.moving ? 'walk' : 'idle';
+      if (this.side) {
+        this.body.setFlipX(this.hdir === 'left');
+        this.body.play(this.def.anims[name], true);
+      } else this.body.play(this.sheetKey + ':' + name + ':' + this.dir, true);
     }
     // Minden képkockában: a rétegek kövessék a test képkockáját.
     update() {
       const frame = this.body.frame.name;
-      for (const k in this.layers) this.layers[k].setFrame(frame);
+      for (const k in this.layers) this.layers[k].setFrame(frame).setFlipX(this.body.flipX);
       this.syncDepth();
     }
   }
@@ -117,6 +144,22 @@
     }
   }
 
+  // Szörny: egy helyben áll az idle animációjával, és a játékos felé fordul.
+  // (A csomag szörnyei jobbra néznek; balra tükrözéssel.)
+  class Mob {
+    constructor(scene, type, x, y) {
+      this.type = type;
+      this.shadow = scene.add.image(0, 0, 'fx_shadow').setOrigin(0.5, 0.5);
+      this.body = scene.add.sprite(0, 0, type.idle, 0).setOrigin(0.5, 1);
+      this.body.play({ key: stripAnim(scene, type.idle), startFrame: Math.floor(Math.random() * 4) });
+      this.container = scene.add.container(x, y, [this.shadow, this.body]).setDepth(y);
+    }
+    get x() { return this.container.x; }
+    get y() { return this.container.y; }
+    lookAt(target) { if (Math.abs(target.x - this.x) > 2) this.body.setFlipX(target.x < this.x); }
+  }
+
   Game.world.Character = Character;
   Game.world.Pet = Pet;
+  Game.world.Mob = Mob;
 })();
