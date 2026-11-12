@@ -1,7 +1,8 @@
 // Indítás.
 (function () {
   function start() {
-    Game.save.load();
+    Game.saveManager.init();
+    Game.saveManager.load();
     Game.ui.init();
 
     if (!window.Phaser || !window.EasyStar) {
@@ -30,8 +31,15 @@
     document.addEventListener('visibilitychange', () => { if (document.hidden) flush(); });
     window.addEventListener('pagehide', flush);
 
-    if (!Game.state.flags.introSeen) Game.menu.intro();
+    if (!Game.state.flag('introSeen')) Game.menu.intro();
   }
 
-  if (document.readyState === 'complete') start(); else window.addEventListener('load', start);
+  // Ha a tartalom (data/*.json) sem tölthető be, a szövegek sincsenek meg: egyszerű hibaüzenet.
+  function fail(e) {
+    console.error(e);
+    document.getElementById('ui').textContent = 'Das Spiel konnte nicht geladen werden. / A játékot nem sikerült betölteni.';
+  }
+
+  const boot = () => Game.content.load().then(start, fail);
+  if (document.readyState === 'complete') boot(); else window.addEventListener('load', boot);
 })();

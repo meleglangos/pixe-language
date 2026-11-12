@@ -27,7 +27,7 @@ Game.data.config = {
     ],
   },
 
-  // Rarity létra alulról felfelé. A nevek a strings.js-ben: rarity.<id>
+  // Rarity létra alulról felfelé. A nevek a data/strings.json-ban: rarity.<id>
   rarities: [
     { id: 'common1',   color: '#b8b8b8' },
     { id: 'common2',   color: '#d0d0d0' },

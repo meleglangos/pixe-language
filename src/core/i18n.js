@@ -1,4 +1,4 @@
-// Szövegek lekérése a strings.js-ből.
+// Szövegek lekérése a data/strings.json-ból (Game.data.strings).
 (function () {
   function get(key, lang, vars) {
     const entry = Game.data.strings[key];

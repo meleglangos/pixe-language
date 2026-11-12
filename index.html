@@ -18,18 +18,26 @@
 
 <!-- Mag -->
 <script src="src/core/game.js"></script>
+<script src="src/core/events.js"></script>
 
-<!-- Adatok: ezeket lehet bővíteni a játéklogika módosítása nélkül -->
-<script src="src/data/config.js"></script>
-<script src="src/data/strings.js"></script>
-<script src="src/data/tiles.js"></script>
-<script src="src/data/assets.js"></script>
-<script src="src/data/map.js"></script>
-<script src="src/data/dungeons.js"></script>
+<!-- Beállítások (kód közeli: sebesség, grafikai manifest, mezőtípusok) -->
+<script src="src/config/config.js"></script>
+<script src="src/config/tiles.js"></script>
+<script src="src/config/assets.js"></script>
 
-<!-- Logika -->
+<!-- Tartalom: a data/*.json-t a ContentLoader tölti be; ez csak a file:// alóli futáshoz kell -->
+<script src="data/bundle.js"></script>
+
+<!-- Rendszerek -->
 <script src="src/core/i18n.js"></script>
-<script src="src/core/save.js"></script>
+<script src="src/systems/content/ContentValidator.js"></script>
+<script src="src/systems/content/ContentLoader.js"></script>
+<script src="src/state/GameState.js"></script>
+<script src="src/systems/save/SaveSchema.js"></script>
+<script src="src/systems/save/SaveCodec.js"></script>
+<script src="src/systems/save/SaveManager.js"></script>
+
+<!-- Grafika, világ, felület -->
 <script src="src/gfx/placeholders.js"></script>
 <script src="src/world/grid.js"></script>
 <script src="src/world/character.js"></script>
@@ -37,9 +45,15 @@
 <script src="src/ui/ui.js"></script>
 <script src="src/ui/hud.js"></script>
 <script src="src/ui/menu.js"></script>
+
+<!-- Jelenetek -->
 <script src="src/scenes/BootScene.js"></script>
 <script src="src/scenes/ExploreScene.js"></script>
 <script src="src/scenes/WorldScene.js"></script>
+<script src="src/scenes/dungeon/props.js"></script>
+<script src="src/scenes/dungeon/lighting.js"></script>
+<script src="src/scenes/dungeon/water.js"></script>
+<script src="src/scenes/dungeon/ambience.js"></script>
 <script src="src/scenes/DungeonScene.js"></script>
 <script src="src/main.js"></script>
 </body>

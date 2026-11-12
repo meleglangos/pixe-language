@@ -1,4 +1,4 @@
-// DOM-alapú felület a játék fölött. Minden szöveg a strings.js-ből jön,
+// DOM-alapú felület a játék fölött. Minden szöveg a data/strings.json-ból jön,
 // és kap egy "?" gombot, ami a magyar fordítást mutatja.
 (function () {
   const ui = Game.ui = { root: null, modalEl: null };

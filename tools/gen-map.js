@@ -1,6 +1,5 @@
-// Térképgenerátor: `node tools/gen-map.js` -> felülírja a src/data/map.js fájlt.
-// A map.js utána kézzel is szerkeszthető (ASCII rács); ha kézzel szerkeszted,
-// ne futtasd újra ezt a scriptet, mert felülírja.
+// Térképgenerátor: `node tools/gen-map.js --force` -> felülírja a data/world_map.json fájlt.
+// A térkép azóta kézzel szerkesztett (ASCII rács a JSON-ban), ezért --force nélkül nem ír felül semmit.
 const fs = require('fs');
 const path = require('path');
 
@@ -11,10 +10,10 @@ const rnd = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
 const pois = [
   { id: 'home',     type: 'home',    x: 16, y: 13, sprite: 'poi_home' },
   { id: 'shop',     type: 'shop',    x: 24, y: 13, sprite: 'poi_shop' },
-  { id: 'dungeon1', type: 'dungeon', x: 7,  y: 15, sprite: 'poi_cave' },
-  { id: 'dungeon2', type: 'dungeon', x: 32, y: 10, sprite: 'poi_mine' },
-  { id: 'dungeon3', type: 'dungeon', x: 30, y: 22, sprite: 'poi_crypt' },
-  { id: 'boss',     type: 'boss',    x: 20, y: 7,  sprite: 'poi_tower' },
+  { id: 'dungeon_cave', type: 'dungeon', x: 7,  y: 15, sprite: 'poi_cave' },
+  { id: 'dungeon_mine', type: 'dungeon', x: 32, y: 10, sprite: 'poi_mine' },
+  { id: 'dungeon_crypt', type: 'dungeon', x: 30, y: 22, sprite: 'poi_crypt' },
+  { id: 'boss_tower', type: 'boss',    x: 20, y: 7,  sprite: 'poi_tower' },
 ];
 const spawn = { x: 20, y: 16 };
 
@@ -118,37 +117,24 @@ while (q.length) {
 }
 for (const p of pois) if (!seen.has(key(p.x, p.y))) throw new Error('Nem elérhető: ' + p.id);
 
-const rows = a => a.map(r => "    '" + r.join('') + "',").join('\n');
-const out = `// A világtérkép. Kézzel szerkeszthető: minden karakter egy 16x16-os mező.
-// A betűk jelentése a "legend" alatt van, a mezőtípusok tulajdonságai a tiles.js-ben.
-// (Eredetileg a tools/gen-map.js generálta.)
-Game.data.map = {
+const map = {
   tileSize: 16,
-  width: ${W},
-  height: ${H},
-  spawn: { x: ${spawn.x}, y: ${spawn.y} },
-
+  width: W,
+  height: H,
+  spawn,
   legend: {
     ground: { g: 'grass', G: 'darkgrass', f: 'flowers', p: 'path', s: 'sand', w: 'water', r: 'rocky' },
     objects: { T: 'tree_oak', P: 'tree_pine', D: 'tree_dead', R: 'rock', B: 'bush', X: 'grave', K: 'crystal' },
   },
-
-  // Talaj
-  ground: [
-${rows(ground)}
-  ],
-
-  // Tereptárgyak ('.' = üres)
-  objects: [
-${rows(objects)}
-  ],
-
-  // Helyszínek. x,y = az ajtó előtti mező; az épület ettől felfelé áll (3 mező széles, 2 magas).
-  // A nevek és leírások a strings.js-ben vannak: poi.<id>.name / poi.<id>.desc
-  pois: [
-${pois.map(p => '    ' + JSON.stringify(p).replace(/"(\w+)":/g, '$1: ').replace(/"/g, "'").replace(/,/g, ', ') + ',').join('\n')}
-  ],
+  ground: ground.map(r => r.join('')),
+  objects: objects.map(r => r.join('')),
+  pois,
 };
-`;
-fs.writeFileSync(path.join(__dirname, '..', 'src', 'data', 'map.js'), out);
+const out = path.join(__dirname, '..', 'data', 'world_map.json');
+if (fs.existsSync(out) && !process.argv.includes('--force')) {
+  console.error('A data/world_map.json már létezik (és kézzel szerkesztett). Felülírás: node tools/gen-map.js --force');
+  process.exit(1);
+}
+fs.writeFileSync(out, require('./jsonFormat')(map));
 console.log(ground.map((r, y) => r.map((c, x) => objects[y][x] !== '.' ? objects[y][x] : (c === 'g' ? ' ' : c)).join('')).join('\n'));
+console.log('Kész: data/world_map.json -- utána futtasd: node tools/build-data.js');

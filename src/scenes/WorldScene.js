@@ -1,4 +1,4 @@
-// A világtérkép: helyszínek, automatikus mentés. A mozgás az ExploreScene-ben van.
+// A világtérkép: helyszínek, a pozíció mentése. A mozgás az ExploreScene-ben van.
 (function () {
   // Helyszínek kezelése. Egy típus kezelője: (poi, scene) => { ... }
   // Amíg nincs kezelő (vagy a helyszín még nincs kész), a "még zárva" üzenet jelenik meg.
@@ -30,7 +30,7 @@
       this.paintGround();
       this.placeObjects();
 
-      const st = Game.state.player;
+      const st = Game.state.position();
       let tile = { x: Math.round(st.x), y: Math.round(st.y) };
       if (!this.grid.walkable(tile.x, tile.y)) tile = map.spawn;
       this.initExplore({ tile, dir: st.dir, width: map.width * ts, height: map.height * ts });
@@ -52,7 +52,6 @@
 
       if (Game.debug) this.drawDebug();
       Game.events.emit('scene', { key: 'World' });
-      Game.events.emit('state');
     }
 
     // A teljes talaj egyetlen textúrára rajzolva.
@@ -96,10 +95,10 @@
 
     saveNow() {
       if (!this.player) return;
-      const t = this.grid.tileOf(this.player.x, this.player.y), st = Game.state.player;
-      st.x = t.x; st.y = t.y; st.dir = this.player.dir;
+      const t = this.grid.tileOf(this.player.x, this.player.y);
+      Game.state.setPosition(t.x, t.y, this.player.dir);
       this.dirty = false; this.saveTimer = 0;
-      Game.save.persist();
+      Game.saveManager.save();
     }
   }
 
