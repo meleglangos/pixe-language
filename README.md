@@ -32,6 +32,10 @@ a „még zárva” üzenet jelenik meg.
 
 `index.html?debug=1`: kirajzolja a járható (zöld) és blokkolt (piros) mezőket.
 
+## Assetek
+Katalógus: `assets/ASSETS.md`, előnézetek: `assets/previews/`. Újragenerálás: `python3 tools/asset_catalog/build.py`
+(a leírások a `tools/asset_catalog/notes.py`-ban vannak).
+
 ## Új dungeon hozzáadása
 1. `src/data/dungeons.js`: új bejegyzés a `Game.data.dungeons` alá a helyszín azonosítójával (pálya ASCII-ban,
    ajtók, szörnyek, láda, berendezés, `theme: 'crypt' | 'mine'`).
