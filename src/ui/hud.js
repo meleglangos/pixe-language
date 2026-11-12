@@ -22,14 +22,15 @@
         bar = ui.el('div', 'place-bar panel', [ui.el('span', 'place-name', [ui.tx(info.name)]), ui.btn('dungeon.exit', info.exit)]);
         ui.root.append(bar);
       });
-      Game.events.on('state', Game.hud.refresh);
+      // a központi állapot változására frissül (state/GameState.js)
+      ['state:hp', 'state:gold', 'state:replaced'].forEach(ev => Game.events.on(ev, Game.hud.refresh));
       Game.hud.refresh();
     },
     refresh() {
       const s = Game.state;
       if (!s || !hpFill) return;
-      hpFill.style.width = Math.round(100 * s.player.hp / s.player.maxHp) + '%';
-      hpNum.textContent = s.player.hp + '/' + s.player.maxHp;
+      hpFill.style.width = Math.round(100 * s.hp / s.maxHp) + '%';
+      hpNum.textContent = s.hp + '/' + s.maxHp;
       goldNum.textContent = s.gold;
     },
   };

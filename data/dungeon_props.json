@@ -1,0 +1,351 @@
+[
+  {"id": "coffin_a", "kind": "object", "frame": "coffin_a", "blocks": true},
+  {"id": "coffin_b", "kind": "object", "frame": "coffin_b", "blocks": true},
+  {"id": "statue", "kind": "object", "frame": "statue", "blocks": true},
+  {"id": "barrel", "kind": "object", "frame": "barrel", "blocks": true},
+  {"id": "barrel_broken", "kind": "object", "frame": "barrel_broken", "blocks": true},
+  {"id": "crate", "kind": "object", "frame": "crate", "blocks": true},
+  {"id": "pot", "kind": "object", "frame": "pot", "blocks": true},
+  {"id": "vase", "kind": "object", "frame": "vase", "blocks": true},
+  {"id": "bones_a", "kind": "decal", "frame": "bones_a"},
+  {"id": "bones_b", "kind": "decal", "frame": "bones_b"},
+  {"id": "rubble_a", "kind": "decal", "frame": "rubble_a"},
+  {"id": "rubble_b", "kind": "decal", "frame": "rubble_b"},
+  {"id": "pot_broken", "kind": "decal", "frame": "pot_broken"},
+  {"id": "floor_grate", "kind": "decal", "frame": "floor_grate"},
+  {"id": "floor_holes", "kind": "decal", "frame": "floor_holes"},
+  {"id": "floor_blood", "kind": "decal", "frame": "floor_blood"},
+  {"id": "vine_a", "kind": "decal", "frame": "vine_a", "alpha": 0.92, "clip": true},
+  {"id": "vine_b", "kind": "decal", "frame": "vine_b", "alpha": 0.92, "clip": true},
+  {"id": "vine_c", "kind": "decal", "frame": "vine_c", "alpha": 0.92, "clip": true},
+  {"id": "banner_red", "kind": "wall", "frame": "banner_red", "dy": 5},
+  {"id": "banner_blue", "kind": "wall", "frame": "banner_blue", "dy": 5},
+  {"id": "banner_green", "kind": "wall", "frame": "banner_green", "dy": 5},
+  {"id": "wall_arms_a", "kind": "wall", "frame": "wall_arms_a", "dy": 4},
+  {"id": "wall_arms_b", "kind": "wall", "frame": "wall_arms_b", "dy": 4},
+  {"id": "wall_arms_c", "kind": "wall", "frame": "wall_arms_c", "dy": 5},
+  {
+    "id": "torch",
+    "kind": "wall",
+    "frame": "sconce",
+    "dy": 5,
+    "ground": [["glow_red", -1, 1]],
+    "parts": [{"strip": "fire_small", "dy": -9, "originY": 0.6875}],
+    "light": {"scale": 1.5, "dy": 11, "hole": 52, "color": "warm", "mode": "flicker"}
+  },
+  {
+    "id": "brazier",
+    "kind": "object",
+    "strip": "brazier",
+    "blocks": true,
+    "shadow": false,
+    "dy": -1,
+    "parts": [{"strip": "fire_big", "dy": -12, "originY": 0.7916666666666666}],
+    "light": {"scale": 1.3, "dy": -10, "hole": 58, "color": "warm", "mode": "flicker"}
+  },
+  {"id": "rail_h", "kind": "decal", "frame": "rail_h"},
+  {"id": "rail_v", "kind": "decal", "frame": "rail_v"},
+  {
+    "id": "lamp_post",
+    "kind": "object",
+    "texture": "lamp_post",
+    "blocks": true,
+    "originX": 0.16,
+    "light": {"color": "amber", "scale": 1.5, "dx": 29, "dy": -32, "mode": "flicker", "hole": 62}
+  },
+  {
+    "id": "lantern",
+    "kind": "object",
+    "frame": "lantern",
+    "blocks": true,
+    "light": {"color": "amber", "scale": 1, "dy": -6, "mode": "flicker", "hole": 40}
+  },
+  {
+    "id": "furnace",
+    "kind": "object",
+    "strip": "furnace",
+    "blocks": true,
+    "blocksLeft": 1,
+    "blocksRight": 1,
+    "shadow": false,
+    "light": {"color": "warm", "scale": 1.4, "dy": -14, "mode": "flicker", "hole": 54}
+  },
+  {"id": "rope_post", "kind": "object", "frame": "rope_post", "blocks": true},
+  {"id": "anvil", "kind": "object", "frame": "anvil", "blocks": true},
+  {"id": "log_pile", "kind": "object", "frame": "log_pile", "blocks": true},
+  {"id": "coal_pile", "kind": "object", "frame": "coal_pile", "blocks": true, "shadow": false},
+  {"id": "coal_lump", "kind": "decal", "frame": "coal_lump"},
+  {"id": "crate_empty", "kind": "object", "frame": "crate_empty", "blocks": true},
+  {"id": "crate_coal", "kind": "object", "frame": "crate_coal", "blocks": true},
+  {"id": "rock_big_a", "kind": "object", "frame": "rock_big_a", "blocks": true},
+  {"id": "rock_big_b", "kind": "object", "frame": "rock_big_b", "blocks": true},
+  {"id": "rock_mid_a", "kind": "object", "frame": "rock_mid_a", "blocks": true},
+  {"id": "rock_mid_b", "kind": "object", "frame": "rock_mid_b", "blocks": true},
+  {"id": "rock_small_a", "kind": "decal", "frame": "rock_small_a"},
+  {"id": "rock_small_b", "kind": "decal", "frame": "rock_small_b"},
+  {"id": "rock_small_c", "kind": "decal", "frame": "rock_small_c"},
+  {"id": "pebble", "kind": "decal", "frame": "pebble"},
+  {"id": "sledgehammer", "kind": "wall", "frame": "sledgehammer", "dy": 1},
+  {"id": "ore_copper", "kind": "decal", "frame": "ore_copper", "dy": 3},
+  {"id": "ore_copper_b", "kind": "decal", "frame": "ore_copper_b", "dy": 6, "dx": 3},
+  {"id": "ore_silver", "kind": "decal", "frame": "ore_silver", "dy": 3},
+  {"id": "ore_silver_b", "kind": "decal", "frame": "ore_silver_b", "dy": 6, "dx": 3},
+  {"id": "ore_gold", "kind": "decal", "frame": "ore_gold", "dy": 3},
+  {"id": "ore_gold_b", "kind": "decal", "frame": "ore_gold_b", "dy": 6, "dx": 3},
+  {
+    "id": "crystal_big_blue",
+    "kind": "object",
+    "texture": "crystal_big_blue",
+    "blocks": true,
+    "light": {"color": "cyan", "scale": 1.7, "dy": -12, "mode": "pulse", "hole": 58},
+    "sparkle": "cyan"
+  },
+  {
+    "id": "wcrystal_big_blue",
+    "kind": "wall",
+    "texture": "crystal_big_blue",
+    "dy": 1,
+    "light": {"color": "cyan", "scale": 1.7, "dy": -12, "mode": "pulse", "hole": 58},
+    "sparkle": "cyan"
+  },
+  {
+    "id": "crystal_big_pink",
+    "kind": "object",
+    "texture": "crystal_big_pink",
+    "blocks": true,
+    "light": {"color": "pink", "scale": 1.7, "dy": -12, "mode": "pulse", "hole": 58},
+    "sparkle": "pink"
+  },
+  {
+    "id": "wcrystal_big_pink",
+    "kind": "wall",
+    "texture": "crystal_big_pink",
+    "dy": 1,
+    "light": {"color": "pink", "scale": 1.7, "dy": -12, "mode": "pulse", "hole": 58},
+    "sparkle": "pink"
+  },
+  {
+    "id": "crystal_big_green",
+    "kind": "object",
+    "texture": "crystal_big_green",
+    "blocks": true,
+    "light": {"color": "green", "scale": 1.7, "dy": -12, "mode": "pulse", "hole": 58},
+    "sparkle": "green"
+  },
+  {
+    "id": "wcrystal_big_green",
+    "kind": "wall",
+    "texture": "crystal_big_green",
+    "dy": 1,
+    "light": {"color": "green", "scale": 1.7, "dy": -12, "mode": "pulse", "hole": 58},
+    "sparkle": "green"
+  },
+  {
+    "id": "crystal_big_amber",
+    "kind": "object",
+    "texture": "crystal_big_amber",
+    "blocks": true,
+    "light": {"color": "amber", "scale": 1.7, "dy": -12, "mode": "pulse", "hole": 58},
+    "sparkle": "amber"
+  },
+  {
+    "id": "wcrystal_big_amber",
+    "kind": "wall",
+    "texture": "crystal_big_amber",
+    "dy": 1,
+    "light": {"color": "amber", "scale": 1.7, "dy": -12, "mode": "pulse", "hole": 58},
+    "sparkle": "amber"
+  },
+  {
+    "id": "crystal_mid_blue",
+    "kind": "object",
+    "texture": "crystal_mid_blue",
+    "blocks": true,
+    "light": {"color": "cyan", "scale": 1.15, "dy": -9, "mode": "pulse", "hole": 42},
+    "sparkle": "cyan"
+  },
+  {
+    "id": "wcrystal_mid_blue",
+    "kind": "wall",
+    "texture": "crystal_mid_blue",
+    "dy": 1,
+    "light": {"color": "cyan", "scale": 1.15, "dy": -9, "mode": "pulse", "hole": 42},
+    "sparkle": "cyan"
+  },
+  {
+    "id": "crystal_mid_pink",
+    "kind": "object",
+    "texture": "crystal_mid_pink",
+    "blocks": true,
+    "light": {"color": "pink", "scale": 1.15, "dy": -9, "mode": "pulse", "hole": 42},
+    "sparkle": "pink"
+  },
+  {
+    "id": "wcrystal_mid_pink",
+    "kind": "wall",
+    "texture": "crystal_mid_pink",
+    "dy": 1,
+    "light": {"color": "pink", "scale": 1.15, "dy": -9, "mode": "pulse", "hole": 42},
+    "sparkle": "pink"
+  },
+  {
+    "id": "crystal_mid_green",
+    "kind": "object",
+    "texture": "crystal_mid_green",
+    "blocks": true,
+    "light": {"color": "green", "scale": 1.15, "dy": -9, "mode": "pulse", "hole": 42},
+    "sparkle": "green"
+  },
+  {
+    "id": "wcrystal_mid_green",
+    "kind": "wall",
+    "texture": "crystal_mid_green",
+    "dy": 1,
+    "light": {"color": "green", "scale": 1.15, "dy": -9, "mode": "pulse", "hole": 42},
+    "sparkle": "green"
+  },
+  {
+    "id": "crystal_mid_amber",
+    "kind": "object",
+    "texture": "crystal_mid_amber",
+    "blocks": true,
+    "light": {"color": "amber", "scale": 1.15, "dy": -9, "mode": "pulse", "hole": 42},
+    "sparkle": "amber"
+  },
+  {
+    "id": "wcrystal_mid_amber",
+    "kind": "wall",
+    "texture": "crystal_mid_amber",
+    "dy": 1,
+    "light": {"color": "amber", "scale": 1.15, "dy": -9, "mode": "pulse", "hole": 42},
+    "sparkle": "amber"
+  },
+  {
+    "id": "crystal_mid_b_blue",
+    "kind": "object",
+    "texture": "crystal_mid_b_blue",
+    "blocks": true,
+    "light": {"color": "cyan", "scale": 1.15, "dy": -9, "mode": "pulse", "hole": 42},
+    "sparkle": "cyan"
+  },
+  {
+    "id": "wcrystal_mid_b_blue",
+    "kind": "wall",
+    "texture": "crystal_mid_b_blue",
+    "dy": 1,
+    "light": {"color": "cyan", "scale": 1.15, "dy": -9, "mode": "pulse", "hole": 42},
+    "sparkle": "cyan"
+  },
+  {
+    "id": "crystal_mid_b_pink",
+    "kind": "object",
+    "texture": "crystal_mid_b_pink",
+    "blocks": true,
+    "light": {"color": "pink", "scale": 1.15, "dy": -9, "mode": "pulse", "hole": 42},
+    "sparkle": "pink"
+  },
+  {
+    "id": "wcrystal_mid_b_pink",
+    "kind": "wall",
+    "texture": "crystal_mid_b_pink",
+    "dy": 1,
+    "light": {"color": "pink", "scale": 1.15, "dy": -9, "mode": "pulse", "hole": 42},
+    "sparkle": "pink"
+  },
+  {
+    "id": "crystal_mid_b_green",
+    "kind": "object",
+    "texture": "crystal_mid_b_green",
+    "blocks": true,
+    "light": {"color": "green", "scale": 1.15, "dy": -9, "mode": "pulse", "hole": 42},
+    "sparkle": "green"
+  },
+  {
+    "id": "wcrystal_mid_b_green",
+    "kind": "wall",
+    "texture": "crystal_mid_b_green",
+    "dy": 1,
+    "light": {"color": "green", "scale": 1.15, "dy": -9, "mode": "pulse", "hole": 42},
+    "sparkle": "green"
+  },
+  {
+    "id": "crystal_mid_b_amber",
+    "kind": "object",
+    "texture": "crystal_mid_b_amber",
+    "blocks": true,
+    "light": {"color": "amber", "scale": 1.15, "dy": -9, "mode": "pulse", "hole": 42},
+    "sparkle": "amber"
+  },
+  {
+    "id": "wcrystal_mid_b_amber",
+    "kind": "wall",
+    "texture": "crystal_mid_b_amber",
+    "dy": 1,
+    "light": {"color": "amber", "scale": 1.15, "dy": -9, "mode": "pulse", "hole": 42},
+    "sparkle": "amber"
+  },
+  {
+    "id": "crystal_small_blue",
+    "kind": "object",
+    "texture": "crystal_small_blue",
+    "blocks": true,
+    "light": {"color": "cyan", "scale": 0.7, "dy": -4, "mode": "pulse", "hole": 26},
+    "sparkle": "cyan"
+  },
+  {
+    "id": "wcrystal_small_blue",
+    "kind": "wall",
+    "texture": "crystal_small_blue",
+    "dy": 1,
+    "light": {"color": "cyan", "scale": 0.7, "dy": -4, "mode": "pulse", "hole": 26},
+    "sparkle": "cyan"
+  },
+  {
+    "id": "crystal_small_pink",
+    "kind": "object",
+    "texture": "crystal_small_pink",
+    "blocks": true,
+    "light": {"color": "pink", "scale": 0.7, "dy": -4, "mode": "pulse", "hole": 26},
+    "sparkle": "pink"
+  },
+  {
+    "id": "wcrystal_small_pink",
+    "kind": "wall",
+    "texture": "crystal_small_pink",
+    "dy": 1,
+    "light": {"color": "pink", "scale": 0.7, "dy": -4, "mode": "pulse", "hole": 26},
+    "sparkle": "pink"
+  },
+  {
+    "id": "crystal_small_green",
+    "kind": "object",
+    "texture": "crystal_small_green",
+    "blocks": true,
+    "light": {"color": "green", "scale": 0.7, "dy": -4, "mode": "pulse", "hole": 26},
+    "sparkle": "green"
+  },
+  {
+    "id": "wcrystal_small_green",
+    "kind": "wall",
+    "texture": "crystal_small_green",
+    "dy": 1,
+    "light": {"color": "green", "scale": 0.7, "dy": -4, "mode": "pulse", "hole": 26},
+    "sparkle": "green"
+  },
+  {
+    "id": "crystal_small_amber",
+    "kind": "object",
+    "texture": "crystal_small_amber",
+    "blocks": true,
+    "light": {"color": "amber", "scale": 0.7, "dy": -4, "mode": "pulse", "hole": 26},
+    "sparkle": "amber"
+  },
+  {
+    "id": "wcrystal_small_amber",
+    "kind": "wall",
+    "texture": "crystal_small_amber",
+    "dy": 1,
+    "light": {"color": "amber", "scale": 0.7, "dy": -4, "mode": "pulse", "hole": 26},
+    "sparkle": "amber"
+  }
+]

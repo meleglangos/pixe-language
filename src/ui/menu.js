@@ -34,7 +34,7 @@
       if (world && world.saveNow) world.saveNow();
       const area = ui.el('textarea', 'code');
       area.readOnly = true;
-      area.value = Game.save.exportCode();
+      area.value = Game.saveManager.exportCode();
       const status = ui.el('div', 'status');
       const say = key => { status.replaceChildren(ui.tx(key)); };
       const copy = () => {
@@ -57,14 +57,14 @@
       area.autocapitalize = 'off';
       const status = ui.el('div', 'status error');
       const load = () => {
-        if (!Game.save.importCode(area.value)) { status.replaceChildren(ui.tx('import.error')); return; }
+        if (!Game.saveManager.importCode(area.value)) { status.replaceChildren(ui.tx('import.error')); return; }
         ui.closeModal();
         restartWorld();
         ui.toast('import.ok');
       };
       ui.modal({
         title: 'import.title',
-        body: [p('import.desc'), ui.el('div', 'with-help', [area, ui.help(Game.i18n.hu('import.placeholder'))]), status],
+        body: [p('import.desc'), ui.el('div', 'with-help', [area, ui.help('import.placeholder')]), status],
         buttons: [ui.btn('import.load', load, 'primary'), ui.btn('common.back', menu.open)],
       });
     },
@@ -75,9 +75,7 @@
         body: [p('reset.confirm')],
         buttons: [
           ui.btn('reset.yes', () => {
-            Game.save.reset();
-            Game.state.flags.introSeen = true;
-            Game.save.persist();
+            Game.saveManager.newGame({ introSeen: true });
             ui.closeModal();
             restartWorld();
             ui.toast('reset.done');
@@ -102,7 +100,7 @@
     },
 
     intro() {
-      const done = () => { Game.state.flags.introSeen = true; Game.save.persist(); ui.closeModal(); };
+      const done = () => { Game.state.setFlag('introSeen', true); ui.closeModal(); };
       ui.modal({
         title: 'intro.title',
         closable: false,

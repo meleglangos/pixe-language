@@ -1,0 +1,23 @@
+[
+  {"id": "skeleton", "idle": "skel_base_idle", "name": "mob.skeleton.name", "desc": "mob.skeleton.desc"},
+  {
+    "id": "skeleton_rogue",
+    "idle": "skel_rogue_idle",
+    "name": "mob.skeleton_rogue.name",
+    "desc": "mob.skeleton_rogue.desc"
+  },
+  {
+    "id": "skeleton_warrior",
+    "idle": "skel_warrior_idle",
+    "name": "mob.skeleton_warrior.name",
+    "desc": "mob.skeleton_warrior.desc"
+  },
+  {"id": "orc", "idle": "orc_idle", "name": "mob.orc.name", "desc": "mob.orc.desc"},
+  {"id": "orc_rogue", "idle": "orc_rogue_idle", "name": "mob.orc_rogue.name", "desc": "mob.orc_rogue.desc"},
+  {
+    "id": "orc_warrior",
+    "idle": "orc_warrior_idle",
+    "name": "mob.orc_warrior.name",
+    "desc": "mob.orc_warrior.desc"
+  }
+]

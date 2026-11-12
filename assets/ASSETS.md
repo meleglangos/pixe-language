@@ -15,8 +15,8 @@
 | **Tiny RPG Character Asset Pack 01 – Free (Soldier & Orc)**, Zerie | `tiny-rpg-01/` | 2 animált karakter 100×100-as kockákban: katona (kard + íj) és ork (fejsze); idle, walk, támadások, hurt, death; nyílvessző lövedék | **Harc-animációk**: a Pixel Crawlerben nincs támadás- és sebződés-animáció a szörnyeknek, itt van. Más stílusú (nagyobb fej, chibi), egymás mellett nem keverendő | A csomagban nincs licencfájl; a letöltési oldalon (itch.io) kell ellenőrizni. Credit: *Tiny RPG Character Asset Pack by Zerie* |
 | **Tiny RPG Character Asset Pack 02 – Free (Demon_A & Blood Monster_A)**, Zerie | `tiny-rpg-02/` | 2 animált szörny 100×100-as kockákban: démon (nagy pengével) és vérszörny; idle, walk, 2 támadás, hurt, death | Boss- vagy szörny-jelöltek harc-animációval | Mint fent |
 
-A játékban használt kivágások nevei és koordinátái: `src/data/assets.js` (`frames`, `strips`).
-A credit a játékban: Menü → „Mitwirkende” (`src/data/config.js` → `credits`).
+A játékban használt kivágások nevei és koordinátái: `src/config/assets.js` (`frames`, `strips`).
+A credit a játékban: Menü → „Mitwirkende” (`src/config/config.js` → `credits`).
 
 ### Gyors kereső
 
@@ -180,7 +180,7 @@ Előnézet: [`previews/pc-npc.png`](previews/pc-npc.png)
 ### Szörnyek (csontvázak, orkok)
 
 Minden szörnynek 3 animációja van: **idle** (32×32, 4 kocka, jobbra néz), **run** (64×64, 6 kocka), **death** (eltérő méret).
-A játékban: kripta = csontváz → zsivány → harcos, bánya = ork → felderítő → harcos (`src/data/dungeons.js`).
+A játékban: kripta = csontváz → zsivány → harcos, bánya = ork → felderítő → harcos (`data/dungeons.json`, `data/monsters.json`).
 Még nem használt: `skel-mage` (piros köpenyes mágus), `orc-shaman` (sámán). A csontvázak death animációjának
 utolsó kockái csontkupacként is jók (a kriptában így használjuk).
 

@@ -1,0 +1,10 @@
+{
+  "name": "das-deutsch-abenteuer",
+  "private": true,
+  "description": "Böngészős pixel-art RPG német nyelvtanuláshoz. Futtatáshoz nem kell npm; ez csak a tesztekhez és az adateszközökhöz van.",
+  "scripts": {
+    "test": "node --test \"tests/*.test.js\"",
+    "build:data": "node tools/build-data.js",
+    "check:data": "node tools/build-data.js --check"
+  }
+}

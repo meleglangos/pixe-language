@@ -1,0 +1,11 @@
+[
+  {"id": "dungeon_crypt", "name": "poi.dungeon_crypt.name", "theme": "crypt", "map": "dungeon_crypt"},
+  {
+    "id": "dungeon_mine",
+    "name": "poi.dungeon_mine.name",
+    "theme": "mine",
+    "map": "dungeon_mine",
+    "darkness": {"color": "#04060e", "alpha": 0.8, "playerLight": 52},
+    "ambience": {"dust": true}
+  }
+]

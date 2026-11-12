@@ -1,4 +1,5 @@
-// Szövegek lekérése a strings.js-ből.
+// Szövegek lekérése a fordítási fájlból (data/translations.json -> Game.data.strings).
+// Minden megjelenő szöveg innen jön: Game.i18n.de(kulcs) a játékban látszik, Game.i18n.hu(kulcs) a "?" buborék.
 (function () {
   function get(key, lang, vars) {
     const entry = Game.data.strings[key];

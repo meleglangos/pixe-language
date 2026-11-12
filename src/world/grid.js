@@ -14,7 +14,7 @@
       this.rebuild();
     }
 
-    // A világtérkép rácsa a map.js alapján.
+    // A világtérkép rácsa a data/world_map.json alapján.
     static fromOverworld(map) {
       const tiles = Game.data.tiles, objs = Game.data.objectTypes;
       const cells = [];
