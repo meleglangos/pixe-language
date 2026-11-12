@@ -1,4 +1,4 @@
-// A data/*.json fájlokból elkészíti a data/bundle.js-t, amit a játék file:// alóli futáskor használ
+// A data/*.json és data/maps/*.json fájlokból elkészíti a data/bundle.js-t, amit a játék file:// alóli futáskor használ
 // (ott a böngésző nem engedi a JSON-ok betöltését). Weboldalként a JSON-ok töltődnek be közvetlenül.
 //
 //   node tools/build-data.js           -- újragenerálja a bundle-t
@@ -11,16 +11,28 @@ const path = require('path');
 const DATA = path.join(__dirname, '..', 'data');
 // Ugyanaz a lista, mint a src/systems/content/ContentLoader.js-ben (FILES).
 const FILES = {
-  strings: 'strings.json', map: 'world_map.json', monsters: 'monsters.json', dungeonProps: 'dungeon_props.json',
+  strings: 'translations.json', monsters: 'monsters.json', dungeonProps: 'dungeon_props.json',
   dungeons: 'dungeons.json', items: 'items.json', lootTables: 'loot_tables.json', tasks: 'tasks.json', shop: 'shop.json',
 };
 
-function build() {
+// Az összes tartalom egy objektumban (ugyanaz a szerkezet, amit a ContentLoader.install kap).
+function readContent() {
   const content = {};
   for (const [key, file] of Object.entries(FILES)) {
     const text = fs.readFileSync(path.join(DATA, file), 'utf8');
     try { content[key] = JSON.parse(text); } catch (e) { throw new Error(file + ': hibás JSON – ' + e.message); }
   }
+  // Tiled térképek: a világtérkép + minden dungeon "map" mezője (ugyanaz, mint a ContentLoader mapIds-e)
+  content.maps = {};
+  for (const id of ['overworld', ...new Set(content.dungeons.map(d => d.map))]) {
+    const file = path.join(DATA, 'maps', id + '.json');
+    try { content.maps[id] = JSON.parse(fs.readFileSync(file, 'utf8')); } catch (e) { throw new Error('maps/' + id + '.json: ' + e.message); }
+  }
+  return content;
+}
+
+function build() {
+  const content = readContent();
   return '// GENERÁLT FÁJL – ne szerkeszd! Forrás: data/*.json, újragenerálás: node tools/build-data.js\n' +
     'window.GAME_CONTENT_BUNDLE = ' + JSON.stringify(content) + ';\n';
 }
@@ -37,4 +49,4 @@ if (require.main === module) {
   console.log('data/bundle.js kész (' + Math.round(text.length / 1024) + ' KB).');
 }
 
-module.exports = { build, FILES };
+module.exports = { build, readContent, FILES };

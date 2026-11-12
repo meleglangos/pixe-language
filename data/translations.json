@@ -139,5 +139,6 @@
   "error.libs": {
     "de": "Das Spiel konnte nicht geladen werden. Bitte prüfe deine Internetverbindung und lade die Seite neu.",
     "hu": "A játékot nem sikerült betölteni. Kérlek, ellenőrizd az internetkapcsolatot, és töltsd újra az oldalt."
-  }
+  },
+  "ui.translation": {"de": "Übersetzung", "hu": "Fordítás"}
 }

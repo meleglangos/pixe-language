@@ -3,6 +3,7 @@
   function start() {
     Game.saveManager.init();
     Game.saveManager.load();
+    document.title = Game.i18n.de('game.title');
     Game.ui.init();
 
     if (!window.Phaser || !window.EasyStar) {
@@ -34,7 +35,8 @@
     if (!Game.state.flag('introSeen')) Game.menu.intro();
   }
 
-  // Ha a tartalom (data/*.json) sem tölthető be, a szövegek sincsenek meg: egyszerű hibaüzenet.
+  // Ha a tartalom (data/*.json) sem tölthető be, a fordítási fájl sincs meg: ez az egyetlen
+  // szöveg, ami nem onnan jön (kétnyelvű, beégetett hibaüzenet).
   function fail(e) {
     console.error(e);
     document.getElementById('ui').textContent = 'Das Spiel konnte nicht geladen werden. / A játékot nem sikerült betölteni.';

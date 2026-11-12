@@ -10,6 +10,7 @@ const SCRIPTS = [
   'src/core/events.js',
   'src/config/config.js',
   'src/config/tiles.js',
+  'src/systems/maps/TiledMap.js',
   'src/systems/content/ContentValidator.js',
   'src/systems/content/ContentLoader.js',
   'src/state/GameState.js',
@@ -31,12 +32,8 @@ function memoryStorage(initial) {
   };
 }
 
-function readData() {
-  const { FILES } = require('../../tools/build-data.js');
-  const raw = {};
-  for (const [key, file] of Object.entries(FILES)) raw[key] = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', file), 'utf8'));
-  return raw;
-}
+// a teljes nyers tartalom (data/*.json + data/maps/*.json), ugyanúgy, ahogy a bundle-be kerül
+const readData = () => require('../../tools/build-data.js').readContent();
 
 // opts.items: extra tárgyak a tesztekhez (a data/items.json még üres)
 // opts.storage: kezdeti localStorage tartalom ({ kulcs: szöveg })

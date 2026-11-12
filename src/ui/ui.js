@@ -1,4 +1,4 @@
-// DOM-alapú felület a játék fölött. Minden szöveg a data/strings.json-ból jön,
+// DOM-alapú felület a játék fölött. Minden szöveg a fordítási fájlból (data/translations.json) jön kulccsal,
 // és kap egy "?" gombot, ami a magyar fordítást mutatja.
 (function () {
   const ui = Game.ui = { root: null, modalEl: null };
@@ -11,12 +11,13 @@
     return e;
   };
 
-  // "?" gomb magyar fordítással
-  ui.help = function (hu) {
+  // "?" gomb: a buborék a fordítási fájlból (data/translations.json) mutatja a kulcs magyar változatát.
+  ui.help = function (key, vars) {
     const b = ui.el('button', 'help', ['?']);
     b.type = 'button';
-    b.setAttribute('aria-label', 'Übersetzung');
-    b.dataset.hu = hu;
+    b.setAttribute('aria-label', Game.i18n.de('ui.translation'));
+    b.dataset.key = key;
+    if (vars) b.dataset.vars = JSON.stringify(vars);
     return b;
   };
 
@@ -24,7 +25,7 @@
   ui.tx = function (key, vars, cls) {
     return ui.el('span', 'tx' + (cls ? ' ' + cls : ''), [
       ui.el('span', 'de', [Game.i18n.de(key, vars) + '\u00A0']), // nem törhető szóköz: a "?" ne kerüljön külön sorba
-      ui.help(Game.i18n.hu(key, vars)),
+      ui.help(key, vars),
     ]);
   };
 
@@ -33,12 +34,12 @@
     const b = ui.el('button', 'btn' + (cls ? ' ' + cls : ''), [Game.i18n.de(key)]);
     b.type = 'button';
     b.addEventListener('click', onClick);
-    return ui.el('span', 'btn-wrap', [b, ui.help(Game.i18n.hu(key))]);
+    return ui.el('span', 'btn-wrap', [b, ui.help(key)]);
   };
 
   // ---------- fordítás-buborék ----------
   function showBubble(anchor) {
-    bubble.textContent = anchor.dataset.hu;
+    bubble.textContent = Game.i18n.hu(anchor.dataset.key, anchor.dataset.vars ? JSON.parse(anchor.dataset.vars) : undefined);
     bubble.hidden = false;
     bubbleFor = anchor;
     const a = anchor.getBoundingClientRect(), b = bubble.getBoundingClientRect();

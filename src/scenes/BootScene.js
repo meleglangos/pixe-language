@@ -26,6 +26,11 @@
         const [file, x, y, w, h] = a.frames[name];
         if (this.textures.exists(file)) this.textures.get(file).add(name, 0, x, y, w, h);
       });
+      // A Tiled térképek a Phaser tilemap-cache-be is bekerülnek ('map_<id>'), így bármelyik jelenet
+      // a Phaser saját Tiled-olvasójával is megnyithatja őket: this.make.tilemap({ key: 'map_overworld' }).
+      Object.keys(Game.data.maps).forEach(id => {
+        this.cache.tilemap.add('map_' + id, { format: Phaser.Tilemaps.Formats.TILED_JSON, data: Game.data.maps[id] });
+      });
       Game.gfx.buildDerived(this);
       Game.gfx.generateMissing(this);
       this.scene.start('World');

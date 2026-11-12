@@ -64,7 +64,7 @@
       };
       ui.modal({
         title: 'import.title',
-        body: [p('import.desc'), ui.el('div', 'with-help', [area, ui.help(Game.i18n.hu('import.placeholder'))]), status],
+        body: [p('import.desc'), ui.el('div', 'with-help', [area, ui.help('import.placeholder')]), status],
         buttons: [ui.btn('import.load', load, 'primary'), ui.btn('common.back', menu.open)],
       });
     },
