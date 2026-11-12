@@ -89,6 +89,8 @@ def scan(rules):
                 w, h = im.size
                 frames = info['frames'] if 'frames' in info else (detect_frames(r, im) if info['mode'] == 'grid' else None)
                 bbox = im.getbbox()
+            if frames == 'x100':
+                frames = (100, 100, w // 100)
             item = dict(info, path=r, w=w, h=h, frames=frames, empty=bbox is None)
             items.append(item)
     return items

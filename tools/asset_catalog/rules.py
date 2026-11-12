@@ -14,6 +14,8 @@ PACKS = {
     'wp': '16x16 Weapon RPG Icons (Shade)',
     'it': 'Items16 (Glionox)',
     'mi': 'Modern Interiors – Free (LimeZu)',
+    't1': 'Tiny RPG Character Asset Pack 01 – Free: Soldier & Orc (Zerie)',
+    't2': 'Tiny RPG Character Asset Pack 02 – Free: Demon_A & Blood Monster_A (Zerie)',
 }
 
 # (csomag, kategória-azonosító, kategória neve, minta a csomagon belüli útvonalra, megjelenítés)
@@ -40,6 +42,13 @@ CATEGORIES = [
     ('mi', 'belso-nagy', 'Ugyanez 32×32 és 48×48 felbontásban', r'^Interiors_free/(32x32|48x48)/', 'list'),
     ('mi', 'attekintes', 'A csomag saját áttekintő képe', r'^free_overview', 'list'),
     ('mi', 'regi', 'Régi (Old) tilesetek és karakter', r'^Old/', 'list'),
+    ('t1', 'lovedek', 'Lövedék (nyílvessző)', r'Arrow', 'grid'),
+    ('t1', 'arnyekkal', 'Ugyanezek árnyékkal (with shadows)', r' with shadows/', 'list'),
+    ('t2', 'arnyekkal', 'Ugyanezek árnyékkal (with shadows)', r' with shadows/', 'list'),
+    ('t1', 'karakter', 'Karakterek animációi (Soldier, Orc)', r'^Characters\(100x100 split\)/[^/]+/[^/]+/[^/]+_\w+\.png$', 'grid'),
+    ('t1', 'lap', 'Egyben lévő karakterlapok (soronként egy animáció)', r'^Characters\(100x100 split\)/[^/]+/[^/]+/[^/_]+\.png$', 'list'),
+    ('t2', 'karakter', 'Karakterek animációi (Demon_A, Blood Monster_A)', r'^Characters\(100x100 split\)/[^/]+/[^/]+/[^/]+_(Attack|Death|Hurt|Idle|Walk)\d*\.png$', 'grid'),
+    ('t2', 'lap', 'Egyben lévő karakterlapok (soronként egy animáció)', r'^Characters\(100x100 split\)/[^/]+/[^/]+/[^/]+\.png$', 'list'),
 ]
 
 # Ahol az automatikus képkocka-felismerés nem működik (egymáshoz érő figurák), kézzel megadva:
@@ -56,7 +65,9 @@ FRAME_HINTS = [
     (r'Characters_free/[A-Z][a-z]+_16x16\.png', (16, 32, 168), 'teljes karakterlap: 24 oszlop × 7 sor'),
 ]
 
-PREFIX = {'pc': PC, 'wp': WP, 'mi': MI, 'it': 'items/'}
+T1 = 'tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/'
+T2 = 'tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/'
+PREFIX = {'pc': PC, 'wp': WP, 'mi': MI, 'it': 'items/', 't1': T1, 't2': T2}
 
 
 def make_id(pack, inner):
@@ -80,6 +91,15 @@ def make_id(pack, inner):
         p = '/'.join(out)
     elif pack == 'mi':
         p = p.replace('Characters_free/', '').replace('Interiors_free/', '').replace('_16x16', '').replace('_free', '')
+    elif pack in ('t1', 't2'):
+        m = re.match(r'Characters\(100x100 split\)/([^/]+)/([^/]+)/(.+)$', inner)
+        arrow = re.search(r'Arrow01\((\d+x\d+)\)', inner)
+        if arrow:
+            p = ('soldier-' if 'Soldier/' in inner else '') + 'arrow-' + arrow.group(1)
+        elif m:
+            char, sub, fname = m.groups()
+            anim = re.sub(r'\.png$', '', fname)[len(char):].lstrip('_') or 'lap'
+            p = char + ('-shadow' if 'with shadows' in sub else '') + '/' + anim
     elif pack == 'wp':
         p = p.replace('-weapons', '')
     return pack + ':' + '/'.join(slug(x) for x in p.split('/'))
@@ -95,6 +115,8 @@ def classify(path):
                     for pat, fr, note in FRAME_HINTS:
                         if re.search(pat, path):
                             d['frames'], d['frame_note'] = fr or None, note
+                            if fr == 'x100':  # 100x100-as kockák egy sorban
+                                d['frames'] = 'x100'
                             break
                     return d
             return dict(pack=pack, cat='egyeb', catname='Egyéb', mode='list', id=make_id(pack, inner), inner=inner)

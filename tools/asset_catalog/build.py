@@ -69,7 +69,12 @@ def build_previews(groups):
         elif mode == 'atlas':
             for it in items:
                 im = Image.open(os.path.join(ASSETS, it['path'])).convert('RGBA')
-                name = '%s-%s-%s.png' % (pack, cat, slug(it['id'].split(':', 1)[1].split('/')[-1]))
+                short = it['id'].split(':', 1)[1]
+                parts = short.split('/')
+                key = parts[-2] if parts[-1] == 'lap' and len(parts) > 1 else parts[-1]
+                name = '%s-%s-%s.png' % (pack, cat, slug(key))
+                if name in files:  # azonos végű azonosítók (pl. orc/lap, soldier/lap)
+                    name = '%s-%s-%s.png' % (pack, cat, slug(short))
                 col_labels = notes.WEAPON_COLUMNS if pack == 'wp' else None
                 pv.atlas_sheet('%s  ·  %d×%d px  ·  mező 16 px (oszlop, sor)' % (it['id'], it['w'], it['h']),
                                im, os.path.join(PREV, name), col_labels=col_labels)

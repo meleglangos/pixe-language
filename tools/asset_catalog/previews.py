@@ -27,11 +27,27 @@ def save(img, path):
     rgb.save(path, optimize=True)
 
 
-def first_frame(im, frames):
-    if frames:
-        fw, fh, n = frames
-        return im.crop((0, 0, fw, fh))
-    return im
+def first_frame(im, frames, max_frames=1):
+    """Előnézeti kép egy fájlhoz: animációnál az első néhány kocka egymás mellett,
+    a tartalomra vágva (a sok üres hely nélkül, pl. a 100×100-as kockákban álló kis figurák)."""
+    if not frames:
+        b = im.getbbox()
+        return im.crop(b) if b else im
+    fw, fh, n = frames
+    cols = max(1, im.width // fw)
+    cells = [im.crop(((i % cols) * fw, (i // cols) * fh, (i % cols) * fw + fw, (i // cols) * fh + fh)) for i in range(n)]
+    boxes = [c.getbbox() for c in cells[:max_frames] if c.getbbox()] or [c.getbbox() for c in cells if c.getbbox()]
+    if not boxes:
+        return cells[0]
+    x0, y0 = min(b[0] for b in boxes), min(b[1] for b in boxes)
+    x1, y1 = max(b[2] for b in boxes), max(b[3] for b in boxes)
+    x0, y0, x1, y1 = max(0, x0 - 1), max(0, y0 - 1), min(fw, x1 + 1), min(fh, y1 + 1)
+    shown = cells[:max_frames]
+    w = (x1 - x0)
+    strip = Image.new('RGBA', (w * len(shown) + 2 * (len(shown) - 1), y1 - y0), (0, 0, 0, 0))
+    for i, c in enumerate(shown):
+        strip.alpha_composite(c.crop((x0, y0, x1, y1)), (i * (w + 2), 0))
+    return strip
 
 
 def fit(im, box):

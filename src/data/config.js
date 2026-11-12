@@ -19,6 +19,7 @@ Game.data.config = {
       { name: '16x16 Weapon RPG Icons', by: 'Shade' },
       { name: 'Items16', by: 'Glionox' },
       { name: 'Modern Interiors', by: 'LimeZu', url: 'https://limezu.itch.io/moderninteriors' },
+      { name: 'Tiny RPG Character Asset Pack 01 & 02', by: 'Zerie' },
     ],
     code: [
       { name: 'Phaser 3', by: 'Phaser Studio', url: 'https://phaser.io' },

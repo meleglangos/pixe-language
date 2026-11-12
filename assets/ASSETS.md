@@ -12,6 +12,8 @@
 | **16x16 Weapon RPG Icons**, Shade | `weapons/` | 4 anyag (bronz, vas, acél, arany) × 480 fegyver ikon, 24 fegyvertípus × 10 változat | Fegyver loot, inventory, bolt, gear-ikonok a rarity létrához | A csomagban nincs licencfájl; a letöltési oldalon kell ellenőrizni. Credit: *16x16 Weapon RPG Icons by Shade* |
 | **Items16**, Glionox | `items/` | 1244 egyedi 16×16 ikon: fegyverek, páncél, ruha, étel, drágakő, érc, könyv, kulcs, hangszer, hal, virág, szörny-alapanyag | Páncél-ikonok, HP-ital, loot, meglepetés-tárgyak, bolt | A csomagban nincs licencfájl; a letöltési oldalon kell ellenőrizni. Credit: *Items16 by Glionox* |
 | **Modern Interiors – Free v2.2**, LimeZu | `modern-interiors/` | Modern belső tér (bútor, konyha, fürdő, iroda), szobaépítő (falak, padlók), 4 modern karakter | A későbbi **ház rendszerhez**. Fantasy dungeonbe nem illik | **Csak nem kereskedelmi célra.** Credit: *Modern Interiors by LimeZu*, https://limezu.itch.io/moderninteriors |
+| **Tiny RPG Character Asset Pack 01 – Free (Soldier & Orc)**, Zerie | `tiny-rpg-01/` | 2 animált karakter 100×100-as kockákban: katona (kard + íj) és ork (fejsze); idle, walk, támadások, hurt, death; nyílvessző lövedék | **Harc-animációk**: a Pixel Crawlerben nincs támadás- és sebződés-animáció a szörnyeknek, itt van. Más stílusú (nagyobb fej, chibi), egymás mellett nem keverendő | A csomagban nincs licencfájl; a letöltési oldalon (itch.io) kell ellenőrizni. Credit: *Tiny RPG Character Asset Pack by Zerie* |
+| **Tiny RPG Character Asset Pack 02 – Free (Demon_A & Blood Monster_A)**, Zerie | `tiny-rpg-02/` | 2 animált szörny 100×100-as kockákban: démon (nagy pengével) és vérszörny; idle, walk, 2 támadás, hurt, death | Boss- vagy szörny-jelöltek harc-animációval | Mint fent |
 
 A játékban használt kivágások nevei és koordinátái: `src/data/assets.js` (`frames`, `strips`).
 A credit a játékban: Menü → „Mitwirkende” (`src/data/config.js` → `credits`).
@@ -30,6 +32,7 @@ A credit a játékban: Menü → „Mitwirkende” (`src/data/config.js` → `cr
 | bájital, tekercs, könyv | `pc:esoteric` és Items16 |
 | tűz, tábortűz, kemence, üllő | Pixel Crawler → Munkaállomások |
 | szörny (idle / futás / halál) | Pixel Crawler → Szörnyek |
+| szörny **támadás és sebződés** animációval | Tiny RPG 01 / 02 |
 | fegyver ikon (anyag szerint) | `wp:*` |
 | páncél, sisak, csizma, étel, kulcs, drágakő ikon | Items16 (sorszám-tartományok lent) |
 | modern bútor, szoba | Modern Interiors |
@@ -42,6 +45,8 @@ A credit a játékban: Menü → „Mitwirkende” (`src/data/config.js` → `cr
 | 16x16 Weapon RPG Icons (Shade) | 5 | 5 |
 | Items16 (Glionox) | 1244 | 1244 |
 | Modern Interiors – Free (LimeZu) | 64 | 64 |
+| Tiny RPG Character Asset Pack 01 – Free: Soldier & Orc (Zerie) | 34 | 34 |
+| Tiny RPG Character Asset Pack 02 – Free: Demon_A & Blood Monster_A (Zerie) | 28 | 28 |
 
 ## Tartalom
 
@@ -69,6 +74,15 @@ A credit a játékban: Menü → „Mitwirkende” (`src/data/config.js` → `cr
   - [Ugyanez 32×32 és 48×48 felbontásban](#mi-belso-nagy) (4)
   - [A csomag saját áttekintő képe](#mi-attekintes) (1)
   - [Régi (Old) tilesetek és karakter](#mi-regi) (24)
+- **Tiny RPG Character Asset Pack 01 – Free: Soldier & Orc (Zerie)**
+  - [Lövedék (nyílvessző)](#t1-lovedek) (4)
+  - [Ugyanezek árnyékkal (with shadows)](#t1-arnyekkal) (15)
+  - [Karakterek animációi (Soldier, Orc)](#t1-karakter) (13)
+  - [Egyben lévő karakterlapok (soronként egy animáció)](#t1-lap) (2)
+- **Tiny RPG Character Asset Pack 02 – Free: Demon_A & Blood Monster_A (Zerie)**
+  - [Ugyanezek árnyékkal (with shadows)](#t2-arnyekkal) (14)
+  - [Karakterek animációi (Demon_A, Blood Monster_A)](#t2-karakter) (12)
+  - [Egyben lévő karakterlapok (soronként egy animáció)](#t2-lap) (2)
 
 ---
 
@@ -609,4 +623,141 @@ Előnézet: [`previews/mi-belso-16-interiors.png`](previews/mi-belso-16-interior
 | `mi:old/run-horizontal-2` | `modern-interiors/Modern tiles_Free/Old/run_horizontal_16x16_2.png` | 384×32 | – | Régi karakter, oldalra fut | modern, régi, karakter, animáció |
 | `mi:old/run-horizontal-32x32-2` | `modern-interiors/Modern tiles_Free/Old/run_horizontal_32x32_2.png` | 768×64 | – | Régi karakter, oldalra fut | modern, régi, karakter, animáció |
 | `mi:old/run-horizontal-48x48-2` | `modern-interiors/Modern tiles_Free/Old/run_horizontal_48x48_2.png` | 1152×96 | – | Régi karakter, oldalra fut | modern, régi, karakter, animáció |
+
+---
+
+## Tiny RPG Character Asset Pack 01 – Free: Soldier & Orc (Zerie)
+
+Útvonal: `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/`. Minden animáció egysoros csík
+**100×100-as kockákkal**; a figura ebből csak kb. 20–30 px, középen áll. Jobbra néznek.
+Minden karakter két változatban van: árnyék nélkül és `with shadows` (árnyékkal a talpuk alatt).
+A `Characters(100x100 split)/<Név>/<Név>/<Név>.png` az összes animáció egy lapon, soronként egy.
+Mellette `.aseprite` forrásfájlok (a katalógus nem sorolja fel).
+
+<a id="t1-lovedek"></a>
+### Lövedék (nyílvessző)
+
+Előnézet: [`previews/t1-lovedek.png`](previews/t1-lovedek.png)
+
+| Azonosító | Fájl | Méret | Képkockák | Leírás | Címkék |
+| --- | --- | --- | --- | --- | --- |
+| `t1:arrow-100x100` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Arrow(Projectile)/Arrow01(100x100).png` | 100×100 | – | Nyílvessző lövedék 100×100-as keretben (a katona íjlövéséhez) | lövedék, nyíl, harc |
+| `t1:arrow-32x32` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Arrow(Projectile)/Arrow01(32x32).png` | 32×32 | – | Nyílvessző lövedék 32×32-es keretben | lövedék, nyíl, harc |
+| `t1:soldier-arrow-100x100` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Soldier/Arrow(projectile)/Arrow01(100x100).png` | 100×100 | – | Nyílvessző lövedék 100×100-as keretben (a katona íjlövéséhez) | lövedék, nyíl, harc |
+| `t1:soldier-arrow-32x32` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Soldier/Arrow(projectile)/Arrow01(32x32).png` | 32×32 | – | Nyílvessző lövedék 32×32-es keretben | lövedék, nyíl, harc |
+
+<a id="t1-arnyekkal"></a>
+### Ugyanezek árnyékkal (with shadows)
+
+Ugyanazok a fájlok, mint fent, de a figura alatt árnyék-ellipszis van. Ha a játék maga rajzol árnyékot, az árnyék nélküli kell.
+
+| Azonosító | Fájl | Méret | Képkockák | Leírás | Címkék |
+| --- | --- | --- | --- | --- | --- |
+| `t1:orc-shadow/lap` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Orc/Orc with shadows/Orc.png` | 800×600 | – | Ork, összes animáció egy lapon, árnyékkal | szörny, ork, atlasz, árnyék |
+| `t1:orc-shadow/attack01` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Orc/Orc with shadows/Orc_Attack01.png` | 600×100 | – | Ork fejszecsapás | szörny, ork, támadás, animáció |
+| `t1:orc-shadow/attack02` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Orc/Orc with shadows/Orc_Attack02.png` | 600×100 | – | Ork fejszecsapás (másik) | szörny, ork, támadás, animáció |
+| `t1:orc-shadow/death` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Orc/Orc with shadows/Orc_Death.png` | 400×100 | – | Ork meghal | szörny, ork, halál, animáció |
+| `t1:orc-shadow/hurt` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Orc/Orc with shadows/Orc_Hurt.png` | 400×100 | – | Ork sebződik | szörny, ork, sebződés, animáció |
+| `t1:orc-shadow/idle` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Orc/Orc with shadows/Orc_Idle.png` | 600×100 | – | Ork (zöld, nagy fejsze) áll | szörny, ork, idle, animáció |
+| `t1:orc-shadow/walk` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Orc/Orc with shadows/Orc_Walk.png` | 800×100 | – | Ork sétál | szörny, ork, séta, animáció |
+| `t1:soldier-shadow/lap` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Soldier/Soldier with shadows/Soldier.png` | 900×700 | – | Katona, összes animáció egy lapon, árnyékkal | karakter, katona, atlasz, árnyék |
+| `t1:soldier-shadow/attack01` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Soldier/Soldier with shadows/Soldier_Attack01.png` | 600×100 | – | Katona kardvágás (széles ív) | karakter, katona, támadás, kard, animáció |
+| `t1:soldier-shadow/attack02` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Soldier/Soldier with shadows/Soldier_Attack02.png` | 600×100 | – | Katona kardszúrás | karakter, katona, támadás, kard, animáció |
+| `t1:soldier-shadow/attack03` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Soldier/Soldier with shadows/Soldier_Attack03.png` | 900×100 | – | Katona íjlövés (nyílvesszővel) | karakter, katona, támadás, íj, animáció |
+| `t1:soldier-shadow/death` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Soldier/Soldier with shadows/Soldier_Death.png` | 400×100 | – | Katona meghal, eldől | karakter, katona, halál, animáció |
+| `t1:soldier-shadow/hurt` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Soldier/Soldier with shadows/Soldier_Hurt.png` | 400×100 | – | Katona sebződik (pirosan villan) | karakter, katona, sebződés, animáció |
+| `t1:soldier-shadow/idle` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Soldier/Soldier with shadows/Soldier_Idle.png` | 600×100 | – | Katona (sisak, kard, piros tunika) áll | karakter, katona, idle, animáció |
+| `t1:soldier-shadow/walk` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Soldier/Soldier with shadows/Soldier_Walk.png` | 800×100 | – | Katona sétál | karakter, katona, séta, animáció |
+
+<a id="t1-karakter"></a>
+### Karakterek animációi (Soldier, Orc)
+
+Előnézet: [`previews/t1-karakter.png`](previews/t1-karakter.png)
+
+| Azonosító | Fájl | Méret | Képkockák | Leírás | Címkék |
+| --- | --- | --- | --- | --- | --- |
+| `t1:orc/attack01` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Orc/Orc/Orc_Attack01.png` | 600×100 | 6 kocka, 100×100 | Ork fejszecsapás | szörny, ork, támadás, animáció |
+| `t1:orc/attack02` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Orc/Orc/Orc_Attack02.png` | 600×100 | 6 kocka, 100×100 | Ork fejszecsapás (másik) | szörny, ork, támadás, animáció |
+| `t1:orc/death` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Orc/Orc/Orc_Death.png` | 400×100 | 4 kocka, 100×100 | Ork meghal | szörny, ork, halál, animáció |
+| `t1:orc/hurt` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Orc/Orc/Orc_Hurt.png` | 400×100 | 4 kocka, 100×100 | Ork sebződik | szörny, ork, sebződés, animáció |
+| `t1:orc/idle` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Orc/Orc/Orc_Idle.png` | 600×100 | 6 kocka, 100×100 | Ork (zöld, nagy fejsze) áll | szörny, ork, idle, animáció |
+| `t1:orc/walk` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Orc/Orc/Orc_Walk.png` | 800×100 | 8 kocka, 100×100 | Ork sétál | szörny, ork, séta, animáció |
+| `t1:soldier/attack01` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Soldier/Soldier/Soldier_Attack01.png` | 600×100 | 6 kocka, 100×100 | Katona kardvágás (széles ív) | karakter, katona, támadás, kard, animáció |
+| `t1:soldier/attack02` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Soldier/Soldier/Soldier_Attack02.png` | 600×100 | 6 kocka, 100×100 | Katona kardszúrás | karakter, katona, támadás, kard, animáció |
+| `t1:soldier/attack03` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Soldier/Soldier/Soldier_Attack03.png` | 900×100 | 9 kocka, 100×100 | Katona íjlövés (nyílvesszővel) | karakter, katona, támadás, íj, animáció |
+| `t1:soldier/death` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Soldier/Soldier/Soldier_Death.png` | 400×100 | 4 kocka, 100×100 | Katona meghal, eldől | karakter, katona, halál, animáció |
+| `t1:soldier/hurt` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Soldier/Soldier/Soldier_Hurt.png` | 400×100 | 4 kocka, 100×100 | Katona sebződik (pirosan villan) | karakter, katona, sebződés, animáció |
+| `t1:soldier/idle` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Soldier/Soldier/Soldier_Idle.png` | 600×100 | 6 kocka, 100×100 | Katona (sisak, kard, piros tunika) áll | karakter, katona, idle, animáció |
+| `t1:soldier/walk` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Soldier/Soldier/Soldier_Walk.png` | 800×100 | 8 kocka, 100×100 | Katona sétál | karakter, katona, séta, animáció |
+
+<a id="t1-lap"></a>
+### Egyben lévő karakterlapok (soronként egy animáció)
+
+Sorrend a lapon (soronként): **Soldier**: idle (6), walk (8), attack01 (6, vágás), attack02 (6, szúrás),
+attack03 (9, íjlövés), hurt (4), death (4). **Orc**: idle (6), walk (8), attack01 (6), attack02 (6), hurt (4), death (4).
+A sorok kockaszáma a sor elejétől számít; a sor vége üres lehet.
+
+| Azonosító | Fájl | Méret | Képkockák | Leírás | Címkék |
+| --- | --- | --- | --- | --- | --- |
+| `t1:orc/lap` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Orc/Orc/Orc.png` | 800×600 | – | Ork, összes animáció egy lapon (6 sor) | szörny, ork, atlasz |
+| `t1:soldier/lap` | `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/Characters(100x100 split)/Soldier/Soldier/Soldier.png` | 900×700 | – | Katona, összes animáció egy lapon (7 sor) | karakter, katona, atlasz |
+
+---
+
+## Tiny RPG Character Asset Pack 02 – Free: Demon_A & Blood Monster_A (Zerie)
+
+Útvonal: `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/`. Ugyanaz a formátum, mint
+a Tiny RPG 01-nél: 100×100-as kockák, jobbra néznek, árnyék nélkül és `with shadows` változat, egyben lévő lap is.
+
+<a id="t2-arnyekkal"></a>
+### Ugyanezek árnyékkal (with shadows)
+
+Ugyanazok a fájlok, mint fent, árnyékkal.
+
+| Azonosító | Fájl | Méret | Képkockák | Leírás | Címkék |
+| --- | --- | --- | --- | --- | --- |
+| `t2:blood-monster-a-shadow/lap` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A with shadows/Blood Monster_A.png` | 800×600 | – | Vérszörny, összes animáció egy lapon, árnyékkal | szörny, vérszörny, atlasz, árnyék |
+| `t2:blood-monster-a-shadow/attack01` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A with shadows/Blood Monster_A_Attack01.png` | 800×100 | – | Vérszörny támadás | szörny, vérszörny, támadás, animáció |
+| `t2:blood-monster-a-shadow/attack02` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A with shadows/Blood Monster_A_Attack02.png` | 800×100 | – | Vérszörny támadás (másik) | szörny, vérszörny, támadás, animáció |
+| `t2:blood-monster-a-shadow/death` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A with shadows/Blood Monster_A_Death.png` | 400×100 | – | Vérszörny meghal | szörny, vérszörny, halál, animáció |
+| `t2:blood-monster-a-shadow/hurt` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A with shadows/Blood Monster_A_Hurt.png` | 400×100 | – | Vérszörny sebződik | szörny, vérszörny, sebződés, animáció |
+| `t2:blood-monster-a-shadow/idle` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A with shadows/Blood Monster_A_Idle.png` | 600×100 | – | Vérszörny (bíbor, csápos, fogas) áll | szörny, vérszörny, idle, animáció |
+| `t2:blood-monster-a-shadow/walk` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A with shadows/Blood Monster_A_Walk.png` | 800×100 | – | Vérszörny mászik | szörny, vérszörny, séta, animáció |
+| `t2:demon-a-shadow/lap` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A with shadows/Demon_A.png` | 800×600 | – | Démon, összes animáció egy lapon, árnyékkal | szörny, démon, atlasz, árnyék |
+| `t2:demon-a-shadow/attack01` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A with shadows/Demon_A_Attack01.png` | 700×100 | – | Démon pengecsapás | szörny, démon, támadás, animáció |
+| `t2:demon-a-shadow/attack02` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A with shadows/Demon_A_Attack02.png` | 700×100 | – | Démon pengecsapás (másik) | szörny, démon, támadás, animáció |
+| `t2:demon-a-shadow/death` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A with shadows/Demon_A_Death.png` | 400×100 | – | Démon meghal | szörny, démon, halál, animáció |
+| `t2:demon-a-shadow/hurt` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A with shadows/Demon_A_Hurt.png` | 400×100 | – | Démon sebződik | szörny, démon, sebződés, animáció |
+| `t2:demon-a-shadow/idle` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A with shadows/Demon_A_Idle.png` | 600×100 | – | Démon (piros, szarvas, nagy ívelt pengével) áll — boss-jelölt | szörny, démon, boss, idle, animáció |
+| `t2:demon-a-shadow/walk` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A with shadows/Demon_A_Walk.png` | 800×100 | – | Démon sétál | szörny, démon, séta, animáció |
+
+<a id="t2-karakter"></a>
+### Karakterek animációi (Demon_A, Blood Monster_A)
+
+Előnézet: [`previews/t2-karakter.png`](previews/t2-karakter.png)
+
+| Azonosító | Fájl | Méret | Képkockák | Leírás | Címkék |
+| --- | --- | --- | --- | --- | --- |
+| `t2:blood-monster-a/attack01` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Attack01.png` | 800×100 | 8 kocka, 100×100 | Vérszörny támadás | szörny, vérszörny, támadás, animáció |
+| `t2:blood-monster-a/attack02` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Attack02.png` | 800×100 | 8 kocka, 100×100 | Vérszörny támadás (másik) | szörny, vérszörny, támadás, animáció |
+| `t2:blood-monster-a/death` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Death.png` | 400×100 | 4 kocka, 100×100 | Vérszörny meghal | szörny, vérszörny, halál, animáció |
+| `t2:blood-monster-a/hurt` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Hurt.png` | 400×100 | 4 kocka, 100×100 | Vérszörny sebződik | szörny, vérszörny, sebződés, animáció |
+| `t2:blood-monster-a/idle` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Idle.png` | 600×100 | 6 kocka, 100×100 | Vérszörny (bíbor, csápos, fogas) áll | szörny, vérszörny, idle, animáció |
+| `t2:blood-monster-a/walk` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Walk.png` | 800×100 | 8 kocka, 100×100 | Vérszörny mászik | szörny, vérszörny, séta, animáció |
+| `t2:demon-a/attack01` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A/Demon_A_Attack01.png` | 700×100 | 7 kocka, 100×100 | Démon pengecsapás | szörny, démon, támadás, animáció |
+| `t2:demon-a/attack02` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A/Demon_A_Attack02.png` | 700×100 | 7 kocka, 100×100 | Démon pengecsapás (másik) | szörny, démon, támadás, animáció |
+| `t2:demon-a/death` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A/Demon_A_Death.png` | 400×100 | 4 kocka, 100×100 | Démon meghal | szörny, démon, halál, animáció |
+| `t2:demon-a/hurt` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A/Demon_A_Hurt.png` | 400×100 | 4 kocka, 100×100 | Démon sebződik | szörny, démon, sebződés, animáció |
+| `t2:demon-a/idle` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A/Demon_A_Idle.png` | 600×100 | 6 kocka, 100×100 | Démon (piros, szarvas, nagy ívelt pengével) áll — boss-jelölt | szörny, démon, boss, idle, animáció |
+| `t2:demon-a/walk` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A/Demon_A_Walk.png` | 800×100 | 8 kocka, 100×100 | Démon sétál | szörny, démon, séta, animáció |
+
+<a id="t2-lap"></a>
+### Egyben lévő karakterlapok (soronként egy animáció)
+
+Sorrend a lapon (soronként): idle (6), walk (8), attack01, attack02 (Demon_A: 7-7, Blood Monster_A: 8-8), hurt (4), death (4).
+
+| Azonosító | Fájl | Méret | Képkockák | Leírás | Címkék |
+| --- | --- | --- | --- | --- | --- |
+| `t2:blood-monster-a/lap` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A.png` | 800×600 | – | Vérszörny, összes animáció egy lapon (6 sor) | szörny, vérszörny, atlasz |
+| `t2:demon-a/lap` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A/Demon_A.png` | 800×600 | – | Démon, összes animáció egy lapon (6 sor) | szörny, démon, atlasz |
 

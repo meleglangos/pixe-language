@@ -14,6 +14,8 @@ SUMMARY = r'''
 | **16x16 Weapon RPG Icons**, Shade | `weapons/` | 4 anyag (bronz, vas, acél, arany) × 480 fegyver ikon, 24 fegyvertípus × 10 változat | Fegyver loot, inventory, bolt, gear-ikonok a rarity létrához | A csomagban nincs licencfájl; a letöltési oldalon kell ellenőrizni. Credit: *16x16 Weapon RPG Icons by Shade* |
 | **Items16**, Glionox | `items/` | 1244 egyedi 16×16 ikon: fegyverek, páncél, ruha, étel, drágakő, érc, könyv, kulcs, hangszer, hal, virág, szörny-alapanyag | Páncél-ikonok, HP-ital, loot, meglepetés-tárgyak, bolt | A csomagban nincs licencfájl; a letöltési oldalon kell ellenőrizni. Credit: *Items16 by Glionox* |
 | **Modern Interiors – Free v2.2**, LimeZu | `modern-interiors/` | Modern belső tér (bútor, konyha, fürdő, iroda), szobaépítő (falak, padlók), 4 modern karakter | A későbbi **ház rendszerhez**. Fantasy dungeonbe nem illik | **Csak nem kereskedelmi célra.** Credit: *Modern Interiors by LimeZu*, https://limezu.itch.io/moderninteriors |
+| **Tiny RPG Character Asset Pack 01 – Free (Soldier & Orc)**, Zerie | `tiny-rpg-01/` | 2 animált karakter 100×100-as kockákban: katona (kard + íj) és ork (fejsze); idle, walk, támadások, hurt, death; nyílvessző lövedék | **Harc-animációk**: a Pixel Crawlerben nincs támadás- és sebződés-animáció a szörnyeknek, itt van. Más stílusú (nagyobb fej, chibi), egymás mellett nem keverendő | A csomagban nincs licencfájl; a letöltési oldalon (itch.io) kell ellenőrizni. Credit: *Tiny RPG Character Asset Pack by Zerie* |
+| **Tiny RPG Character Asset Pack 02 – Free (Demon_A & Blood Monster_A)**, Zerie | `tiny-rpg-02/` | 2 animált szörny 100×100-as kockákban: démon (nagy pengével) és vérszörny; idle, walk, 2 támadás, hurt, death | Boss- vagy szörny-jelöltek harc-animációval | Mint fent |
 
 A játékban használt kivágások nevei és koordinátái: `src/data/assets.js` (`frames`, `strips`).
 A credit a játékban: Menü → „Mitwirkende” (`src/data/config.js` → `credits`).
@@ -32,12 +34,24 @@ A credit a játékban: Menü → „Mitwirkende” (`src/data/config.js` → `cr
 | bájital, tekercs, könyv | `pc:esoteric` és Items16 |
 | tűz, tábortűz, kemence, üllő | Pixel Crawler → Munkaállomások |
 | szörny (idle / futás / halál) | Pixel Crawler → Szörnyek |
+| szörny **támadás és sebződés** animációval | Tiny RPG 01 / 02 |
 | fegyver ikon (anyag szerint) | `wp:*` |
 | páncél, sisak, csizma, étel, kulcs, drágakő ikon | Items16 (sorszám-tartományok lent) |
 | modern bútor, szoba | Modern Interiors |
 '''
 
 PACK_NOTES = {
+    't1': r'''
+Útvonal: `tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/`. Minden animáció egysoros csík
+**100×100-as kockákkal**; a figura ebből csak kb. 20–30 px, középen áll. Jobbra néznek.
+Minden karakter két változatban van: árnyék nélkül és `with shadows` (árnyékkal a talpuk alatt).
+A `Characters(100x100 split)/<Név>/<Név>/<Név>.png` az összes animáció egy lapon, soronként egy.
+Mellette `.aseprite` forrásfájlok (a katalógus nem sorolja fel).
+''',
+    't2': r'''
+Útvonal: `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/`. Ugyanaz a formátum, mint
+a Tiny RPG 01-nél: 100×100-as kockák, jobbra néznek, árnyék nélkül és `with shadows` változat, egyben lévő lap is.
+''',
     'pc': r'''
 Útvonal: `pixel-crawler/Pixel Crawler - Free Pack/`. Minden PNG mellett ott van az `.aseprite` forrásfájl is
 (193 db, ezeket a katalógus nem sorolja fel). A rács 16 px. Az animációk egysoros csíkok,
@@ -62,6 +76,20 @@ sorszám-tartományokkal írjuk le. Egy konkrét ikont az előnézeti lapon a sz
 }
 
 CATEGORY_NOTES = {
+    ('t1', 'lap'): r'''
+Sorrend a lapon (soronként): **Soldier**: idle (6), walk (8), attack01 (6, vágás), attack02 (6, szúrás),
+attack03 (9, íjlövés), hurt (4), death (4). **Orc**: idle (6), walk (8), attack01 (6), attack02 (6), hurt (4), death (4).
+A sorok kockaszáma a sor elejétől számít; a sor vége üres lehet.
+''',
+    ('t2', 'lap'): r'''
+Sorrend a lapon (soronként): idle (6), walk (8), attack01, attack02 (Demon_A: 7-7, Blood Monster_A: 8-8), hurt (4), death (4).
+''',
+    ('t1', 'arnyekkal'): r'''
+Ugyanazok a fájlok, mint fent, de a figura alatt árnyék-ellipszis van. Ha a játék maga rajzol árnyékot, az árnyék nélküli kell.
+''',
+    ('t2', 'arnyekkal'): r'''
+Ugyanazok a fájlok, mint fent, árnyékkal.
+''',
     ('pc', 'szorny'): r'''
 Minden szörnynek 3 animációja van: **idle** (32×32, 4 kocka, jobbra néz), **run** (64×64, 6 kocka), **death** (eltérő méret).
 A játékban: kripta = csontváz → zsivány → harcos, bánya = ork → felderítő → harcos (`src/data/dungeons.js`).
@@ -188,6 +216,43 @@ Modern ruhás karakterek, 16×32-es kockák. Irány-sorrend a csíkokon: jobb, f
 }
 
 FILES = [
+    # ======================= Tiny RPG 01 / 02 =======================
+    (r'Arrow01\(100x100\)', 'Nyílvessző lövedék 100×100-as keretben (a katona íjlövéséhez)', ['lövedék', 'nyíl', 'harc']),
+    (r'Arrow01\(32x32\)', 'Nyílvessző lövedék 32×32-es keretben', ['lövedék', 'nyíl', 'harc']),
+    (r'with shadows/Soldier\.png', 'Katona, összes animáció egy lapon, árnyékkal', ['karakter', 'katona', 'atlasz', 'árnyék']),
+    (r'with shadows/Orc\.png', 'Ork, összes animáció egy lapon, árnyékkal', ['szörny', 'ork', 'atlasz', 'árnyék']),
+    (r'with shadows/Demon_A\.png', 'Démon, összes animáció egy lapon, árnyékkal', ['szörny', 'démon', 'atlasz', 'árnyék']),
+    (r'with shadows/Blood Monster_A\.png', 'Vérszörny, összes animáció egy lapon, árnyékkal', ['szörny', 'vérszörny', 'atlasz', 'árnyék']),
+    (r'Soldier/Soldier\.png', 'Katona, összes animáció egy lapon (7 sor)', ['karakter', 'katona', 'atlasz']),
+    (r'Orc/Orc\.png', 'Ork, összes animáció egy lapon (6 sor)', ['szörny', 'ork', 'atlasz']),
+    (r'Demon_A/Demon_A\.png', 'Démon, összes animáció egy lapon (6 sor)', ['szörny', 'démon', 'atlasz']),
+    (r'Blood Monster_A/Blood Monster_A\.png', 'Vérszörny, összes animáció egy lapon (6 sor)', ['szörny', 'vérszörny', 'atlasz']),
+    (r'Soldier_Idle', 'Katona (sisak, kard, piros tunika) áll', ['karakter', 'katona', 'idle', 'animáció']),
+    (r'Soldier_Walk', 'Katona sétál', ['karakter', 'katona', 'séta', 'animáció']),
+    (r'Soldier_Attack01', 'Katona kardvágás (széles ív)', ['karakter', 'katona', 'támadás', 'kard', 'animáció']),
+    (r'Soldier_Attack02', 'Katona kardszúrás', ['karakter', 'katona', 'támadás', 'kard', 'animáció']),
+    (r'Soldier_Attack03', 'Katona íjlövés (nyílvesszővel)', ['karakter', 'katona', 'támadás', 'íj', 'animáció']),
+    (r'Soldier_Hurt', 'Katona sebződik (pirosan villan)', ['karakter', 'katona', 'sebződés', 'animáció']),
+    (r'Soldier_Death', 'Katona meghal, eldől', ['karakter', 'katona', 'halál', 'animáció']),
+    (r'Orc_Idle', 'Ork (zöld, nagy fejsze) áll', ['szörny', 'ork', 'idle', 'animáció']),
+    (r'Orc_Walk', 'Ork sétál', ['szörny', 'ork', 'séta', 'animáció']),
+    (r'Orc_Attack01', 'Ork fejszecsapás', ['szörny', 'ork', 'támadás', 'animáció']),
+    (r'Orc_Attack02', 'Ork fejszecsapás (másik)', ['szörny', 'ork', 'támadás', 'animáció']),
+    (r'Orc_Hurt', 'Ork sebződik', ['szörny', 'ork', 'sebződés', 'animáció']),
+    (r'Orc_Death', 'Ork meghal', ['szörny', 'ork', 'halál', 'animáció']),
+    (r'Demon_A_Idle', 'Démon (piros, szarvas, nagy ívelt pengével) áll — boss-jelölt', ['szörny', 'démon', 'boss', 'idle', 'animáció']),
+    (r'Demon_A_Walk', 'Démon sétál', ['szörny', 'démon', 'séta', 'animáció']),
+    (r'Demon_A_Attack01', 'Démon pengecsapás', ['szörny', 'démon', 'támadás', 'animáció']),
+    (r'Demon_A_Attack02', 'Démon pengecsapás (másik)', ['szörny', 'démon', 'támadás', 'animáció']),
+    (r'Demon_A_Hurt', 'Démon sebződik', ['szörny', 'démon', 'sebződés', 'animáció']),
+    (r'Demon_A_Death', 'Démon meghal', ['szörny', 'démon', 'halál', 'animáció']),
+    (r'Blood Monster_A_Idle', 'Vérszörny (bíbor, csápos, fogas) áll', ['szörny', 'vérszörny', 'idle', 'animáció']),
+    (r'Blood Monster_A_Walk', 'Vérszörny mászik', ['szörny', 'vérszörny', 'séta', 'animáció']),
+    (r'Blood Monster_A_Attack01', 'Vérszörny támadás', ['szörny', 'vérszörny', 'támadás', 'animáció']),
+    (r'Blood Monster_A_Attack02', 'Vérszörny támadás (másik)', ['szörny', 'vérszörny', 'támadás', 'animáció']),
+    (r'Blood Monster_A_Hurt', 'Vérszörny sebződik', ['szörny', 'vérszörny', 'sebződés', 'animáció']),
+    (r'Blood Monster_A_Death', 'Vérszörny meghal', ['szörny', 'vérszörny', 'halál', 'animáció']),
+
     # ======================= Pixel Crawler: karakter alaptest =======================
     (r'Body_A/Animations/Idle_Base/Idle_(\w+)', 'Alaptest áll (idle)', ['karakter', 'alaptest', 'idle', 'animáció']),
     (r'Body_A/Animations/Walk_Base/', 'Alaptest sétál', ['karakter', 'alaptest', 'séta', 'animáció']),
