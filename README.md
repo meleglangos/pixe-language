@@ -35,7 +35,7 @@ Böngészős pixel-art RPG német nyelvtanuláshoz. Nincs build lépés: az `ind
 | `assets/` | grafikai csomagok (Pixel Crawler – Anokolisa; Weapon Icons – Shade; Items16 – Glionox; Modern Interiors – LimeZu, csak nem kereskedelmi célra; Tiny RPG – Zerie) |
 | `tests/` | tesztek: `npm test` (Node 20+, függőség nélkül) |
 | `tools/` | `build-data.js` (bundle), `asset_catalog/` (asset-katalógus) |
-| `.github/workflows/pages.yml` | tesztek + közzététel GitHub Pages-en |
+| `.github/workflows/tests.yml` | automatikus tesztek minden push és PR után |
 
 A helyszínekre belépést a `Game.poi.handlers[típus]` kezeli (`WorldScene.js`); amíg nincs kezelő,
 a „még zárva” üzenet jelenik meg.
@@ -78,18 +78,15 @@ A [Tiled](https://www.mapeditor.org/) szerkesztővel: File → Open → `data/ma
 `dungeon_crypt.json`, `dungeon_mine.json`). Mentés után `node tools/build-data.js` és `npm test`.
 A rétegek és objektumok jelentése: [`data/README.md`](data/README.md#maps--tiled-térképek).
 
-## Online elérhetőség (GitHub Pages)
-A `.github/workflows/pages.yml` minden `main`-re küldött push után lefuttatja a teszteket, és ha zöldek,
-kiteszi a játékot. Egyszeri beállítás a GitHubon:
-1. Repó → **Settings** → bal oldalt **Pages**.
-2. **Build and deployment** → **Source**: válaszd a **GitHub Actions**-t (nem a „Deploy from a branch”-et).
-3. Ha a repó privát, a Pages-hez fizetős csomag kell; publikus repónál ingyenes.
-4. Az **Actions** fülön a „GitHub Pages” futás végén megjelenik a cím: https://meleglangos.github.io/pixe-language/
-   (első alkalommal kézzel is indítható: Actions → GitHub Pages → **Run workflow**).
-
-## Assetek
-Katalógus: `assets/ASSETS.md`, előnézetek: `assets/previews/`. Újragenerálás: `python3 tools/asset_catalog/build.py`
-(a leírások a `tools/asset_catalog/notes.py`-ban vannak).
+## Online elérhetőség (GitHub Pages) és munkamenet
+- **`main` = az élő oldal.** A Pages közvetlenül a `main` branchből megy:
+  Settings → Pages → Build and deployment → Source: **Deploy from a branch**, Branch: **main**, mappa: **/ (root)**.
+  Cím: https://meleglangos.github.io/pixe-language/
+- **Munkabranch** (pl. `refactor/foundations`): ide kerülnek az újítások. Minden push után lefutnak a tesztek
+  (`.github/workflows/tests.yml`, eredmény az **Actions** fülön), az élő oldal nem változik.
+- Kipróbálás merge előtt: a branch letöltése (Code → Download ZIP), majd az `index.html` megnyitása.
+- Ha a tesztek zöldek és te is jóváhagytad: pull request a `main`-be → merge → pár perc múlva élesben.
+  Pár nagyobb update után új munkabranch indul a `main`-ről.
 
 ## Új dungeon hozzáadása
 1. Tiledben: másold le pl. a `data/maps/dungeon_crypt.json`-t új néven (`dungeon_<név>.json`), és rajzold meg

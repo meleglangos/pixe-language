@@ -1,7 +1,11 @@
 # Das Deutsch-Abenteuer – munkaszabályok
 
 Böngészős pixel-art RPG német nyelvtanuláshoz. Phaser 3, sima `<script>` tagek, nincs build lépés;
-GitHub Pages-en fut (`.github/workflows/pages.yml`). Tesztek: `npm test` (Node 20+, függőség nélkül).
+GitHub Pages-en fut, közvetlenül a `main` branchből. Tesztek: `npm test` (Node 20+, függőség nélkül),
+minden push után automatikusan is (`.github/workflows/tests.yml`).
+
+**Munkamenet:** a fejlesztés munkabranchen folyik (most: `refactor/foundations`), a `main` az élő oldal.
+A `main`-re csak a felhasználó jóváhagyása után kerülhet bármi (PR + merge); a `main`-re közvetlenül ne pusholj.
 
 ## Felépítés
 
