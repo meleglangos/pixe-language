@@ -1,6 +1,6 @@
 # Ládanyitás (animáció + kirepülő loot)
 
-**Állapot:** folyamatban (jóváhagyva: 2026-11-17)
+**Állapot:** kész (jóváhagyva: 2026-11-17)
 **Ötlet:** README „Állapot” → 2. szakasz → loot szabályok (első darab: csak a láda, inventory nélkül)
 
 ## 1. Cél
@@ -62,13 +62,16 @@ ikonok a játékoshoz repülnek és eltűnnek. Utána a láda üres („Leer –
       így egy új láda kipróbálása csak adat + asset, kód nélkül.
 
 ## 10. Kész, ha
-- [ ] a láda remeg, kinyílik, a tárgyak ívben kirepülnek, földet érnek, és a „Beute” ablak listázza őket
-- [ ] a loot a loot táblából jön, súlyozott véletlennel; a validátor ellenőrzi a tárgyakat és a táblákat
-- [ ] a láda kinézete adatból jön, egy másik láda-stílus kód nélkül kipróbálható
-- [ ] a láda zárva, amíg él szörny
-- [ ] `node tools/build-data.js` és `npm test` zöld, új tesztekkel (sorsolás, validátor)
-- [ ] telefonméretben (érintéssel) kipróbálva; régi mentéssel is működik
-- [ ] README „Állapot”, `docs/GAME_DESIGN.md` 3. rész (jutalmak), szükség esetén `docs/DECISIONS.md`
+- [x] a láda remeg, kinyílik, a tárgyak ívben kirepülnek, a láda két oldalán földet érnek, és a „Beute” ablak listázza őket
+- [x] a loot a loot táblából jön, súlyozott véletlennel; a validátor ellenőrzi a tárgyakat, táblákat, láda-stílusokat
+- [x] a láda kinézete adatból jön (`chest_styles.json`), egy másik láda-stílus kód nélkül kipróbálható
+- [x] a láda zárva, amíg él szörny (zörög, és üzenet jelzi)
+- [x] `node tools/build-data.js` és `npm test` zöld, új tesztekkel (sorsolás, ikonok, validátor)
+- [x] telefonméretben (iPhone 13 emuláció, érintéssel) a teljes játékban kipróbálva (a Phaser helyi másolatával)
+- [x] README „Állapot”, `docs/GAME_DESIGN.md` 3. rész, `data/README.md`, `CLAUDE.md` frissítve
+
+Eltérések: a 2. és 3. lépés egy commitban készült; a húzható tételek közül kikerült az arany (különben előfordult,
+hogy csak arany jött ki); a tárgyak a láda két oldalára esnek, nem elé (ott a játékos áll).
 
 ## 11. Lépések
 1. Adat + sorsolás: `items.json` első tárgyai, `loot_tables.json`, validátor, `src/systems/loot/` + tesztek.

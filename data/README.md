@@ -20,8 +20,9 @@ lehet hozzáadni. **Minden módosítás után futtasd:** `node tools/build-data.
 | `dungeons.json` | a dungeonök nem térképes adatai (név, téma, sötétség) + melyik térkép | `dungeon_*` |
 | `monsters.json` | szörnytípusok | pl. `skeleton` |
 | `dungeon_props.json` | dungeon-berendezés (fáklya, koporsó, kristály…) | pl. `torch` |
-| `items.json` | tárgyak (még üres) | pl. `sword_bronze_01` |
-| `loot_tables.json` | loot táblák (még üres) | pl. `loot_crypt_chest` |
+| `items.json` | tárgyak: név, leírás, fajta, ritkaság, ikon | pl. `sword_bronze_01` |
+| `loot_tables.json` | loot táblák: mi eshet (láda, később boss / vizsga) és milyen eséllyel | pl. `loot_crypt_chest` |
+| `chest_styles.json` | a láda kinézete és nyitás-animációja (cserélhető) | pl. `pc_wood` |
 | `questions/pools.json` + `questions/<fájl>.json` | **a német kérdések**: egy közös készlet, rendezésből több fájlban | pl. `q_crypt_04` |
 | `questions/tags.json` | a kérdés-címkék rögzített listája (helyzet-téma / nyelvtan) | pl. `dungeon`, `perfekt` |
 | `challenges.json` | kihívások: melyik poolból, hány jó válasz kell, rossz válasz ára | pl. `ch_crypt_monster` |
@@ -79,7 +80,9 @@ nyílik meg, ha van azonos ID-jú bejegyzés a `dungeons.json`-ban.
   "darkness": {"color": "#04060e", "alpha": 0.8, "playerLight": 52},  // opcionális: sötét dungeon
   "ambience": {"dust": true},        // opcionális: lebegő por (a cseppek helye a térkép "drips" rétegében)
   "challenge": "ch_mine_monster",    // a szörnyei ezt a kihívást adják (challenges.json); kötelező, ha vannak szörnyei
-  "monsterStats": {"orc": {"damage": 2}}  // opcionális: szörnytípusonként más need / damage ebben a dungeonben
+  "monsterStats": {"orc": {"damage": 2}}, // opcionális: szörnytípusonként más need / damage ebben a dungeonben
+  "lootTable": "loot_mine_chest",    // a láda ebből sorsol (kötelező, ha van láda a térképen)
+  "chestStyle": "pc_wood"            // opcionális: a láda kinézete (chest_styles.json)
 }
 ```
 
@@ -179,17 +182,40 @@ Egy kihíváson belül nincs ismétlés; a dungeon egy látogatáson belül sem 
 Ha egy német szövegben nem vagy 100%-ig biztos: `{"de": "…", "hu": "…", "review": true}`. A listájuk:
 `npm run review`. Más mező nem lehet a bejegyzésben (a validátor ellenőrzi).
 
-## Tervezett formátumok (a 3–4. szakaszhoz)
-
-A validátor ezeket a mezőket már most ellenőrzi; a többi mező szabadon bővíthető.
+## items.json – tárgyak
 
 ```jsonc
-// items.json
-{"id": "sword_bronze_01", "name": "item.sword_bronze_01.name", "slot": "weapon", "rarity": "common1"}
-// loot_tables.json -- a dungeons.json "lootTable" mezője hivatkozhat rá
-{"id": "loot_crypt_chest", "entries": [{"item": "sword_bronze_01", "weight": 3}, {"gold": [5, 15], "weight": 5}]}
+{"id": "sword_bronze_01", "kind": "weapon", "rarity": "common2", "icon": "wp:bronze c3 r0",
+ "name": "item.sword_bronze_01.name", "desc": "item.sword_bronze_01.desc"}
+```
+- `kind`: `potion` | `gem` | `material` | `key` | `weapon` | `armor` | `treasure`; `rarity`: `config.js` → `rarities`.
+- `icon`: `"it:<szám>"` = Items16 (`assets/items/item<szám>.png`), `"wp:<anyag> c<oszlop> r<sor>"` = Weapon Icons
+  (anyag: bronze / iron / steel / gold); a választáshoz: `assets/ASSETS.md` és `assets/previews/`.
+- A név névelővel: „der Bronzedolch”. A tárgy ID-ja majd a mentésbe kerül (inventory): kiadott ID-t ne nevezz át.
+
+## loot_tables.json – loot táblák
+
+```jsonc
+{"id": "loot_crypt_chest",
+ "always": [{"gold": [5, 15]}],          // mindig benne van
+ "rolls": [1, 3],                         // ennyiszer húz (visszatevéssel) az entries-ből
+ "entries": [{"item": "potion_small", "qty": [1, 2], "weight": 4}, {"item": "gem_red", "weight": 1}]}
+```
+Egy tétel vagy `item` (+ `qty`: szám vagy `[min, max]`), vagy `gold` (szám vagy `[min, max]`); a húzható tételeknek
+`weight` kell (nagyobb = gyakoribb). A dungeon ládája a `dungeons.json` → `lootTable` táblából sorsol.
+
+## chest_styles.json – a láda kinézete
+
+```jsonc
+{"id": "pc_wood", "closed": "chest_closed", "open": "chest_open"}             // két kivágás (assets.js: frames)
+{"id": "chest_gold", "strip": "chest_gold_open", "closedFrame": 0, "openFrames": [1, 2, 3, 4], "fps": 12}  // animált csík (assets.js: strips)
+```
+Alapból a `config.js` → `loot.chestStyle`; egy dungeon a `"chestStyle"` mezővel mást választhat. Új láda kipróbálása:
+asset + kivágás / csík az `assets.js`-be + egy sor ide, kód nélkül.
+
+## Tervezett formátumok (a 3. szakaszhoz)
+
+```jsonc
 // shop.json
 {"id": "offer_sword_bronze_01", "item": "sword_bronze_01", "price": 40}
 ```
-
-A `rarity` a `src/config/config.js` → `rarities` egyik `id`-ja.

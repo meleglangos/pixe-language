@@ -28,12 +28,15 @@ Kilenc fokozat alulról felfelé: `common1–3`, `rare1–3`, `epic1–2`, `lege
 
 ## 3. Jutalmak és loot
 
+- Most: a dungeon ládája. Zárva, amíg él szörny a dungeonben; minden belépéskor újra tele van. Kinyitáskor
+  2–4 tétel jön ki (mindig van arany), a zsákmány egyelőre csak látvány: sem a tárgyak, sem az arany nem
+  tárolódik (az inventory külön feature). Spec: `docs/features/chest_opening.md`.
 - Loot forrásai (tervezett): láda a dungeonben, kérdés-kihívás, boss, vizsga. Mindegyik loot táblára
   hivatkozik (`data/loot_tables.json`, formátum: `data/README.md`); a jutalom soha nincs a kódba égetve.
 - Alapelv: a nehezebb kérdés és a több egymás utáni jó válasz jobb lootot ér; a „komoly” jutalom
   (epic, legendary) a vizsgákhoz és bossokhoz kötődik.
 - Meglepetés-loot: `Game.state.addSurprise` (a mentésben már van helye).
-- **Eldöntendő:** a loot táblák súlyai, az arany mennyisége, ismétlődhet-e a láda tartalma.
+- **Eldöntendő:** a loot táblák súlyai, az arany mennyisége, és hogy tárolás után is újratöltődjön-e a láda.
 
 ## 4. HP
 

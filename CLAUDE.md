@@ -42,8 +42,9 @@ tartalom csak a felhasználó kifejezett jóváhagyásával kerülhet bele.
 | `src/state/GameState.js` | a központi játékállapot (`Game.state`): HP, arany, inventory, felszerelés, dungeonök, jelzők |
 | `src/systems/save/` | mentés: `SaveManager`, `SaveSchema` (verzió + migrációk), `SaveCodec` (export/import kód) |
 | `src/systems/content/` | a `data/` betöltése és ellenőrzése; `src/systems/maps/`: Tiled olvasó |
+| `src/systems/loot/` | loot sorsolás (`Game.loot`), tárgy-ikonok (`Game.itemIcons`); a „Beute” ablak: `src/ui/loot.js` |
 | `src/systems/questions/` | a közös kérdés-motor (`Game.questions`): kiválasztás, ellenőrzés, kihívás; ablak: `src/ui/quiz.js` |
-| `src/scenes/` | Phaser jelenetek: `ExploreScene` (közös mozgás-alap), `WorldScene`, `DungeonScene`; `dungeon/`: fény, víz, hangulat, berendezés |
+| `src/scenes/` | Phaser jelenetek: `ExploreScene` (közös mozgás-alap), `WorldScene`, `DungeonScene`; `dungeon/`: fény, víz, hangulat, berendezés, láda |
 | `src/world/` | rács + útkeresés, karakter, kutya, szörny; `dungeonThemes.js`: a dungeonök kinézete |
 | `src/ui/` | DOM felület: HUD, menü, ablakok, „?” buborék |
 | `src/gfx/placeholders.js` | a kódból rajzolt ideiglenes grafika |
@@ -145,3 +146,7 @@ Ha új csapdába futsz, ami egy későbbi munkamenetet is megfoghat, írd be ide
   és `file://`-ról a régi tartalom fut.
 - A Tiled rétegneveket és objektumtípusokat a kód név szerint olvassa: ne nevezd át őket.
 - A Phaser és az EasyStar CDN-ről jön: verziót csak tudatosan, teszteléssel válts.
+- A felhős munkamenetben a CDN (jsdelivr) tiltva lehet, az npm viszont nem: a teljes játék kipróbálásához
+  `npm pack phaser@3.90.0 easystarjs@0.4.4` a scratchpadba (nem a repóba!), és Playwrightban
+  `context.route(/cdn\.jsdelivr\.net\/npm\/phaser@/, …)` → a helyi fájl; az `index.html` `file://`-ról fut.
+- Ha a `ContentValidator`-ba szúrsz be sort, vigyázz az `if … else if` párokra (a dungeon-résznél kétszer is szétszakadt).
