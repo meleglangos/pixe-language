@@ -14,7 +14,46 @@
   const ui = Game.ui;
   const SCALE = 5;
   const OPEN_TAPS = 3;
-  const STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.8l3.1 6.6 7.2.9-5.3 5 1.4 7.1L12 17.9 5.6 21.4 7 14.3 1.7 9.3l7.2-.9z"/></svg>';
+  // pixel art csillag: egy ötágú csillag alakból generált N×N-es pixelrács (körvonal, csillanás bal-felül,
+  // árnyék jobb-alul), egész számú nagyítással -- éles, és illik a játék grafikájához
+  const STAR_N = 15, STAR_PX = 3;
+  const STAR_COLORS = {
+    on: { o: '#7a4a12', h: '#fff6c2', y: '#ffcc33', s: '#e0961a' },
+    off: { o: '#9c8a66', h: '#efe4c8', y: '#dccca6', s: '#c4b088' },
+  };
+  const STAR_GRID = (function () {
+    const pts = [];
+    for (let i = 0; i < 10; i++) {
+      const a = -Math.PI / 2 + i * Math.PI / 5, r = i % 2 ? 0.52 : 1.05;
+      pts.push([Math.cos(a) * r, Math.sin(a) * r + 0.09]);
+    }
+    const inside = (x, y) => {
+      let c = false;
+      for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+        const [xi, yi] = pts[i], [xj, yj] = pts[j];
+        if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c;
+      }
+      return c;
+    };
+    const h = (STAR_N - 1) / 2;
+    const at = (x, y) => x >= 0 && y >= 0 && x < STAR_N && y < STAR_N && inside((x - h) / h, (y - h) / h);
+    const g = [];
+    for (let y = 0; y < STAR_N; y++) for (let x = 0; x < STAR_N; x++) {
+      if (!at(x, y)) continue;
+      const edge = !at(x - 1, y) || !at(x + 1, y) || !at(x, y - 1) || !at(x, y + 1);
+      const d = (x - h) + (y - h); // bal-felül negatív, jobb-alul pozitív
+      g.push([x, y, edge ? 'o' : d < -4 ? 'h' : d > 3 ? 's' : 'y']);
+    }
+    return g;
+  })();
+  function starCanvas(kind) {
+    const c = document.createElement('canvas');
+    c.width = c.height = STAR_N * STAR_PX;
+    c.className = 'cw-star-' + kind;
+    const ctx = c.getContext('2d'), pal = STAR_COLORS[kind];
+    STAR_GRID.forEach(([x, y, k]) => { ctx.fillStyle = pal[k]; ctx.fillRect(x * STAR_PX, y * STAR_PX, STAR_PX, STAR_PX); });
+    return c;
+  }
   const GOLD_COLOR = '#ffd75a';
   const images = {};
 
@@ -80,17 +119,18 @@
 
       // ---------- felépítés ----------
       const canvas = ui.el('canvas', 'cw-chest');
+      // a fény és a sugarak külön rétegben, ami a széle felé lágyan elhalványul (nincs éles levágás, nincs görgetősáv)
       const glow = ui.el('div', 'cw-glow');
       const rays = ui.el('div', 'cw-rays');
-      const counter = ui.el('div', 'cw-counter');
-      const chestBox = ui.el('div', 'cw-chest-box', [rays, glow, canvas, counter]);
+      const fxLayer = ui.el('div', 'cw-fx', [rays, glow]);
+      const chestBox = ui.el('div', 'cw-chest-box', [canvas]);
       const reveal = ui.el('div', 'cw-reveal');      // ide emelkedik ki a tárgy
       // a koppintható terület egy div (nem <button>), mert benne "?" gombok is vannak
-      const stage = ui.el('div', 'cw-stage', [reveal, chestBox]);
+      const stage = ui.el('div', 'cw-stage', [fxLayer, reveal, chestBox]);
       stage.setAttribute('role', 'button');
       stage.tabIndex = 0;
       stage.setAttribute('aria-label', Game.i18n.de('chest.name'));
-      const starEls = [0, 1, 2, 3, 4].map(() => { const s = ui.el('span', 'cw-star'); s.innerHTML = STAR; return s; });
+      const starEls = [0, 1, 2, 3, 4].map(() => ui.el('span', 'cw-star', [starCanvas('off'), starCanvas('on'), ui.el('span', 'cw-twinkle')]));
       const starRow = ui.el('div', 'cw-stars', starEls);
       const caption = ui.el('div', 'cw-caption');
       const collected = ui.el('div', 'cw-collected');
@@ -123,7 +163,10 @@
         const ticks = 10 + stars;
         for (let k = 0; k < ticks && phase === 'stars' && !skipStars; k++) { light((k % 5) + 1); await wait(55 + k * 9); }
         light(stars);
-        starEls.slice(0, stars).forEach((s, i) => fx(s, [{ transform: 'scale(1)' }, { transform: 'scale(1.45)' }, { transform: 'scale(1)' }], { duration: 320, delay: i * 70 }));
+        starEls.slice(0, stars).forEach((s, i) => {
+          fx(s, [{ transform: 'scale(1)' }, { transform: 'scale(1.45) rotate(-8deg)' }, { transform: 'scale(1)' }], { duration: 340, delay: i * 80, easing: 'ease-out' });
+          fx(s.querySelector('.cw-twinkle'), [{ opacity: 0, transform: 'scale(.2) rotate(0deg)' }, { opacity: 1, transform: 'scale(1.2) rotate(45deg)', offset: 0.4 }, { opacity: 0, transform: 'scale(.4) rotate(90deg)' }], { duration: 600, delay: i * 80 + 120 });
+        });
         if (stars === 5) panel.classList.add('cw-five');
         setGlow(GOLD_COLOR, 1, 0.35 + stars * 0.05);
         hint('chest.tapToOpen');
@@ -157,11 +200,18 @@
       }
 
       // ---------- 3. tárgyankénti kiemelés ----------
-      // előjel: a láda a következő tárgy ritkaságának színében dereng, a számláló mutatja, mennyi van még
+      // előjel: a láda a következő tárgy ritkaságának színében dereng. Az utolsó tárgy után is koppintásra vár,
+      // és csak utána jön az összesítő.
       function prepareNext() {
         const left = loot.length - next;
-        counter.replaceChildren(left ? ui.tx('chest.remaining', { n: left }) : '');
-        if (!left) { finish(); return; }
+        if (!left) {
+          phase = 'last';
+          panel.dataset.phase = phase;
+          chestBox.classList.remove('cw-tease');
+          setGlow(GOLD_COLOR, 0.9, 0.25);
+          hint('chest.tapNext');
+          return;
+        }
         const r = rarityInfo(loot[next]);
         const strong = { common: 0, gold: 0, rare: 1, epic: 2, legendary: 3 }[r.group] || 0;
         setGlow(r.color, 1.2 + strong * 0.25, 0.55 + strong * 0.15);
@@ -227,7 +277,7 @@
         chestBox.classList.remove('ready', 'cw-tease');
         setGlow(GOLD_COLOR, 0.9, 0.25);
         caption.replaceChildren(ui.el('div', 'cw-count', [ui.tx('chest.stars', { n: stars })]));
-        // az utolsó kiemelt tárgy is a sorba kerül, kis késéssel (hogy látszódjon)
+        // az utolsó kiemelt tárgy is a sorba kerül
         setTimeout(() => {
           stash();
           panel.querySelector('.modal-body').append(Game.lootUI.list(loot));
@@ -236,7 +286,7 @@
           btns.replaceChildren(ui.btn('loot.ok', done, 'primary'));
           const b = btns.querySelector('button');
           setTimeout(() => { if (b.isConnected) { b.focus({ preventScroll: true }); b.scrollIntoView({ block: 'nearest' }); } }, 0);
-        }, 650);
+        }, 120);
       }
 
       // ---------- koppintás: ha fut valami, a végére ugrik; különben a következő lépés ----------
@@ -248,7 +298,11 @@
         if (stepping || busy()) { hurry(); return; }
         if (phase === 'done') return;
         stepping = true;
-        try { if (phase === 'closed') await openTap(); else if (phase === 'reveal') await revealTap(); } finally { stepping = false; }
+        try {
+          if (phase === 'closed') await openTap();
+          else if (phase === 'reveal') await revealTap();
+          else if (phase === 'last') finish();
+        } finally { stepping = false; }
       });
 
       draw(canvas, frameOf(style, 'closed')).then(spinStars, () => spinStars());

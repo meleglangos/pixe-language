@@ -564,6 +564,5 @@
   "item.crown_gold.name": {"de": "die goldene Krone", "hu": "az aranykorona"},
   "item.crown_gold.desc": {"de": "Sie gehörte einst einem König.", "hu": "Egykor egy királyé volt."},
   "chest.tapNext": {"de": "Tippe weiter!", "hu": "Koppints tovább!"},
-  "chest.remaining": {"de": "Noch {n}", "hu": "Még {n}"},
   "chest.legendary": {"de": "Legendär!", "hu": "Legendás!"}
 }

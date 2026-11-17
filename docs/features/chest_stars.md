@@ -92,6 +92,10 @@ Az egy koppintás unalmas volt („hiányzik a dopamin”). Új menet:
 - Kész: a teljes játékban kipróbálva (iPhone 13 emuláció), fix zsákmánnyal minden ritkaság menete, és a gyors
   végigkoppintás (egy 3★ láda ~2 mp alatt).
 
+Finomítás (a telefonos teszt után): pixel art csillagok (generált, csillanással, 5★-nál ragyognak), a „Noch”
+számláló kikerült, a fény és a sugarak a széle felé lágyan elhalványulnak (nincs éles levágás), és az utolsó
+tárgy után a láda koppintásra vár, csak utána jön az összesítő.
+
 ## 11. Lépések
 1. Csillagok a loot-sorsolásban (`rollStars`, `roll(…, { stars })`, `rarityFactor`, `chances`) + validátor + tesztek.
 2. Láda-ablak: nagy láda, csillag-animáció, koppintásra nyitás, kieső loot, lista.
