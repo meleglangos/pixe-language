@@ -210,7 +210,7 @@ html, body {
 .chest-window { text-align: center; }
 .cw-stage {
   position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-  width: 100%; height: 250px; padding: 0; border: 0; background: none; cursor: pointer; font: inherit; color: inherit;
+  width: 100%; height: 272px; padding: 0; border: 0; background: none; cursor: pointer; font: inherit; color: inherit;
   -webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; -webkit-user-select: none;
 }
 /* a fény-effektek rétege (pixeles vásznak), a stage-en belül; --cx / --cy / --cb: a láda közepe és alja */
@@ -218,7 +218,7 @@ html, body {
 .cw-fx canvas { position: absolute; image-rendering: pixelated; pointer-events: none; }
 /* nyitás előtt a láda középen áll, robbanáskor lecsúszik, hogy helyet adjon a kiemelt tárgyaknak */
 .cw-chest-box { transition: transform .4s cubic-bezier(.3, 1.4, .5, 1); }
-.cw-stage.centered .cw-chest-box { transform: translateY(-62px); }
+.cw-stage.centered .cw-chest-box { transform: translateY(-74px); }
 .cw-stage:focus { outline: none; }
 .cw-stage:focus-visible { outline: 3px solid #8fb6e6; outline-offset: 2px; border-radius: 6px; }
 .chest-window { overflow-x: hidden; }
@@ -299,3 +299,9 @@ html, body {
 .lab-select { width: 100%; }
 .lab-panel .modal-body { overflow-x: hidden; }
 .lab-star { min-width: 44px; padding: 6px 7px; }
+
+/* képernyő-effektek a láda-ablakhoz (a teljes képernyőn, a koppintást nem fogják meg) */
+.cw-screen { position: fixed; inset: 0; pointer-events: none; z-index: 90; overflow: hidden; }
+.cw-sparkle { position: absolute; image-rendering: pixelated; margin: -10px 0 0 -10px; }
+.cw-streak { position: absolute; width: 4px; height: 36px; margin: -18px 0 0 -2px; transform-origin: 50% 100%; }
+.cw-confetti { position: absolute; top: 0; width: 6px; height: 6px; }

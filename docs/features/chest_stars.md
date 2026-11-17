@@ -114,6 +114,13 @@ A rezgés csak Androidon működik (iOS-en a böngésző nem engedi); „csökke
   vas pántok és sarkok, aranyzár rubinnal; nyitva arany a belsejében. Ez az alap láda-stílus (`royal`), a pályán is.
 - Nyitás előtt a láda középen áll, robbanáskor lecsúszik (kevesebb üres hely), az ablak alacsonyabb.
 
+## 5. kiegészítés: képernyő-effektek (2026-11-17)
+- Robbanáskor pixeles fénycsíkok a ládából a képernyő szélei felé, és szétszórt pixel-csillanások az egész képernyőn.
+- Kiemeléskor: rare – néhány csillanás; epic – több, lila; legendary – arany pixel-konfetti hullik az egész képernyőn.
+- Egy teljes képernyős, átlátszó rétegben (`.cw-screen`), ami nem fogja meg a koppintást, és a „Super!”-ral eltűnik.
+- Javítva: a fényfolt vászna mindig akkora, mint a folt (nem vágódik le egyenesen); a láda-terület magasabb,
+  hogy a kiemelt tárgy felirata ne fusson rá a ládára.
+
 ## 11. Lépések
 1. Csillagok a loot-sorsolásban (`rollStars`, `roll(…, { stars })`, `rarityFactor`, `chances`) + validátor + tesztek.
 2. Láda-ablak: nagy láda, csillag-animáció, koppintásra nyitás, kieső loot, lista.

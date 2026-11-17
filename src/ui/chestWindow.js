@@ -127,6 +127,73 @@
     return bandAlpha(d, x, y) * 1.6 * (0.25 + up * 0.75);
   });
 
+  // ---------- képernyő-effektek: a teljes képernyőn, a játék fölött (nem fogják meg a koppintást) ----------
+  // pixel-csillanás: 7×7-es négyágú csillag, egész számú nagyítással
+  function sparkleCanvas(color, px) {
+    const c = document.createElement('canvas');
+    c.width = c.height = 7;
+    c.style.width = c.style.height = (7 * px) + 'px';
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = color;
+    [[3, 0], [3, 1], [3, 2], [3, 4], [3, 5], [3, 6], [0, 3], [1, 3], [2, 3], [4, 3], [5, 3], [6, 3], [2, 2], [4, 2], [2, 4], [4, 4]]
+      .forEach(([x, y]) => ctx.fillRect(x, y, 1, 1));
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(3, 3, 1, 1); ctx.fillRect(3, 2, 1, 1); ctx.fillRect(2, 3, 1, 1);
+    return c;
+  }
+  const screenFx = {
+    layer: null,
+    open() { this.close(); this.layer = ui.el('div', 'cw-screen'); document.body.append(this.layer); return this.layer; },
+    close() { if (this.layer) { this.layer.remove(); this.layer = null; } },
+    // szétszórt csillanások az egész képernyőn
+    sparkles(n, colors, delayMax) {
+      const L = this.layer; if (!L) return;
+      for (let i = 0; i < n; i++) {
+        const c = sparkleCanvas(colors[i % colors.length], Math.random() < 0.3 ? 4 : 3);
+        c.className = 'cw-sparkle';
+        c.style.left = (Math.random() * 100) + 'vw'; c.style.top = (Math.random() * 100) + 'vh';
+        L.append(c);
+        const a = c.animate([{ transform: 'scale(0) rotate(0deg)', opacity: 1 }, { transform: 'scale(1.2) rotate(0deg)', opacity: 1, offset: 0.4 }, { transform: 'scale(0) rotate(90deg)', opacity: 0 }],
+          { duration: 700 + Math.random() * 500, delay: Math.random() * (delayMax || 600), easing: 'steps(6, end)', fill: 'both' });
+        a.finished.then(() => c.remove(), () => c.remove());
+      }
+    },
+    // pixeles fénycsíkok a ládából a képernyő szélei felé
+    streaks(x, y, n, color) {
+      const L = this.layer; if (!L) return;
+      const far = Math.hypot(innerWidth, innerHeight);
+      for (let i = 0; i < n; i++) {
+        const ang = (i / n) * 360 + Math.random() * 12;
+        const s = ui.el('span', 'cw-streak');
+        s.style.left = x + 'px'; s.style.top = y + 'px';
+        s.style.background = i % 3 ? color : '#ffffff';
+        L.append(s);
+        const a = s.animate([{ transform: 'rotate(' + ang + 'deg) translateY(-40px) scaleY(.4)', opacity: 1 },
+          { transform: 'rotate(' + ang + 'deg) translateY(-' + far * 0.6 + 'px) scaleY(1.4)', opacity: 0 }],
+          { duration: 450 + Math.random() * 200, easing: 'steps(7, end)' });
+        a.finished.then(() => s.remove(), () => s.remove());
+      }
+    },
+    // pixel-konfetti hullik az egész képernyőn
+    confetti(n, colors) {
+      const L = this.layer; if (!L) return;
+      for (let i = 0; i < n; i++) {
+        const p = ui.el('span', 'cw-confetti');
+        p.style.background = colors[i % colors.length];
+        p.style.left = (Math.random() * 100) + 'vw';
+        if (Math.random() < 0.5) { p.style.width = '4px'; p.style.height = '8px'; }
+        L.append(p);
+        const sway = (Math.random() - 0.5) * 80, rot = (Math.random() < 0.5 ? -1 : 1) * 360;
+        const a = p.animate([
+          { transform: 'translate(0, -20px) rotate(0deg)' },
+          { transform: 'translate(' + sway + 'px, 50vh) rotate(' + rot / 2 + 'deg)', offset: 0.5 },
+          { transform: 'translate(' + (-sway / 2) + 'px, 105vh) rotate(' + rot + 'deg)' },
+        ], { duration: 1600 + Math.random() * 900, delay: Math.random() * 700, easing: 'steps(24, end)', fill: 'both' });
+        a.finished.then(() => p.remove(), () => p.remove());
+      }
+    },
+  };
+
   // a ritkaság-csoport és színe egy loot-tételhez
   function rarityInfo(e) {
     if (e.gold !== undefined) return { group: 'gold', color: GOLD_COLOR, id: null };
@@ -183,6 +250,7 @@
       const collected = ui.el('div', 'cw-collected');
       const panel = ui.modal({ title: 'chest.name', closable: false, body: [stage, starRow, collected], buttons: [] });
       panel.classList.add('chest-window');
+      screenFx.open();
       panel.append(flash);
       panel.dataset.stars = stars;
       panel.dataset.phase = 'stars';
@@ -199,7 +267,8 @@
       const setGlow = (color, scale, alpha) => {
         placeFx();
         const r = 8 + scale * 7;
-        pixelGlow(glow, 48, 48, color, r, r);
+        const size = Math.ceil(r * 2) + 2;            // a vászon mindig nagyobb a foltnál: nincs egyenes levágás
+        pixelGlow(glow, size, size, color, r, r);
         pixelGlow(inner, 24, 12, color, 10, 6);
         glow.style.opacity = alpha;
       };
@@ -390,6 +459,11 @@
           { transform: 'translateX(-50%) scaleY(1)', opacity: 1, offset: 0.25 },
           { transform: 'translateX(-50%) scaleY(1)', opacity: 0 }], { duration: bestLevel >= 3 ? 1600 : 1000, easing: 'steps(8, end)' });
         coinBurst(8 + stars * 3 + bestLevel * 4);
+        if (!calm) {
+          const c = canvas.getBoundingClientRect();
+          screenFx.streaks(c.left + c.width / 2, c.top + c.height / 2, 10 + stars * 2 + bestLevel * 2, aura);
+          screenFx.sparkles(8 + stars * 3 + bestLevel * 4, [aura, '#ffe58a', '#ffffff'], 700);
+        }
         sparks(16 + stars * 4, '#fff3b0', 110);
         sparks(8 + bestLevel * 6, aura, 130);
         fx(panel, [0, -1, 1, -0.8, 0.8, -0.5, 0.5, 0].map(k => ({ transform: 'translate(' + k * (5 + stars + bestLevel * 2) + 'px,' + (-k * (3 + stars)) + 'px)' })), { duration: 450 + bestLevel * 100 });
@@ -463,6 +537,9 @@
         reveal.replaceChildren(big);
         if (r.group === 'legendary' || r.group === 'epic') setRays('on', r.color);
         if (r.group === 'legendary') fx(panel, [{ boxShadow: '0 0 0 0 #fff0' }, { boxShadow: '0 0 60px 20px ' + r.color }, { boxShadow: '0 0 0 0 #fff0' }], { duration: 900 });
+        if (!calm && r.group === 'legendary') { screenFx.confetti(70, [r.color, '#ffe58a', '#ffffff', '#ffcc33']); screenFx.sparkles(24, [r.color, '#ffffff'], 900); }
+        else if (!calm && r.group === 'epic') screenFx.sparkles(18, [r.color, '#ffffff'], 600);
+        else if (!calm && r.group === 'rare') screenFx.sparkles(6, [r.color, '#ffffff'], 300);
         sparks({ common: 4, gold: 6, rare: 10, epic: 16, legendary: 26 }[r.group] || 4, r.color, 90);
         await anim(big, [
           { transform: 'translate(-50%, 90px) scale(.3)', opacity: 0 },
@@ -482,7 +559,7 @@
         setTimeout(() => {
           stash();
           panel.querySelector('.modal-body').append(Game.lootUI.list(loot));
-          const done = () => { ui.closeModal(); if (opts.onDone) opts.onDone(loot, stars); };
+          const done = () => { screenFx.close(); ui.closeModal(); if (opts.onDone) opts.onDone(loot, stars); };
           const btns = panel.querySelector('.modal-buttons');
           btns.replaceChildren(ui.btn('loot.ok', done, 'primary'));
           const b = btns.querySelector('button');
