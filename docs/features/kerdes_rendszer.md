@@ -88,6 +88,23 @@ következménye: lásd 9. A „Fliehen” gombbal bármikor kiléphet. Ha minden
 - Debug módban (`?debug=1`) „Lösung zeigen” gomb a kérdés-ablakban: az összes elfogadott megoldás (de + hu,
   `review` jelöléssel), a magyar magyarázat és a kérdés ID-ja. Nem számít válasznak, a haladást nem írja.
 
+## 2. kiegészítés: egy nagy kérdéskészlet témákkal (2026-11-17, jóváhagyva)
+Cél: a kérdések egy közös készletet alkotnak (a fájlok csak rendezésre valók), és mindig az interakcióhoz
+illő témából jön kérdés, a szinten belül véletlenszerűen (a haladás szerint súlyozva).
+- **Rögzített címkelista:** `data/questions/tags.json`, kétféle címke: `context` (helyzet-téma: `dungeon`,
+  `alltag`, később `tiere`, `laden`…) és `grammar` (nyelvtani téma / szókincs). Minden kérdésnek legalább egy
+  `context` és egy `grammar` címkéje van; a validátor szól, ha egy címke nincs a listán (elírás ellen).
+- **Kihívás:** `levels` (szint), `context` (helyzet-téma) és `contextShare` (alapból 0,7: ennyi eséllyel jön a
+  témából, különben bármelyik kérdés a szinten belül, hogy ne fogyjon ki). A `pools` és `tags` szűrés marad,
+  de nem kötelező.
+- **Nincs ismétlés egy dungeon-látogatáson belül** (amíg van még nem látott kérdés).
+- **Szörnyek:** minden szörny **2** jó választ kér (a harcos is). Rossz válasz: **sima szörny −1 HP, harcos −2 HP**.
+- **Állíthatóság:** sorrend, az erősebb nyer: `dungeons.json` → `monsterStats[szörnytípus]` (`need`, `damage`) >
+  `monsters.json` szörnytípus (`need`, `damage`) > kihívás (`need`, `wrongDamage`) > `config.js`. Így egy nehezebb
+  dungeonben ugyanaz a szörny többet sebezhet, a boss / vizsga pedig saját kihívást kap.
+- Mentés nem változik. A meglévő 42 kérdés helyzet-témát kap (`dungeon` / `alltag`), a fájlok `dungeon.json`
+  és `alltag.json` lesznek (a kérdés-ID-k nem változnak).
+
 ## 11. Lépések
 1. Motor: pool- és kérdésformátum, betöltés, validátor, `review` jelölés + lista; tesztek (még nincs felület).
 2. Mentés v4: `questions`, `unlocks`, `daily` + `Game.state` metódusok, migráció, fixture, tesztek.
