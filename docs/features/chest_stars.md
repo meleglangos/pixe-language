@@ -29,9 +29,20 @@ megremeg, kinyílik, és a loot ívben kiesik belőle az ablakban; alul megjelen
   "gold":    [1, 1.3, 1.6, 2, 3]                     // az arany szorzója
 }
 ```
-- **Ritkaság → minimum csillag** (`config.js` → `loot.rarityMinStars`): egy tárgy csak elég jó ládából eshet.
-  Javaslat: `common*` 1★, `rare1` 3★, `rare2–3` 4★, `epic*` és `legendary` 5★. Így a loot táblában elég felsorolni a
-  tárgyakat, a ritkaságuk dönti el, hány csillagtól jöhetnek. (Ritkaság-rendszer: lásd 9. utolsó pont.)
+- **Nincs korlát: bármi eshet bármelyik ládából, csak az esélyek mások.** Egy tétel esélye = a súlya × a
+  ritkasága szorzója az adott csillagszámnál (`config.js` → `loot.stars.rarityFactor`, ritkaság-csoportonként):
+```jsonc
+"rarityFactor": {                       // 1★    2★    3★    4★    5★
+  "common":    [1,     0.9,  0.8,  0.6,  0.4],
+  "rare":      [0.15,  0.3,  0.5,  0.8,  1.2],
+  "epic":      [0.03,  0.06, 0.12, 0.25, 0.5],
+  "legendary": [0.005, 0.01, 0.03, 0.06, 0.15],   // 1★-ból is jöhet legendary, csak ritkán
+  "gold":      [1,     1,    1,    1,    1]       // az arany is csak egy tétel a táblában
+}
+```
+  A csoport a ritkaság ID-jából jön (`common1` → `common`, `rare2` → `rare`). Pontos esélyek: lásd a teszt / a
+  `Game.loot.chances(tábla, csillag)` függvény, ami kiírja, mi milyen eséllyel jön.
+- **Az arany nem jár mindig:** kikerül az `always` rész, az arany a többi tétellel együtt sorsolódik.
 - `Game.loot.roll(tábla, { stars })` – a csillagszám sorsolása: `Game.loot.rollStars(tábla)`.
 
 ## 5. Állapot és mentés
@@ -49,18 +60,20 @@ megremeg, kinyílik, és a loot ívben kiesik belőle az ablakban; alul megjelen
   A saját láda-animációtok később egy új láda-stílus lesz (`chest_styles.json`).
 
 ## 9. Eldöntendő kérdések
-- [ ] A csillagok esélye: 1★ 30%, 2★ 30%, 3★ 20%, 4★ 13%, 5★ 7% – jó így?
-- [ ] A láda az ablakban magától nyíljon ki a csillagok után, vagy a játékos koppintson rá? Javaslat: **koppintás**.
-- [ ] Ritkaság → minimum csillag a 4. pont szerint – jó így?
+- [x] A csillagok esélye → **1★ 30%, 2★ 30%, 3★ 20%, 4★ 13%, 5★ 7%**.
+- [x] Nyitás az ablakban → **a játékos koppint a ládára**.
+- [x] Ritkaság → ~~minimum csillag~~ → **nincs korlát**, 1★-ból is jöhet legendary, csak kis eséllyel;
+      a csillag az esélyeket tolja a ritkább felé (4. pont, `rarityFactor`). **Az arany nem jár mindig.**
+- [ ] A `rarityFactor` számai (4. pont) így jók kezdésnek? (Később adatban hangolható.)
 
 ## 10. Kész, ha
 - [ ] „Öffnen”-re megnyílik az ablak, a csillagok kigyúlnak és véletlenszerűen megállnak 1–5-nél
-- [ ] több csillagnál több tárgy és több arany jön, a ritka tárgyak csak elég csillagnál
+- [ ] több csillagnál több tárgy jön, és nagyobb eséllyel ritka; bármelyik ládából bármi jöhet; az arany nem kötelező
 - [ ] koppintásra a láda kinyílik, a loot kiesik, a lista és a „Super!” megjelenik; a pályán a láda nyitva marad
 - [ ] a csillagok hatása adatból állítható; tesztek a csillag-sorsolásra és a szűrésre
 - [ ] telefonméretben (érintéssel) a teljes játékban kipróbálva
 
 ## 11. Lépések
-1. Csillagok a loot-sorsolásban (`rollStars`, `roll(…, { stars })`, `rarityMinStars`) + validátor + tesztek.
+1. Csillagok a loot-sorsolásban (`rollStars`, `roll(…, { stars })`, `rarityFactor`, `chances`) + validátor + tesztek.
 2. Láda-ablak: nagy láda, csillag-animáció, koppintásra nyitás, kieső loot, lista.
 3. A pályán a régi kirepülés helyett az ablak; dokumentáció.
