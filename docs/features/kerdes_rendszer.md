@@ -1,6 +1,6 @@
 # Kérdés-rendszer (közös kérdés-motor)
 
-**Állapot:** tervezet
+**Állapot:** folyamatban (jóváhagyva: 2026-11-17)
 **Ötlet:** README „Állapot” → 2. szakasz → feladatrendszer (kérdés-rendszer); `docs/DECISIONS.md` D6, D7
 
 ## 1. Cél
@@ -65,14 +65,13 @@ következménye: lásd 9. A „Fliehen” gombbal bármikor kiléphet. Ha minden
 - Nincs új: az ablak a meglévő pergamen-stílus; a szörny eltűnése kódból rajzolt porfelhő.
 
 ## 9. Eldöntendő kérdések
-- [ ] Rossz válasz következménye? Javaslat: −3 HP (config), a szörny marad, új kérdés jön.
-- [ ] 0 HP-nál mi történik? Javaslat: kiesik a dungeonből, kint ébred teljes HP-val (amíg nincs HP-ital).
-- [ ] A legyőzött szörny legyőzve marad (mentésbe kerül), vagy minden belépéskor újra ott van? Javaslat: újra ott
-      van (gyakorlás), a dungeon „teljesítve” jelzése marad.
-- [ ] Jutalom a szörnyért most? Javaslat: még semmi; a loot szabályok külön tétel.
-- [ ] Időlimit? Javaslat: nincs (a szótár-challenge-hez majd külön).
-- [ ] Erősebb szörny (`*_warrior`) 2 jó választ kér, a többi 1-et — rendben?
-- [ ] `review` jelölés a fordítási fájlban (minden szövegre jó, nem csak kérdésre) — rendben?
+- [x] Rossz válasz következménye? → **−3 HP** (`config.js`, kihívásonként felülírható), a szörny marad, új kérdés jön.
+- [x] 0 HP-nál? → **kiesik a dungeonből**, kint ébred **teljes HP-val** (amíg nincs HP-ital).
+- [x] Legyőzött szörny? → **minden belépéskor újra ott van** (gyakorlás); a „teljesítve” jelzés a mentésben marad.
+- [x] Jutalom a szörnyért? → **még semmi**; a loot szabályok külön tétel.
+- [x] Időlimit? → **nincs**.
+- [x] Erősebb szörny (`*_warrior`) **2** jó választ kér, a többi 1-et.
+- [x] `review` jelölés → **a fordítási fájlban**, a bejegyzésen.
 
 ## 10. Kész, ha
 - [ ] a szörnyre koppintva kérdés jön; jó válaszokra a szörny eltűnik, rossznál a 9. szerinti következmény

@@ -9,7 +9,7 @@ Böngészős pixel-art RPG német nyelvtanuláshoz. Nincs build lépés: az `ind
 Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén frissíti (pipák + „Most folyamatban”).
 Új szakaszt vagy tételt csak a felhasználó kérésére vesz fel; az ötletek a `docs/IDEAS.md`-be kerülnek.
 
-**Most folyamatban:** semmi. Következő javasolt lépés: a kérdés-rendszer (`/uj-feature`).
+**Most folyamatban:** kérdés-rendszer (spec: `docs/features/kerdes_rendszer.md`).
 
 - [x] 1. szakasz: térkép, kattintásos + billentyűs mozgás, kutya, mentés + export/import
 - [ ] 2. szakasz: egy dungeon, feladatrendszer, loot szabályok, HP, debug mód
@@ -19,10 +19,13 @@ Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén fris
   - [x] 2/2: „Die Kristallmine” dungeon (pálya és látvány), közös dungeon-rendszer, Credits képernyő
   - [x] dokumentáció: `CLAUDE.md`, `docs/`, slash commandok
   - [ ] feladatrendszer (kérdés-rendszer): a dungeonök, napi kihívások, petek, bossok közös kérdés-motorja
-    - [ ] kérdés-motor és poolok (`data/questions/`), címkék: szint (B1–C1), téma, típus
-    - [ ] elnéző válasz-ellenőrzés (kis/nagybetű, `ae`↔`ä`, `ss`↔`ß`, szóközök, több helyes megoldás)
-    - [ ] „ellenőrizendő” (`review`) jelölés a német szövegeken, kóddal és validátorral
-    - [ ] általános `unlocks` / `daily` állapot, mentési migrációval
+    - [ ] 1. kérdés-motor és poolok (`data/questions/`), címkék: szint (B1–C1), téma, típus; „ellenőrizendő” (`review`) jelölés, validátorral
+    - [ ] 2. mentés v4: kérdés-haladás, általános `unlocks` / `daily` állapot, migrációval
+    - [ ] 3. kihívások (`data/challenges.json`), elnéző válasz-ellenőrzés (kis/nagybetű, `ae`↔`ä`, `ss`↔`ß`, szóközök, több helyes megoldás), HP-vesztés
+    - [ ] 4. kérdés-ablak: választós, beírós, szókártyás
+    - [ ] 5. dungeon: a szörnyek kérdeznek, legyőzés, 0 HP
+    - [ ] 6. első poolok: kripta (B1), bánya (B1–B2)
+    - [ ] 7. dokumentáció
   - [ ] loot szabályok
   - [ ] HP
   - [ ] debug mód
