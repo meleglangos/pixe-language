@@ -10,6 +10,7 @@ Game.data.config = {
   // Loot (src/systems/loot/): az arany ikonja a "Beute" ablakban és a ládából kirepülve
   loot: {
     goldIcon: 'it:1163',
+    coinIcon: 'it:1159',      // egyetlen aranyérme: ez záporozik a láda robbanásakor
     chestStyle: 'pc_wood',  // a láda alap kinézete (data/chest_styles.json); a dungeon "chestStyle"-ja felülírja
     lockChestUntilCleared: false, // true: a láda zárva, amíg él szörny a dungeonben (most kikapcsolva)
     // Láda-csillagok (1–5): a láda minősége. Egy loot tábla "stars" mezője bármelyik részt felülírhatja.

@@ -97,6 +97,15 @@ Finomítás (a telefonos teszt után): pixel art csillagok (generált, csillaná
 számláló kikerült, a fény és a sugarak a széle felé lágyan elhalványulnak (nincs éles levágás), és az utolsó
 tárgy után a láda koppintásra vár, csak utána jön az összesítő.
 
+## 3. kiegészítés: epikus nyitás (2026-11-17, a felhasználó kérésére, szabad kézzel)
+A 3 koppintás három felvonás, egyre erősebben:
+1. **Ébredés:** ütés-érzet (összenyomódik, felugrik, felvillan), izzó pixel-repedések, lökéshullám, por, rövid rezgés.
+2. **Feltöltődés:** több repedés, a résekből és a sugarakból **a legjobb tárgy ritkaság-színében** szivárog a fény
+   (előjel), a háttér elsötétül, parázs száll fel, a láda folyamatosan remeg, a csillagok lüktetnek.
+3. **Robbanás:** összehúzódás, fehér villanás, a fedél pörögve lerepül, fényoszlop, két lökéshullám, aranyérme-zápor,
+   szikrák, az ablak megrázkódik, erős rezgés; a nyitott ládából utána fény árad. Legendarynél minden erősebb.
+A rezgés csak Androidon működik (iOS-en a böngésző nem engedi); „csökkentett mozgás” beállításnál nincs rezgés.
+
 ## 11. Lépések
 1. Csillagok a loot-sorsolásban (`rollStars`, `roll(…, { stars })`, `rarityFactor`, `chances`) + validátor + tesztek.
 2. Láda-ablak: nagy láda, csillag-animáció, koppintásra nyitás, kieső loot, lista.

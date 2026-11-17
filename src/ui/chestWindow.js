@@ -119,11 +119,20 @@
 
       // ---------- felépítés ----------
       const canvas = ui.el('canvas', 'cw-chest');
+      const cracks = ui.el('canvas', 'cw-cracks');   // izzó repedések a ládán (csak a láda pixelein)
+      const inner = ui.el('div', 'cw-inner');       // a nyitott ládából áradó fény
+      const body = ui.el('div', 'cw-body', [canvas, inner, cracks]); // a láda teste: kép + fény + repedések együtt mozognak
+      const lid = ui.el('canvas', 'cw-lid');         // a robbanáskor lerepülő fedél (a csukott kép felső része)
       // a fény és a sugarak külön rétegben, ami a széle felé lágyan elhalványul (nincs éles levágás, nincs görgetősáv)
       const glow = ui.el('div', 'cw-glow');
       const rays = ui.el('div', 'cw-rays');
-      const fxLayer = ui.el('div', 'cw-fx', [rays, glow]);
-      const chestBox = ui.el('div', 'cw-chest-box', [canvas]);
+      const shade = ui.el('div', 'cw-shade');        // feltöltődéskor elsötétül a háttér
+      const pillar = ui.el('div', 'cw-pillar');      // robbanáskor fényoszlop
+      const fxLayer = ui.el('div', 'cw-fx', [shade, rays, glow, pillar]);
+      const chestBox = ui.el('div', 'cw-chest-box', [body, lid]);
+      const flash = ui.el('div', 'cw-flash');
+      // a vászon alapból 300×150 px: amíg nincs rajta semmi, legyen 0, különben kilóg (görgetősáv, ugrálás)
+      cracks.width = cracks.height = lid.width = lid.height = 0;
       const reveal = ui.el('div', 'cw-reveal');      // ide emelkedik ki a tárgy
       // a koppintható terület egy div (nem <button>), mert benne "?" gombok is vannak
       const stage = ui.el('div', 'cw-stage', [fxLayer, reveal, chestBox]);
@@ -135,15 +144,17 @@
       const collected = ui.el('div', 'cw-collected');
       const panel = ui.modal({ title: 'chest.name', closable: false, body: [stage, starRow, collected], buttons: [] });
       panel.classList.add('chest-window');
+      panel.append(flash);
       panel.dataset.stars = stars;
       panel.dataset.phase = 'stars';
 
       const light = n => starEls.forEach((s, i) => s.classList.toggle('on', i < n));
       const setGlow = (color, scale, alpha) => {
         glow.style.setProperty('--glow', color);
+        inner.style.setProperty('--glow', color);
         fx(glow, [{}, { transform: 'translate(-50%, -50%) scale(' + scale + ')', opacity: alpha }], { duration: 350, fill: 'forwards', easing: 'ease-out' });
       };
-      const shake = (amp, ms) => anim(canvas, [0, -1, 1, -0.8, 0.8, -0.5, 0.5, 0].map(k => ({ transform: 'translateX(' + (k * amp) + 'px) rotate(' + (k * amp * 0.4) + 'deg)' })), { duration: ms });
+      const shake = (amp, ms) => anim(body, [0, -1, 1, -0.8, 0.8, -0.5, 0.5, 0].map(k => ({ transform: 'translateX(' + (k * amp) + 'px) rotate(' + (k * amp * 0.4) + 'deg)' })), { duration: ms });
       const sparks = (n, color, spread) => {
         for (let i = 0; i < n; i++) {
           const sp = ui.el('span', 'cw-spark');
@@ -173,24 +184,155 @@
       }
       let skipStars = false;
 
-      // ---------- 2. nyitás 3 koppintással ----------
+      // ---------- 2. nyitás 3 koppintással: ébredés, feltöltődés, robbanás ----------
+      // A 2. koppintástól a fény a zsákmány legjobb tárgyának ritkaság-színében izzik (előjel).
+      const ORDER = { gold: 0, common: 0, rare: 1, epic: 2, legendary: 3 };
+      const best = loot.map(rarityInfo).reduce((a, b) => ((ORDER[b.group] || 0) > (ORDER[a.group] || 0) ? b : a), { group: 'common', color: GOLD_COLOR });
+      const bestLevel = ORDER[best.group] || 0;
+      const aura = bestLevel ? best.color : GOLD_COLOR;
+      const calm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const buzz = pattern => { try { if (!calm && navigator.vibrate) navigator.vibrate(pattern); } catch (e) { /* nincs rezgés */ } };
+      let embers = 0;
+
+      // izzó repedések: pixeles véletlen bolyongás a láda közepéből, utána levágva a láda alakjára
+      function addCracks(n, len) {
+        if (cracks.width !== canvas.width || cracks.height !== canvas.height) { cracks.width = canvas.width; cracks.height = canvas.height; }
+        const ctx = cracks.getContext('2d'), W = canvas.width / SCALE, H = canvas.height / SCALE;
+        ctx.globalCompositeOperation = 'source-over';
+        for (let i = 0; i < n; i++) {
+          let x = W * (0.25 + Math.random() * 0.5), y = H * (0.3 + Math.random() * 0.45);
+          const dx = Math.random() < 0.5 ? -1 : 1;
+          for (let k = 0; k < len; k++) {
+            ctx.fillStyle = k < 2 ? '#ffffff' : '#fff3b0';
+            ctx.fillRect(Math.round(x) * SCALE, Math.round(y) * SCALE, SCALE, SCALE);
+            if (Math.random() < 0.7) x += dx; else y += Math.random() < 0.5 ? -1 : 1;
+            if (Math.random() < 0.25) y += Math.random() < 0.5 ? -1 : 1;
+          }
+        }
+        ctx.globalCompositeOperation = 'destination-in'; // csak ahol a láda nem átlátszó
+        ctx.drawImage(canvas, 0, 0);
+        ctx.globalCompositeOperation = 'source-over';
+      }
+
+      // lökéshullám a láda alján (lapos ellipszis)
+      function ring(color, size, delay) {
+        const r = ui.el('span', 'cw-ring');
+        r.style.borderColor = color;
+        fxLayer.append(r); // a fény-rétegben: nem lóg ki az ablakból
+        fx(r, [{ transform: 'translate(-50%, -50%) scale(.2, .07)', opacity: 1 }, { transform: 'translate(-50%, -50%) scale(' + size + ', ' + size * 0.35 + ')', opacity: 0 }],
+          { duration: 600, delay: delay || 0, easing: 'cubic-bezier(.2,.7,.3,1)' }).then(() => r.remove());
+      }
+
+      // ütés-érzet: összenyomódik, felugrik, fehéren felvillan
+      const hit = (k) => anim(body, [
+        { transform: 'translateY(0) scale(1, 1)', filter: 'brightness(2.4)' },
+        { transform: 'translateY(0) scale(' + (1 + 0.12 * k) + ', ' + (1 - 0.14 * k) + ')', filter: 'brightness(1.6)', offset: 0.18 },
+        { transform: 'translateY(' + (-10 - 8 * k) + 'px) scale(' + (1 - 0.06 * k) + ', ' + (1 + 0.1 * k) + ')', filter: 'brightness(1.1)', offset: 0.5 },
+        { transform: 'translateY(0) scale(' + (1 + 0.06 * k) + ', ' + (1 - 0.06 * k) + ')', filter: 'brightness(1)', offset: 0.8 },
+        { transform: 'translateY(0) scale(1, 1)', filter: 'brightness(1)' },
+      ], { duration: 380 + k * 60, easing: 'ease-out' });
+
+      // parázs: apró fénypontok szállnak fel a láda körül, amíg fel van töltődve
+      function startEmbers() {
+        embers = setInterval(() => {
+          if (!fxLayer.isConnected) { clearInterval(embers); return; }
+          const e = ui.el('span', 'cw-ember');
+          e.style.background = Math.random() < 0.5 ? aura : '#ffe58a';
+          e.style.left = 'calc(50% + ' + Math.round((Math.random() - 0.5) * 120) + 'px)';
+          fxLayer.append(e);
+          fx(e, [{ transform: 'translateY(0) scale(1)', opacity: 0 }, { opacity: 1, offset: 0.2 }, { transform: 'translate(' + Math.round((Math.random() - 0.5) * 30) + 'px, ' + (-90 - Math.random() * 70) + 'px) scale(.4)', opacity: 0 }],
+            { duration: 1100 + Math.random() * 600, easing: 'ease-out' }).then(() => e.remove());
+        }, 70);
+      }
+
+      // robbanáskor aranyérmék záporoznak (parabola), a fény-rétegben (az ablakon belül maradnak)
+      function coinBurst(n) {
+        for (let i = 0; i < n; i++) {
+          const c = Game.lootUI.icon(Game.data.config.loot.coinIcon, 1);
+          c.classList.add('cw-coin');
+          fxLayer.append(c);
+          const vx = (Math.random() - 0.5) * 300, vy = -(180 + Math.random() * 160), g = 520, T = 0.9 + Math.random() * 0.4;
+          const frames = [];
+          for (let k = 0; k <= 8; k++) {
+            const t = T * k / 8;
+            frames.push({ transform: 'translate(' + (vx * t) + 'px, ' + (vy * t + g * t * t / 2) + 'px) rotate(' + (k * 45 * Math.sign(vx)) + 'deg)', opacity: k < 6 ? 1 : (8 - k) / 2 });
+          }
+          fx(c, frames, { duration: T * 1000, easing: 'linear' }).then(() => c.remove());
+        }
+      }
+
       async function openTap() {
         taps++;
-        chestBox.classList.remove('ready');
-        if (taps < OPEN_TAPS) {
-          setGlow(GOLD_COLOR, 1 + taps * 0.25 * power, 0.5 + taps * 0.2);
-          sparks(3 + taps * 2, '#ffe58a', 40 + taps * 15);
-          await shake(4 * taps * power, 260 + taps * 80);
+        chestBox.classList.remove('ready', 'cw-charging');
+        if (taps === 1) {
+          // 1. ébredés
+          buzz(20);
+          addCracks(2, 6);
+          ring('#ffe58a', 2.2);
+          sparks(6, '#c9b58a', 50);            // por
+          sparks(4, '#fff3b0', 40);
+          setGlow(GOLD_COLOR, 1.25 * power, 0.6);
+          await hit(1);
           chestBox.classList.add('ready');
           return;
         }
-        // 3. koppintás: a fedél felpattan
-        await shake(7 * power, 380);
+        if (taps === 2) {
+          // 2. feltöltődés: a fény már a legjobb tárgy színében izzik
+          buzz([25, 30, 25]);
+          addCracks(4, 10);
+          cracks.style.setProperty('--aura', aura);
+          cracks.classList.add('hot');
+          ring(aura, 3);
+          sparks(10, aura, 60);
+          setGlow(aura, 1.5 * power, 0.85);
+          rays.style.setProperty('--rarity', aura);
+          rays.classList.add('leak');
+          fxLayer.classList.add('charge');
+          if (stars >= 4) starEls.forEach(st => st.classList.add('hot'));
+          startEmbers();
+          await hit(1.6);
+          chestBox.classList.add('cw-charging'); // remeg, mintha alig bírná visszatartani
+          return;
+        }
+        // 3. robbanás
+        await anim(body, [{ transform: 'scale(1, 1)' }, { transform: 'scale(1.18, .72)', filter: 'brightness(1.8)' }], { duration: 170, easing: 'ease-in', fill: 'forwards' });
+        clearInterval(embers);
+        buzz(bestLevel >= 3 ? [80, 40, 160] : [60, 30, 100]);
+        fx(flash, [{ opacity: 0 }, { opacity: bestLevel >= 3 ? 1 : 0.85, offset: 0.15 }, { opacity: 0 }], { duration: bestLevel >= 3 ? 650 : 420, easing: 'ease-out' });
+        // a fedél lerepül: a csukott kép felső része külön vásznon
+        const lidH = Math.round(canvas.height * 0.42 / SCALE) * SCALE;
+        lid.width = canvas.width; lid.height = lidH;
+        const lctx = lid.getContext('2d');
+        lctx.imageSmoothingEnabled = false;
+        lctx.drawImage(canvas, 0, 0, canvas.width, lidH, 0, 0, canvas.width, lidH);
+        lid.classList.add('flying');
         if (style.strip) {
           for (const f of style.openFrames) { await draw(canvas, frameOf(style, f)); await wait(1000 / (style.fps || 12)); }
         } else await draw(canvas, frameOf(style, 'open'));
-        sparks(10 + stars * 3, '#ffe58a', 70 + stars * 8);
-        if (stars >= 4) fx(panel, [0, -1, 1, -1, 1, 0].map(k => ({ transform: 'translate(' + k * stars + 'px,' + (-k * stars / 2) + 'px)' })), { duration: 350 });
+        cracks.getContext('2d').clearRect(0, 0, cracks.width, cracks.height);
+        chestBox.classList.add('opened'); // a ládából fény árad (a következő tárgy színében)
+        body.getAnimations && body.getAnimations().forEach(a => a.cancel());
+        const side = Math.random() < 0.5 ? -1 : 1;
+        fx(lid, [
+          { transform: 'translate(0, 0) rotate(0deg)', opacity: 1 },
+          { transform: 'translate(' + side * 60 + 'px, -150px) rotate(' + side * 200 + 'deg)', opacity: 1, offset: 0.55 },
+          { transform: 'translate(' + side * 110 + 'px, -60px) rotate(' + side * 380 + 'deg)', opacity: 0 },
+        ], { duration: 900, easing: 'cubic-bezier(.2,.8,.4,1)' }).then(() => { lid.classList.remove('flying'); lid.width = lid.height = 0; });
+        ring('#ffffff', 4.5);
+        ring(aura, 6, 120);
+        fx(pillar, [{ transform: 'translateX(-50%) scaleY(0)', opacity: 0, background: 'linear-gradient(to top, ' + aura + ', transparent)' },
+          { transform: 'translateX(-50%) scaleY(1)', opacity: 0.9, offset: 0.25 },
+          { transform: 'translateX(-50%) scaleY(1.05)', opacity: 0 }], { duration: bestLevel >= 3 ? 1600 : 1000, easing: 'ease-out' });
+        coinBurst(8 + stars * 3 + bestLevel * 4);
+        sparks(16 + stars * 4, '#fff3b0', 110);
+        sparks(8 + bestLevel * 6, aura, 130);
+        fx(panel, [0, -1, 1, -0.8, 0.8, -0.5, 0.5, 0].map(k => ({ transform: 'translate(' + k * (5 + stars + bestLevel * 2) + 'px,' + (-k * (3 + stars)) + 'px)' })), { duration: 450 + bestLevel * 100 });
+        setGlow(aura, 1.8, 0.9);
+        rays.classList.remove('leak');
+        setTimeout(() => fxLayer.classList.remove('charge'), 500);
+        starEls.forEach(st => st.classList.remove('hot'));
+        await anim(body, [{ transform: 'scale(.9, 1.15)' }, { transform: 'scale(1.06, .95)', offset: 0.5 }, { transform: 'scale(1, 1)' }], { duration: 320, easing: 'ease-out' });
+        await wait(250);
         phase = 'reveal';
         panel.dataset.phase = phase;
         prepareNext();

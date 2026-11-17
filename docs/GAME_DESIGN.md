@@ -31,7 +31,8 @@ Kilenc fokozat alulról felfelé: `common1–3`, `rare1–3`, `epic1–2`, `lege
 - A ládák 1–5 csillagosak (véletlen, 1★ 30%, 2★ 30%, 3★ 20%, 4★ 13%, 5★ 7%): több csillag = több tétel
   (1 → 4–5) és nagyobb esély a ritka tárgyra; bármi bármelyik ládából jöhet, csak más eséllyel. Az arany nem jár
   mindig, csak egy tétel a sok közül (a mennyisége a csillaggal nő). Számok: `config.js` → `loot.stars`.
-- Most: a dungeon ládája, saját ablakban nyílik: csillagok, 3 koppintás a nyitáshoz, utána tárgyanként egy
+- Most: a dungeon ládája, saját ablakban nyílik: csillagok, 3 koppintás a nyitáshoz (ébredés, feltöltődés a legjobb
+  tárgy színében, robbanás), utána tárgyanként egy
   koppintás (előtte a láda a tárgy ritkaságának színében dereng; legendary: külön show). Gyors koppintással siettethető. Bármikor kinyitható (a „zárva, amíg él szörny” kikapcsolható: `config.js` →
   `loot.lockChestUntilCleared`); minden belépéskor újra tele van. Kinyitáskor
   a zsákmány egyelőre csak látvány: sem a tárgyak, sem az arany nem

@@ -78,7 +78,7 @@ test('csillagok: az esélyek a config szerint; több csillag = ritkább tárgyak
 
 test('ikonok: az items.json minden ikonja és az arany ikonja létező fájlra mutat', () => {
   const { Game } = createGame();
-  const icons = Object.values(Game.data.items).map(it => it.icon).concat(Game.data.config.loot.goldIcon);
+  const icons = Object.values(Game.data.items).map(it => it.icon).concat(Game.data.config.loot.goldIcon, Game.data.config.loot.coinIcon);
   for (const icon of icons) {
     const p = Game.itemIcons.parse(icon);
     assert.ok(p, icon);
