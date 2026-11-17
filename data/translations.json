@@ -528,5 +528,7 @@
     "de": "Die Truhe ist verschlossen. Besiege zuerst alle Monster!",
     "hu": "A láda zárva van. Előbb győzd le az összes szörnyet!"
   },
-  "chest.lockedDesc": {"de": "Verschlossen – hier sind noch Monster.", "hu": "Zárva – még vannak itt szörnyek."}
+  "chest.lockedDesc": {"de": "Verschlossen – hier sind noch Monster.", "hu": "Zárva – még vannak itt szörnyek."},
+  "chest.tapToOpen": {"de": "Tippe auf die Truhe!", "hu": "Koppints a ládára!"},
+  "chest.stars": {"de": "{n} von 5 Sternen", "hu": "{n} csillag az 5-ből"}
 }

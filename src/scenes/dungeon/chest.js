@@ -1,6 +1,7 @@
-// A dungeon ládája: (ha a config így kéri) zárva, amíg él szörny; nyitáskor remeg, kinyílik, és a loot ívben kirepül belőle,
-// majd a "Beute" ablak (src/ui/loot.js) listázza. A zsákmány a loot táblából jön (Game.loot.roll), és most
-// még nem tárolódik (spec: docs/features/chest_opening.md).
+// A dungeon ládája: (ha a config így kéri) zárva, amíg él szörny. "Öffnen"-re a láda-ablak nyílik meg
+// (src/ui/chestWindow.js: csillagok, kinyílás, kieső loot, lista); utána a pályán is kinyílik és üres marad.
+// A zsákmány a loot táblából jön (Game.loot), és most még nem tárolódik
+// (spec: docs/features/chest_opening.md, docs/features/chest_stars.md).
 //
 // A láda kinézete adatból jön: data/chest_styles.json (a dungeon "chestStyle" mezője, alapból config.loot.chestStyle).
 //   képkockás: { closed: kivágás-név, open: kivágás-név }              (src/config/assets.js: frames)
@@ -8,8 +9,6 @@
 // A DungeonScene ezeket a metódusokat a saját prototípusára veszi fel (this = a dungeon jelenet).
 (function () {
   const TS = 16;
-  // hová esnek a tárgyak a láda aljához képest (pixel): felváltva balra és jobbra, egyre távolabb
-  const SLOTS = [[-17, 2], [17, 2], [-29, 6], [29, 6], [-23, 15], [23, 15]];
 
   Game.dungeonParts = Game.dungeonParts || {};
   Game.dungeonParts.chest = {
@@ -45,20 +44,19 @@
       this.refreshPrompt();
     },
 
+    // "Öffnen": a láda-ablak (src/ui/chestWindow.js) nyílik meg csillagokkal és a kieső lootal;
+    // amikor bezárul, a pályán is kinyílik a láda (por, csillogás), és üres marad.
     openChest() {
       const ch = this.chest;
       if (ch.opened || ch.busy) return;
       if (this.chestLocked()) { this.chestRattle(); Game.ui.toast('chest.locked'); return; }
       ch.busy = true;
       this.stopPath();
-      const s = ch.sprite, x0 = s.x;
-      // 1. kétszeri remegés
-      this.tweens.add({
-        targets: s, x: { from: x0 - 1, to: x0 + 1 }, duration: 55, yoyo: true, repeat: 3, ease: 'Sine.easeInOut',
-        onComplete: () => { s.x = x0; this.chestPop(); },
+      Game.chestWindow.open({
+        style: ch.style,
+        table: this.def.lootTable,
+        onDone: () => this.chestOpenInWorld(),
       });
-      this.tweens.killTweensOf(ch.light);
-      this.tweens.add({ targets: ch.light, alpha: 1, scale: 1.3, duration: 400 });
     },
 
     // zárt láda: kis zörgés
@@ -67,17 +65,19 @@
       this.tweens.add({ targets: s, x: { from: x0 - 1, to: x0 + 1 }, duration: 40, yoyo: true, repeat: 1, onComplete: () => { s.x = x0; } });
     },
 
-    // 2. a fedél felpattan (képkocka-csere vagy animáció), por és csillogás
-    chestPop() {
+    // a pályán a fedél felpattan (képkocka-csere vagy animáció), por és csillogás; a láda üres marad
+    chestOpenInWorld() {
       const ch = this.chest, s = ch.sprite, st = ch.style;
+      ch.opened = true; ch.busy = false;
+      this.chestPrompt();
       const opened = () => {
         for (let i = 0; i < 8; i++) {
           const d = this.add.rectangle(s.x + (i - 3.5) * 3, s.y - 14, 2, 2, i % 2 ? 0xffe28a : 0xd8d0b0, 0.95).setDepth(90002);
           this.tweens.add({ targets: d, y: d.y - 10 - Math.random() * 10, x: d.x + (i - 3.5) * 2.5, alpha: 0, duration: 500 + Math.random() * 300, onComplete: () => d.destroy() });
         }
-        this.tweens.add({ targets: ch.light, alpha: 0.3, scale: 0.9, duration: 900, delay: 300 });
+        this.tweens.killTweensOf(ch.light);
+        this.tweens.add({ targets: ch.light, alpha: 0.25, scale: 0.9, duration: 900 });
         this.sparkles.gold = [];
-        this.chestLoot();
       };
       if (st.strip) {
         const key = 'chest_open_' + st.id;
@@ -91,48 +91,6 @@
           onComplete: () => { s.setScale(1); opened(); },
         });
       }
-    },
-
-    // 3. a loot ívben kirepül, földet ér, pattan, és ritkaság-színű fényben lebeg; utána a "Beute" ablak
-    chestLoot() {
-      const ch = this.chest;
-      const loot = Game.loot.roll(this.def.lootTable);
-      const n = loot.length;
-      const icons = [];
-      loot.forEach((e, i) => {
-        const item = e.item && Game.data.items[e.item];
-        const icon = Game.itemIcons.parse(item ? item.icon : Game.data.config.loot.goldIcon);
-        const rarity = item && Game.data.config.rarities.find(r => r.id === item.rarity);
-        const color = rarity ? parseInt(rarity.color.slice(1), 16) : 0xffd75a;
-        // a láda két oldalára esnek legyezőben (a láda előtt a játékos áll, ott takarná)
-        const slot = SLOTS[i % SLOTS.length];
-        const tx = ch.x + slot[0], ty = ch.y + slot[1];
-        const img = (icon.sheet ? this.add.image(ch.x, ch.y - 12, icon.key, icon.frame) : this.add.image(ch.x, ch.y - 12, icon.key)).setDepth(90003).setScale(0.3);
-        const glow = this.add.image(tx, ty + 1, 'fx_light_white').setBlendMode(Phaser.BlendModes.ADD).setTint(color).setScale(0.05).setAlpha(0).setDepth(90002);
-        icons.push(img, glow);
-        const fly = { t: 0 }, sx = img.x, sy = img.y, h = 22 + Math.random() * 8;
-        this.tweens.add({
-          targets: fly, t: 1, duration: 520, delay: 160 * i, ease: 'Sine.easeIn',
-          onStart: () => this.tweens.add({ targets: img, scale: 1, duration: 260 }),
-          onUpdate: () => { img.x = sx + (tx - sx) * fly.t; img.y = sy + (ty - sy) * fly.t - Math.sin(fly.t * Math.PI) * h; },
-          onComplete: () => {
-            this.tweens.add({ targets: img, y: ty - 4, duration: 120, yoyo: true, ease: 'Quad.easeOut',
-              onComplete: () => this.tweens.add({ targets: img, y: ty - 2, duration: 700, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' }) });
-            this.tweens.add({ targets: glow, alpha: 0.8, scale: 0.35, duration: 300 });
-          },
-        });
-      });
-      // 4. ha minden földet ért: "Beute" ablak; az OK-ra az ikonok a játékoshoz repülnek
-      this.time.delayedCall(160 * n + 520 + 1000, () => {
-        Game.lootUI.show(loot, () => {
-          icons.forEach(o => {
-            this.tweens.killTweensOf(o);
-            this.tweens.add({ targets: o, x: this.player.x, y: this.player.y - 10, alpha: 0, scale: 0.3, duration: 380, ease: 'Quad.easeIn', onComplete: () => o.destroy() });
-          });
-        });
-        ch.opened = true; ch.busy = false;
-        this.chestPrompt();
-      });
     },
   };
 })();

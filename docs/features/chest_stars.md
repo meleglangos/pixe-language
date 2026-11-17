@@ -1,6 +1,6 @@
 # Láda-ablak csillagokkal
 
-**Állapot:** folyamatban (jóváhagyva: 2026-11-17)
+**Állapot:** kész (jóváhagyva: 2026-11-17)
 **Ötlet:** a felhasználó kérése (a ládanyitás folytatása: `docs/features/chest_opening.md`)
 
 ## 1. Cél
@@ -64,14 +64,18 @@ megremeg, kinyílik, és a loot ívben kiesik belőle az ablakban; alul megjelen
 - [x] Nyitás az ablakban → **a játékos koppint a ládára**.
 - [x] Ritkaság → ~~minimum csillag~~ → **nincs korlát**, 1★-ból is jöhet legendary, csak kis eséllyel;
       a csillag az esélyeket tolja a ritkább felé (4. pont, `rarityFactor`). **Az arany nem jár mindig.**
-- [ ] A `rarityFactor` számai (4. pont) így jók kezdésnek? (Később adatban hangolható.)
+- [x] A `rarityFactor` számai (4. pont) → **jók kezdésnek** (adatban hangolható).
 
 ## 10. Kész, ha
-- [ ] „Öffnen”-re megnyílik az ablak, a csillagok kigyúlnak és véletlenszerűen megállnak 1–5-nél
-- [ ] több csillagnál több tárgy jön, és nagyobb eséllyel ritka; bármelyik ládából bármi jöhet; az arany nem kötelező
-- [ ] koppintásra a láda kinyílik, a loot kiesik, a lista és a „Super!” megjelenik; a pályán a láda nyitva marad
-- [ ] a csillagok hatása adatból állítható; tesztek a csillag-sorsolásra és a szűrésre
-- [ ] telefonméretben (érintéssel) a teljes játékban kipróbálva
+- [x] „Öffnen”-re megnyílik az ablak, a csillagok kigyúlnak és véletlenszerűen megállnak 1–5-nél
+- [x] több csillagnál több tárgy jön, és nagyobb eséllyel ritka; bármelyik ládából bármi jöhet; az arany nem kötelező
+- [x] koppintásra a láda kinyílik, a loot kiesik, a lista és a „Super!” megjelenik; a pályán a láda nyitva marad
+- [x] a csillagok hatása adatból állítható; tesztek a csillag-sorsolásra és a szűrésre
+- [x] telefonméretben (érintéssel) a teljes játékban kipróbálva
+
+Megjegyzések: a „Beute” ablak helyett a lista a láda-ablakban jelenik meg; a pályán a kirepülő loot megszűnt
+(csak a fedél pattan fel). Mivel a közönséges tárgyak szorzója csökken a csillaggal, több csillagnál az arany
+aránya is nő (1★: ~22%, 5★: ~37% egy húzásnál a kriptában) – ha zavaró, a `rarityFactor.gold` sorral hangolható.
 
 ## 11. Lépések
 1. Csillagok a loot-sorsolásban (`rollStars`, `roll(…, { stars })`, `rarityFactor`, `chances`) + validátor + tesztek.

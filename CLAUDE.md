@@ -42,7 +42,7 @@ tartalom csak a felhasználó kifejezett jóváhagyásával kerülhet bele.
 | `src/state/GameState.js` | a központi játékállapot (`Game.state`): HP, arany, inventory, felszerelés, dungeonök, jelzők |
 | `src/systems/save/` | mentés: `SaveManager`, `SaveSchema` (verzió + migrációk), `SaveCodec` (export/import kód) |
 | `src/systems/content/` | a `data/` betöltése és ellenőrzése; `src/systems/maps/`: Tiled olvasó |
-| `src/systems/loot/` | loot sorsolás (`Game.loot`), tárgy-ikonok (`Game.itemIcons`); a „Beute” ablak: `src/ui/loot.js` |
+| `src/systems/loot/` | loot sorsolás (`Game.loot`), tárgy-ikonok (`Game.itemIcons`); a „Beute” lista: `src/ui/loot.js`, a láda-ablak: `src/ui/chestWindow.js` |
 | `src/systems/questions/` | a közös kérdés-motor (`Game.questions`): kiválasztás, ellenőrzés, kihívás; ablak: `src/ui/quiz.js` |
 | `src/scenes/` | Phaser jelenetek: `ExploreScene` (közös mozgás-alap), `WorldScene`, `DungeonScene`; `dungeon/`: fény, víz, hangulat, berendezés, láda |
 | `src/world/` | rács + útkeresés, karakter, kutya, szörny; `dungeonThemes.js`: a dungeonök kinézete |

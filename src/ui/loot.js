@@ -1,6 +1,7 @@
 // A "Beute" ablak: mit adott a láda. Ikon (2× nagyítva, éles pixel art) + német név a "?"-lel + darabszám;
 // a sor bal széle a tárgy ritkaságának színe. Az arany külön sor, összeggel.
-//   Game.lootUI.show([{ gold } | { item, qty }], onOk)
+//   Game.lootUI.show([{ gold } | { item, qty }], onOk)   -- külön ablakban
+//   Game.lootUI.list(loot), Game.lootUI.icon(icon)        -- elemek más ablakba (pl. a láda-ablak)
 (function () {
   const ui = Game.ui;
   const SCALE = 2;
@@ -33,6 +34,8 @@
   }
 
   Game.lootUI = {
+    icon: iconEl,                                                   // a láda-ablak is ezzel rajzol ikont
+    list: loot => ui.el('ul', 'loot-list', loot.map(row)),          // a zsákmány listája (láda-ablak, "Beute")
     show(loot, onOk) {
       const ok = () => { ui.closeModal(); if (onOk) onOk(); };
       ui.modal({

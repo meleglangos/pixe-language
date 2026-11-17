@@ -28,9 +28,12 @@ Kilenc fokozat alulról felfelé: `common1–3`, `rare1–3`, `epic1–2`, `lege
 
 ## 3. Jutalmak és loot
 
-- Most: a dungeon ládája. Bármikor kinyitható (a „zárva, amíg él szörny” kikapcsolható: `config.js` →
+- A ládák 1–5 csillagosak (véletlen, 1★ 30%, 2★ 30%, 3★ 20%, 4★ 13%, 5★ 7%): több csillag = több tétel
+  (1 → 4–5) és nagyobb esély a ritka tárgyra; bármi bármelyik ládából jöhet, csak más eséllyel. Az arany nem jár
+  mindig, csak egy tétel a sok közül (a mennyisége a csillaggal nő). Számok: `config.js` → `loot.stars`.
+- Most: a dungeon ládája, saját ablakban nyílik (csillagok, koppintás, kieső loot). Bármikor kinyitható (a „zárva, amíg él szörny” kikapcsolható: `config.js` →
   `loot.lockChestUntilCleared`); minden belépéskor újra tele van. Kinyitáskor
-  2–4 tétel jön ki (mindig van arany), a zsákmány egyelőre csak látvány: sem a tárgyak, sem az arany nem
+  a zsákmány egyelőre csak látvány: sem a tárgyak, sem az arany nem
   tárolódik (az inventory külön feature). Spec: `docs/features/chest_opening.md`.
 - Loot forrásai (tervezett): láda a dungeonben, kérdés-kihívás, boss, vizsga. Mindegyik loot táblára
   hivatkozik (`data/loot_tables.json`, formátum: `data/README.md`); a jutalom soha nincs a kódba égetve.

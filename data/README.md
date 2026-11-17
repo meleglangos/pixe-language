@@ -204,6 +204,13 @@ Ha egy német szövegben nem vagy 100%-ig biztos: `{"de": "…", "hu": "…", "r
 Egy tétel vagy `item` (+ `qty`: szám vagy `[min, max]`), vagy `gold` (szám vagy `[min, max]`); a húzható tételeknek
 `weight` kell (nagyobb = gyakoribb). A dungeon ládája a `dungeons.json` → `lootTable` táblából sorsol.
 
+**Láda-csillagok (1–5):** a láda minősége, nyitáskor sorsolódik. A csillag dönti el, hány tételt húz (`rolls`), az
+arany szorzóját (`gold`) és a ritkaság-csoportok szorzóit (`rarityFactor`: egy tétel esélye = súly × szorzó; bármi
+bármelyik ládából jöhet, csak más eséllyel). Alapértékek: `src/config/config.js` → `loot.stars`; egy tábla a
+`"stars": { … }` mezővel bármelyik részt felülírhatja (minden lista 5 elemű: 1…5 csillag). Csillagos ládánál az
+`always` és `rolls` mezőt nem érdemes használni. Hangoláshoz: `Game.loot.chances('loot_crypt_chest', 3)` kiírja,
+mi milyen eséllyel jön egy húzásnál.
+
 ## chest_styles.json – a láda kinézete
 
 ```jsonc
