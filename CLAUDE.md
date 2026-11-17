@@ -11,6 +11,9 @@ tartalom csak a felhasználó kifejezett jóváhagyásával kerülhet bele.
 
 - Magyarul válaszolj, röviden. A feladat végén összefoglaló: mi készült, **mit próbáljon ki a telefonon**,
   mely német szövegek kaptak `review` jelölést, mi a következő lépés.
+- Az összefoglalóban mindig add meg a **commit-linket** a kipróbáláshoz (azonnal friss, nincs gyorsítótár):
+  `https://raw.githack.com/meleglangos/pixe-language/<teljes commit hash>/index.html?debug=1`
+  (a branch-nevű link pár percig a régi változatot mutathatja).
 - **Önálló vagy** a kreatív munkában: dungeon, sztori, nevek, szörnyek, kérdések, hangulat, apró javítások.
 - **Kérdezz előbb**, ha a kérés ütközne egy szabállyal, mentési formátumot vagy kiadott ID-t érintene, új
   függőséget vagy build lépést hozna, vagy bármi a `main`-re kerülne.
@@ -134,7 +137,8 @@ Ha assetet keresel, először mindig az `assets/ASSETS.md` katalógusban és az 
 1. Adatmódosítás után `node tools/build-data.js`; mindig `npm test` (új logikához új teszt).
 2. Felületi változásnál kipróbálás a böngészőben, telefonméretben is.
 3. README „Állapot” frissítése (pipák, „Most folyamatban”); ha kell, `docs/GAME_DESIGN.md`, `docs/DECISIONS.md`.
-4. Commit és push a munkabranchre.
+4. Commit és push a munkabranchre (`refactor/foundations`). Ha a munkamenet saját (`ccr-…`) branchen dolgozik,
+   a végén azt is vidd át a `refactor/foundations`-re (a felhasználó ezt kérte, 2026-11-17); a `main`-re továbbra se.
 5. Összefoglaló a felhasználónak (lásd Kommunikáció).
 
 ## Buktatók
