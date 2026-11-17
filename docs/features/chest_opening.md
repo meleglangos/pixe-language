@@ -53,17 +53,19 @@ ikonok a játékoshoz repülnek és eltűnnek. Utána a láda üres („Leer –
   Új asset nem kell.
 
 ## 9. Eldöntendő kérdések
-- [ ] Az arany már most kerüljön be (HUD + mentés), vagy az is csak látvány legyen? Javaslat: **kerüljön be** – a
-      rendszer kész hozzá, és van értelme a ládának.
-- [ ] Minden belépéskor újra tele a láda? Javaslat: **igen, most még igen** (amíg nincs tárolás, nincs mit védeni).
-- [ ] Zárva legyen a láda, amíg él szörny a dungeonben? Javaslat: **igen** („Die Truhe ist verschlossen. Besiege
-      zuerst alle Monster!”) – így a kérdések megoldása vezet a jutalomhoz.
+- [x] Az arany már most kerüljön be? → **nem, az is csak látvány** (a tárolás az inventory feature-rel jön).
+- [x] Minden belépéskor újra tele a láda? → **igen, most még igen**.
+- [x] Zárva legyen a láda, amíg él szörny? → **igen** („Die Truhe ist verschlossen. Besiege zuerst alle Monster!”).
 - [ ] Hány tárgy jön ki? Javaslat: **2–4**, ebből legalább egy arany.
+- [x] Az animáció **cserélhető** legyen: többféle láda-grafikát / animációt ki fogunk próbálni (pl. Otsoga:
+      Free Treasure Chest, itch.io). A láda kinézete adatból jön (`chest_styles.json`: sprite / képkockák / időzítés),
+      így egy új láda kipróbálása csak adat + asset, kód nélkül.
 
 ## 10. Kész, ha
 - [ ] a láda remeg, kinyílik, a tárgyak ívben kirepülnek, földet érnek, és a „Beute” ablak listázza őket
 - [ ] a loot a loot táblából jön, súlyozott véletlennel; a validátor ellenőrzi a tárgyakat és a táblákat
-- [ ] (ha 9.1 igen) az arany bekerül a HUD-ba és a mentésbe
+- [ ] a láda kinézete adatból jön, egy másik láda-stílus kód nélkül kipróbálható
+- [ ] a láda zárva, amíg él szörny
 - [ ] `node tools/build-data.js` és `npm test` zöld, új tesztekkel (sorsolás, validátor)
 - [ ] telefonméretben (érintéssel) kipróbálva; régi mentéssel is működik
 - [ ] README „Állapot”, `docs/GAME_DESIGN.md` 3. rész (jutalmak), szükség esetén `docs/DECISIONS.md`
