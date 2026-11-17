@@ -30,6 +30,7 @@ Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén fris
   - [ ] loot szabályok
     - [x] ládanyitás: tárgyak, loot táblák, sorsolás, animáció, kirepülő loot, „Beute” ablak (a loot még nem tárolódik; a láda bármikor nyitható)
     - [x] láda-ablak csillagokkal: 1–5 csillag (véletlen), több csillag = több és ritkább loot, koppintásra nyílik, a loot kiesik
+    - [x] többkoppintásos nyitás: 3 koppintás, tárgyankénti kiemelés ritkaság-előjellel, legendary show; első epic / legendary tárgyak
   - [ ] HP
   - [ ] debug mód
 - [ ] 3. szakasz: inventory, gear a karakteren, shop, gold, HP-ital

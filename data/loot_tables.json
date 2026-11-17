@@ -9,6 +9,9 @@
       {"item": "sword_bronze_01", "weight": 1},
       {"item": "key_old", "weight": 1},
       {"item": "gem_red", "weight": 1},
+      {"item": "amulet_01", "weight": 1},
+      {"item": "sword_gold_01", "weight": 1},
+      {"item": "crown_gold", "weight": 1},
       {"gold": [5, 15], "weight": 4}
     ]
   },
@@ -21,6 +24,9 @@
       {"item": "sword_bronze_01", "weight": 1},
       {"item": "dagger_bronze_01", "weight": 1},
       {"item": "key_old", "weight": 1},
+      {"item": "amulet_01", "weight": 1},
+      {"item": "sword_gold_01", "weight": 1},
+      {"item": "crown_gold", "weight": 1},
       {"gold": [8, 20], "weight": 4}
     ]
   }

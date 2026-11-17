@@ -6,16 +6,18 @@
   const ui = Game.ui;
   const SCALE = 2;
 
-  // DOM-ikon a Game.itemIcons leírásából: CSS háttér a lapról, 2× nagyítva
-  function iconEl(icon) {
+  // DOM-ikon a Game.itemIcons leírásából: CSS háttér a lapról, egész számú nagyítással (alap: 2×)
+  function iconEl(icon, scale) {
+    const k = scale || SCALE;
     const p = Game.itemIcons.parse(icon);
     const el = ui.el('span', 'loot-icon');
+    el.style.width = el.style.height = (16 * k) + 'px';
     if (!p) return el;
     el.style.backgroundImage = 'url("' + encodeURI(p.url) + '")';
     if (p.sheet) {
-      el.style.backgroundSize = (384 * SCALE) + 'px ' + (320 * SCALE) + 'px'; // a fegyverlapok mérete
-      el.style.backgroundPosition = (-p.x * SCALE) + 'px ' + (-p.y * SCALE) + 'px';
-    }
+      el.style.backgroundSize = (384 * k) + 'px ' + (320 * k) + 'px'; // a fegyverlapok mérete
+      el.style.backgroundPosition = (-p.x * k) + 'px ' + (-p.y * k) + 'px';
+    } else el.style.backgroundSize = (16 * k) + 'px ' + (16 * k) + 'px';
     return el;
   }
 
@@ -34,7 +36,7 @@
   }
 
   Game.lootUI = {
-    icon: iconEl,                                                   // a láda-ablak is ezzel rajzol ikont
+    icon: iconEl,                                                   // (icon, nagyítás) – a láda-ablak is ezzel rajzol
     list: loot => ui.el('ul', 'loot-list', loot.map(row)),          // a zsákmány listája (láda-ablak, "Beute")
     show(loot, onOk) {
       const ok = () => { ui.closeModal(); if (onOk) onOk(); };

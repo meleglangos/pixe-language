@@ -1,6 +1,6 @@
 # Láda-ablak csillagokkal
 
-**Állapot:** kész (jóváhagyva: 2026-11-17)
+**Állapot:** kész, 2. kiegészítéssel (jóváhagyva: 2026-11-17)
 **Ötlet:** a felhasználó kérése (a ládanyitás folytatása: `docs/features/chest_opening.md`)
 
 ## 1. Cél
@@ -76,6 +76,21 @@ megremeg, kinyílik, és a loot ívben kiesik belőle az ablakban; alul megjelen
 Megjegyzések: a „Beute” ablak helyett a lista a láda-ablakban jelenik meg; a pályán a kirepülő loot megszűnt
 (csak a fedél pattan fel). Mivel a közönséges tárgyak szorzója csökken a csillaggal, több csillagnál az arany
 aránya is nő (1★: ~22%, 5★: ~37% egy húzásnál a kriptában) – ha zavaró, a `rarityFactor.gold` sorral hangolható.
+
+## 2. kiegészítés: több koppintás, tárgyankénti kiemelés (jóváhagyva 2026-11-17)
+Az egy koppintás unalmas volt („hiányzik a dopamin”). Új menet:
+- **Nyitás 3 koppintással:** 1. megreped, fény szűrődik ki · 2. erősebb rázás · 3. a fedél felpattan.
+  Több csillag = erősebb rázás és fény.
+- **Tárgyanként egy koppintás:** a következő tárgy előtt a láda a **ritkasága színében dereng** (előjel), koppintásra
+  a tárgy nagyban kiemelkedik a nevével és a ritkaságával; a ládán számláló („noch 3”). Common: gyors; rare: kék fény,
+  szikrák; epic: lila fény, előtte rázás; legendary: hosszabb rázás, arany sugarak, villanás, „Legendär!” felirat.
+- A végén a tárgyak sorban, alattuk a lista és a „Super!”.
+- **Nincs „mindet mutat” gomb**, de lehet sietni: koppintásra az épp futó animáció azonnal a végére ugrik.
+- **Ritka tárgyak:** 3 új tárgy (2 epic, 1 legendary) a két láda táblájába, hogy legyen mit kinyitni
+  (a rendes tárgyrendszer később): `amulet_01` (epic1), `sword_gold_01` (epic2), `crown_gold` (legendary).
+  Esély a kripta-ládában: 5★: a ládák ~5%-ában korona, 1★: ~0,03%.
+- Kész: a teljes játékban kipróbálva (iPhone 13 emuláció), fix zsákmánnyal minden ritkaság menete, és a gyors
+  végigkoppintás (egy 3★ láda ~2 mp alatt).
 
 ## 11. Lépések
 1. Csillagok a loot-sorsolásban (`rollStars`, `roll(…, { stars })`, `rarityFactor`, `chances`) + validátor + tesztek.

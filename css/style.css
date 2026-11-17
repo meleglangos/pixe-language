@@ -199,7 +199,7 @@ html, body {
   display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 6px 10px;
   background: #fffaf0; border: 2px solid var(--parchment-dark); border-radius: 6px;
 }
-.loot-icon { width: 32px; height: 32px; flex: none; background-repeat: no-repeat; background-size: 32px 32px; image-rendering: pixelated; }
+.loot-icon { flex: none; background-repeat: no-repeat; image-rendering: pixelated; }
 .loot-text { display: grid; flex: 1; min-width: 0; }
 .loot-name { font-weight: 700; flex: 1; }
 .loot-row { border-left: 6px solid var(--rarity, #f2c040); }
@@ -208,30 +208,55 @@ html, body {
 
 /* láda-ablak (src/ui/chestWindow.js) */
 .chest-window { text-align: center; }
-.cw-stage { position: relative; height: 210px; display: flex; align-items: flex-end; justify-content: center; }
-.cw-chest-box { position: relative; padding: 0; border: 0; background: none; cursor: pointer; margin-bottom: 64px; -webkit-tap-highlight-color: transparent; }
-.cw-chest-box:disabled { cursor: default; }
-.cw-chest { display: block; image-rendering: pixelated; position: relative; z-index: 1; }
-.cw-chest-box.ready .cw-chest { animation: cw-bob 1.1s ease-in-out infinite; }
-@keyframes cw-bob { 50% { transform: translateY(-5px); } }
-.cw-glow {
-  position: absolute; left: 50%; top: 55%; width: 170px; height: 170px; transform: translate(-50%, -50%);
-  border-radius: 50%; background: radial-gradient(circle, rgba(255, 220, 120, .65), rgba(255, 220, 120, 0) 65%);
-  opacity: .45; transition: opacity .3s, transform .5s;
+.cw-stage {
+  position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  width: 100%; height: 300px; padding: 0; border: 0; background: none; cursor: pointer; font: inherit; color: inherit;
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
 }
-.cw-glow.burst { opacity: 1; transform: translate(-50%, -50%) scale(1.5); }
-.cw-drop { position: absolute; left: 50%; bottom: 12px; width: 0; height: 32px; z-index: 2; }
-.cw-loot { position: absolute; left: -16px; top: 0; filter: drop-shadow(0 0 5px var(--rarity, #ffd75a)); }
-.cw-spark { position: absolute; left: 50%; top: 52%; width: 5px; height: 5px; background: #ffe58a; border-radius: 1px; z-index: 3; pointer-events: none; }
-.cw-stars { display: flex; justify-content: center; gap: 6px; margin: 4px 0 6px; }
+.cw-reveal { position: absolute; left: 0; right: 0; top: 0; height: 150px; z-index: 4; pointer-events: none; }
+.cw-chest-box { position: relative; margin-bottom: 8px; }
+.cw-chest { display: block; image-rendering: pixelated; position: relative; z-index: 2; }
+.cw-chest-box.ready .cw-chest { animation: cw-bob 1.1s ease-in-out infinite; }
+.cw-chest-box.cw-tease .cw-chest { animation: cw-tease .35s ease-in-out infinite; }
+@keyframes cw-bob { 50% { transform: translateY(-5px); } }
+@keyframes cw-tease { 25% { transform: translateX(-2px) rotate(-2deg); } 75% { transform: translateX(2px) rotate(2deg); } }
+.cw-glow {
+  --glow: #ffd75a;
+  position: absolute; left: 50%; top: 50%; width: 180px; height: 180px; transform: translate(-50%, -50%);
+  border-radius: 50%; background: radial-gradient(circle, var(--glow), transparent 65%); opacity: .3; z-index: 1;
+}
+.cw-rays {
+  --rarity: #ffd75a;
+  position: absolute; left: 50%; top: -40%; width: 340px; height: 340px; margin-left: -170px; border-radius: 50%; z-index: 0;
+  background: repeating-conic-gradient(from 0deg, var(--rarity) 0deg 8deg, transparent 8deg 24deg);
+  -webkit-mask: radial-gradient(circle, #000 15%, transparent 70%); mask: radial-gradient(circle, #000 15%, transparent 70%);
+  opacity: 0; transition: opacity .3s; pointer-events: none;
+}
+.cw-rays.on { opacity: .55; animation: cw-spin 6s linear infinite; }
+@keyframes cw-spin { to { transform: rotate(360deg); } }
+.cw-counter { position: absolute; left: calc(100% + 10px); bottom: 12px; z-index: 3; font-weight: 700; font-size: 15px; white-space: nowrap; }
+.cw-spark { position: absolute; left: 50%; top: 45%; width: 5px; height: 5px; background: #ffe58a; border-radius: 1px; z-index: 3; pointer-events: none; }
+.cw-item { position: absolute; left: 50%; top: 4px; display: grid; justify-items: center; gap: 2px; transform: translate(-50%, 0); width: 260px; }
+.cw-big-icon { filter: drop-shadow(0 0 8px var(--rarity)); }
+.cw-name { font-weight: 700; font-size: 18px; }
+.cw-rarity { font-size: 14px; font-weight: 700; color: color-mix(in srgb, var(--rarity) 60%, #3a2618); text-transform: uppercase; letter-spacing: .06em; }
+.cw-qty { font-weight: 700; font-size: 16px; }
+.cw-legendary .cw-name { font-size: 20px; }
+.cw-legend-title {
+  font-size: 22px; font-weight: 700; color: #b5851f; letter-spacing: .08em; text-shadow: 0 0 8px #fff3b0, 0 2px 0 #fff;
+  animation: cw-pulse .8s ease-in-out infinite;
+}
+@keyframes cw-pulse { 50% { transform: scale(1.12); } }
+.cw-stars { display: flex; justify-content: center; gap: 6px; margin: 2px 0 6px; }
 .cw-star svg { width: 34px; height: 34px; display: block; fill: #d9c8a0; stroke: #8a6d3b; stroke-width: 1.2; transition: fill .08s; }
 .cw-star.on svg { fill: #ffcc33; stroke: #b5851f; }
 .cw-five .cw-star.on svg { fill: #ffe066; filter: drop-shadow(0 0 6px #fff1a8); }
-.cw-five .cw-glow { background: radial-gradient(circle, rgba(255, 245, 170, .85), rgba(255, 220, 120, 0) 65%); }
-.cw-caption { min-height: 48px; display: grid; gap: 2px; }
+.cw-caption { min-height: 46px; display: grid; gap: 2px; }
 .cw-count { font-weight: 700; }
 .cw-hint { color: var(--ink-soft); animation: cw-blink 1.4s ease-in-out infinite; }
 @keyframes cw-blink { 50% { opacity: .45; } }
+.cw-collected { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; min-height: 8px; }
+.cw-small { filter: drop-shadow(0 0 4px var(--rarity)); }
 .chest-window .loot-list { margin-top: 10px; text-align: left; }
 
 /* láda-labor (src/debug/chestLab.js, csak ?debug=1) */

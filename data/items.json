@@ -62,5 +62,29 @@
     "icon": "wp:bronze c6 r10",
     "name": "item.dagger_bronze_01.name",
     "desc": "item.dagger_bronze_01.desc"
+  },
+  {
+    "id": "amulet_01",
+    "kind": "treasure",
+    "rarity": "epic1",
+    "icon": "it:867",
+    "name": "item.amulet_01.name",
+    "desc": "item.amulet_01.desc"
+  },
+  {
+    "id": "sword_gold_01",
+    "kind": "weapon",
+    "rarity": "epic2",
+    "icon": "wp:gold c5 r0",
+    "name": "item.sword_gold_01.name",
+    "desc": "item.sword_gold_01.desc"
+  },
+  {
+    "id": "crown_gold",
+    "kind": "treasure",
+    "rarity": "legendary",
+    "icon": "it:874",
+    "name": "item.crown_gold.name",
+    "desc": "item.crown_gold.desc"
   }
 ]
