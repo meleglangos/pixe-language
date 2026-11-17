@@ -233,3 +233,23 @@ html, body {
 .cw-hint { color: var(--ink-soft); animation: cw-blink 1.4s ease-in-out infinite; }
 @keyframes cw-blink { 50% { opacity: .45; } }
 .chest-window .loot-list { margin-top: 10px; text-align: left; }
+
+/* láda-labor (src/debug/chestLab.js, csak ?debug=1) */
+.lab-panel { width: min(520px, 100%); }
+.lab { display: grid; gap: 10px; font-size: 15px; }
+.lab-row { display: grid; gap: 4px; font-weight: 700; }
+.lab-select { font: 600 16px var(--font); padding: 8px; min-height: 44px; border: 2px solid var(--border); border-radius: 6px; background: #fffaf0; }
+.lab-stars { display: flex; flex-wrap: wrap; gap: 6px; }
+.lab-star { min-width: 48px; padding: 6px 8px; font-size: 15px; }
+.lab-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.lab-block h3 { margin: 6px 0 4px; font-size: 16px; }
+.lab-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.lab-table th, .lab-table td { padding: 4px 4px; border-bottom: 1px solid var(--parchment-dark); text-align: left; vertical-align: top; white-space: nowrap; }
+.lab-table td:first-child { white-space: normal; overflow-wrap: anywhere; width: 100%; }
+.lab-table th { font-size: 12px; }
+.lab-table td:nth-child(2) { font-size: 12px; color: var(--ink-soft); }
+.lab-table td:nth-child(n+2), .lab-table th:nth-child(n+2) { text-align: right; }
+.lab, .lab > *, .lab-block { min-width: 0; max-width: 100%; }
+.lab-select { width: 100%; }
+.lab-panel .modal-body { overflow-x: hidden; }
+.lab-star { min-width: 44px; padding: 6px 7px; }

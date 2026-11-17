@@ -20,7 +20,7 @@ test('minden bejegyzésnek van német és magyar szövege, azonos helyőrzőkkel
 // A felület kódjában szereplő kulcs-literálok ('menu.title' stb.) mind léteznek.
 // ('poi.' + id jellegű összefűzéseknél a pontra végződő előtagot kihagyjuk; azokat a tartalom-ellenőrzés nézi.)
 test('a kódban használt összes szöveg-kulcs létezik a fordítási fájlban', () => {
-  const dirs = ['src/ui', 'src/scenes', 'src/world', 'src/main.js'];
+  const dirs = ['src/ui', 'src/scenes', 'src/world', 'src/debug', 'src/main.js'];
   const files = dirs.flatMap(d => {
     const p = path.join(ROOT, d);
     if (fs.statSync(p).isFile()) return [p];

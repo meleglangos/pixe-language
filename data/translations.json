@@ -530,5 +530,31 @@
   },
   "chest.lockedDesc": {"de": "Verschlossen – hier sind noch Monster.", "hu": "Zárva – még vannak itt szörnyek."},
   "chest.tapToOpen": {"de": "Tippe auf die Truhe!", "hu": "Koppints a ládára!"},
-  "chest.stars": {"de": "{n} von 5 Sternen", "hu": "{n} csillag az 5-ből"}
+  "chest.stars": {"de": "{n} von 5 Sternen", "hu": "{n} csillag az 5-ből"},
+  "debug.type": {"de": "Entwickler", "hu": "Fejlesztő"},
+  "debug.chestLab": {"de": "Truhen-Labor", "hu": "Láda-labor"},
+  "debug.chestLabDesc": {"de": "Hier kannst du Truhen und ihre Beute testen.", "hu": "Itt kipróbálhatod a ládákat és a lootjukat."},
+  "debug.open": {"de": "Testen", "hu": "Kipróbálás"},
+  "debug.table": {"de": "Beutetabelle", "hu": "Loot tábla"},
+  "debug.stars": {"de": "Sterne", "hu": "Csillagok"},
+  "debug.random": {"de": "Zufall", "hu": "Véletlen"},
+  "debug.openChest": {"de": "Truhe öffnen", "hu": "Láda nyitása"},
+  "debug.simulate": {"de": "1000× simulieren", "hu": "1000× szimulálás"},
+  "debug.chances": {"de": "Chancen pro Ziehung bei {n} Sternen", "hu": "Egy húzás esélyei {n} csillagnál"},
+  "debug.chancesRandomNote": {
+    "de": "(bei „Zufall“ variiert die Sternzahl)",
+    "hu": "(„Véletlen”-nél a csillagszám változik, itt az 1 csillagos látszik)"
+  },
+  "debug.rolls": {"de": "Anzahl der Ziehungen: {min}–{max}", "hu": "Húzások száma: {min}–{max}"},
+  "debug.colItem": {"de": "Gegenstand", "hu": "Tárgy"},
+  "debug.colRarity": {"de": "Seltenheit", "hu": "Ritkaság"},
+  "debug.colChance": {"de": "Chance", "hu": "Esély"},
+  "debug.colInChests": {"de": "in Truhen", "hu": "ládákban"},
+  "debug.colAvgQty": {"de": "Ø Menge", "hu": "átl. db"},
+  "debug.simTitle": {"de": "Ergebnis von {n} Truhen", "hu": "{n} láda eredménye"},
+  "debug.simStars": {"de": "Sterne:", "hu": "Csillagok:"},
+  "debug.simAvg": {
+    "de": "Ø {avg} Einträge pro Truhe, Ø {gold} Gold (wenn Gold dabei ist)",
+    "hu": "átlag {avg} tétel ládánként, átlag {gold} arany (ha volt arany)"
+  }
 }

@@ -1,7 +1,7 @@
 // A láda-ablak: a láda nagyban, alatta 1–5 csillag (a láda minősége, véletlen), koppintásra kinyílik,
 // a loot kiesik belőle, alul a lista és a "Super!" gomb. Spec: docs/features/chest_stars.md.
 //
-//   Game.chestWindow.open({ style: chest_styles.json bejegyzés, table: loot tábla id, onDone(loot, stars) })
+//   Game.chestWindow.open({ style: chest_styles.json bejegyzés, table: loot tábla id, onDone(loot, stars), stars? })
 //
 // A láda képe canvasra rajzolódik a láda-stílus képkockáiból (kivágás vagy animációs csík), 5× nagyítva,
 // éles pixel arttal -- így bármelyik láda-stílus működik vele. A loot most csak látvány (nem tárolódik).
@@ -47,7 +47,7 @@
   Game.chestWindow = {
     open(opts) {
       const style = opts.style, table = opts.table;
-      const stars = Game.loot.rollStars(table);
+      const stars = opts.stars || Game.loot.rollStars(table); // opts.stars: fix csillagszám (láda-labor)
       const loot = Game.loot.roll(table, { stars });
 
       const canvas = ui.el('canvas', 'cw-chest');
