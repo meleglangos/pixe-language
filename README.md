@@ -9,7 +9,8 @@ Böngészős pixel-art RPG német nyelvtanuláshoz. Nincs build lépés: az `ind
 Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén frissíti (pipák + „Most folyamatban”).
 Új szakaszt vagy tételt csak a felhasználó kérésére vesz fel; az ötletek a `docs/IDEAS.md`-be kerülnek.
 
-**Most folyamatban:** semmi. Következő javasolt lépés: inventory (a loot tárolása + „Tasche” ablak).
+**Most folyamatban:** semmi. Következő: a láda-ablak háttere (`docs/IDEAS.md` → „Láda-ablak háttér”), utána a tárgyrendszer
+(ritkaság, tárgycsoportok), majd az inventory (a loot tárolása + „Tasche” ablak).
 
 - [x] 1. szakasz: térkép, kattintásos + billentyűs mozgás, kutya, mentés + export/import
 - [ ] 2. szakasz: egy dungeon, feladatrendszer, loot szabályok, HP, debug mód

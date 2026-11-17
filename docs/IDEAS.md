@@ -36,6 +36,16 @@ kéri, vagy ha új feature-t kell választani.
 - [ ] Bossok, legyőzésük után új tartalom — boss rendszer + feloldás
 - [ ] Nyelvtani témához kötött boss (pl. Passiv-Golem) — boss rendszer + kérdés-motor
 
+## Láda és loot
+- [ ] Láda-ablak háttér: a pergamen helyett kincskamra / dungeon-fal fáklyákkal, és / vagy izzó rúnakör a láda alatt
+      (a nyitáskor a ritkaság színében izzik), esetleg díszes ablakkeret. Két út: kész asset (itch.io: Assets → 2D → Pixel
+      Art; keresőszavak: `pixel art dungeon background`, `treasure room pixel art`, `pixel art magic circle`,
+      `fantasy UI pixel art`, `pixel UI panel 9-slice`; az Anokolisa – Pixel Crawler szerzője – csomagjai illenek a
+      legjobban; licenc: nyilvános repóba feltehető-e, kell-e credit) vagy saját rajz kódból (`tools/art/`, mint a
+      `chest_royal.py`). Mérethez: 16 px-es rács, álló telefon (kb. 180×300 px, 2×), ne legyen zsúfolt — láda-ablak
+- [ ] Tárgyrendszer: tárgycsoportok, ritkaság csoportonként, érték / erő; a loot táblák ehhez igazodnak — adat + loot
+- [ ] Többféle láda (a felhasználónak sok ötlete van) — `chest_styles.json` + loot táblák
+
 ## Haladás és motiváció
 - [ ] Achievementek és címek, hozzá rangrendszer — achievement rendszer + mentés
 - [ ] Saját szoba / ház, berendezhető a megszerzett bútorokkal — ház rendszer + Modern Interiors assetek
