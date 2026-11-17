@@ -6,36 +6,32 @@ Böngészős pixel-art RPG német nyelvtanuláshoz. Nincs build lépés: az `ind
 **Online:** https://meleglangos.github.io/pixe-language/ (lásd lent: [Online elérhetőség](#online-elérhetőség-github-pages))
 
 ## Állapot
+Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén frissíti (pipák + „Most folyamatban”).
+Új szakaszt vagy tételt csak a felhasználó kérésére vesz fel; az ötletek a `docs/IDEAS.md`-be kerülnek.
+
+**Most folyamatban:** dokumentáció (`CLAUDE.md`, `docs/`, `CHANGELOG.md`, slash commandok).
+
 - [x] 1. szakasz: térkép, kattintásos + billentyűs mozgás, kutya, mentés + export/import
 - [ ] 2. szakasz: egy dungeon, feladatrendszer, loot szabályok, HP, debug mód
   - [x] alapok: mappaszerkezet, JSON tartalom állandó ID-kkal, SaveManager (verzió, migráció, tartalék), központi állapot + események, tesztek
   - [x] alapok 2: fordítási fájl, Tiled térképek, GitHub Pages automatikus közzététel
   - [x] 2/1: „Die versunkene Gruft” dungeon jelenet, szörnyek (harc nélkül), láda
   - [x] 2/2: „Die Kristallmine” dungeon (pálya és látvány), közös dungeon-rendszer, Credits képernyő
+  - [ ] dokumentáció: `CLAUDE.md`, `docs/`, `CHANGELOG.md`, slash commandok
+  - [ ] feladatrendszer (kérdés-rendszer): a dungeonök, napi kihívások, petek, bossok közös kérdés-motorja
+    - [ ] kérdés-motor és poolok (`data/questions/`), címkék: szint (B1–C1), téma, típus
+    - [ ] elnéző válasz-ellenőrzés (kis/nagybetű, `ae`↔`ä`, `ss`↔`ß`, szóközök, több helyes megoldás)
+    - [ ] „ellenőrizendő” (`review`) jelölés a német szövegeken, kóddal és validátorral
+    - [ ] általános `unlocks` / `daily` állapot, mentési migrációval
+  - [ ] loot szabályok
+  - [ ] HP
+  - [ ] debug mód
 - [ ] 3. szakasz: inventory, gear a karakteren, shop, gold, HP-ital
 - [ ] 4. szakasz: többi dungeon, boss, meglepetés-lootok, feladatkészlet
 
 ## Felépítés
-| Hol | Mi |
-| --- | --- |
-| `data/*.json` | **a teljes tartalom**: dungeonök, szörnyek, berendezés, tárgyak, loot, feladatok, shop – formátumok: [`data/README.md`](data/README.md) |
-| `data/translations.json` | **a fordítási fájl**: minden megjelenő szöveg kulccsal, német + magyar változattal |
-| `data/maps/` | a pályák **Tiled** formátumban (overworld, kripta, kristálybánya); `tilesets/`: a szerkesztő képei |
-| `data/bundle.js` | generált másolat a `file://` alóli futáshoz (`node tools/build-data.js`) |
-| `src/config/` | kód közeli beállítások: `config.js` (sebesség, HP, rarity létra, creditek), `assets.js` (grafikai manifest), `tiles.js` (mező- és helyszíntípusok) |
-| `src/core/` | névtér (`game.js`), eseménybusz (`events.js`), szövegek (`i18n.js`) |
-| `src/state/GameState.js` | **központi játékállapot**: HP, arany, inventory, felszerelés, dungeonök – csak a metódusain át módosítható, minden változás eseményt küld |
-| `src/systems/save/` | mentés: `SaveManager` (az egyetlen, ami ír/olvas), `SaveSchema` (verzió, migrációk, ellenőrzés), `SaveCodec` (export/import kód) |
-| `src/systems/content/` | a `data/*.json` betöltése és ellenőrzése |
-| `src/systems/maps/` | a Tiled térképek olvasása (`TiledMap.js`) |
-| `src/scenes/` | Phaser jelenetek: közös mozgás-alap (`ExploreScene`), világtérkép, dungeon; `dungeon/`: fények, víz, hangulat, berendezés |
-| `src/world/` | rács + útkeresés, karakter, kutya, szörny; `dungeonThemes.js`: a dungeonök kinézete (kripta, bánya) |
-| `src/ui/` | DOM felület: HUD, menü, ablakok, „?” buborékok |
-| `src/gfx/placeholders.js` | a kódból rajzolt ideiglenes grafika |
-| `assets/` | grafikai csomagok (Pixel Crawler – Anokolisa; Weapon Icons – Shade; Items16 – Glionox; Modern Interiors – LimeZu, csak nem kereskedelmi célra; Tiny RPG – Zerie) |
-| `tests/` | tesztek: `npm test` (Node 20+, függőség nélkül) |
-| `tools/` | `build-data.js` (bundle), `asset_catalog/` (asset-katalógus) |
-| `.github/workflows/tests.yml` | automatikus tesztek minden push és PR után |
+A mappák és fájlok térképe, valamint a munkaszabályok: [`CLAUDE.md`](CLAUDE.md).
+Az adatfájlok formátuma: [`data/README.md`](data/README.md).
 
 A helyszínekre belépést a `Game.poi.handlers[típus]` kezeli (`WorldScene.js`); amíg nincs kezelő,
 a „még zárva” üzenet jelenik meg.
@@ -58,6 +54,9 @@ a HUD ezekre frissül magától, a SaveManager pedig ezekre ment.
 - Betöltéskor minden mezőt ellenőriz; az ismeretlen ID-kat eldobja (a konzolra kiírja), nem fagy le.
 - A mentésben verziószám van (`v`). **Ha a szerkezet változik:** növeld a `VERSION`-t a
   `SaveSchema.js`-ben, írj egy `migrations[régi verzió]` lépést, és tesztet a `tests/save.migration.test.js`-be.
+- **iPhone / Safari:** a Safari 7 nap használat nélkül törölheti a weboldalak adatait, így a mentést is.
+  Ellenszer: Safari → Megosztás → **Főképernyőhöz adás**, és onnan indítani a játékot (arra nem vonatkozik a törlés).
+  A Főképernyőről indított játéknak saját tárhelye van, a Safariban lévő mentést export kóddal kell átvinni.
 - Export/import kód: `DA1.<base64>.<ellenőrzőösszeg>` – a régi kódok is betölthetők (migrációval).
 
 ## Tesztek
