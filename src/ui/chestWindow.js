@@ -85,8 +85,10 @@
       const counter = ui.el('div', 'cw-counter');
       const chestBox = ui.el('div', 'cw-chest-box', [rays, glow, canvas, counter]);
       const reveal = ui.el('div', 'cw-reveal');      // ide emelkedik ki a tárgy
-      const stage = ui.el('button', 'cw-stage', [reveal, chestBox]);
-      stage.type = 'button';
+      // a koppintható terület egy div (nem <button>), mert benne "?" gombok is vannak
+      const stage = ui.el('div', 'cw-stage', [reveal, chestBox]);
+      stage.setAttribute('role', 'button');
+      stage.tabIndex = 0;
       stage.setAttribute('aria-label', Game.i18n.de('chest.name'));
       const starEls = [0, 1, 2, 3, 4].map(() => { const s = ui.el('span', 'cw-star'); s.innerHTML = STAR; return s; });
       const starRow = ui.el('div', 'cw-stars', starEls);
@@ -239,7 +241,9 @@
 
       // ---------- koppintás: ha fut valami, a végére ugrik; különben a következő lépés ----------
       let stepping = false;
-      stage.addEventListener('click', async () => {
+      stage.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); stage.click(); } });
+      stage.addEventListener('click', async e => {
+        if (e.target.closest && e.target.closest('.help')) return; // a "?" csak fordítást mutat, nem léptet
         if (phase === 'stars') { skipStars = true; hurry(); return; }
         if (stepping || busy()) { hurry(); return; }
         if (phase === 'done') return;
