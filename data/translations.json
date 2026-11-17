@@ -503,5 +503,6 @@
     "hu": "„je … desto” = minél … annál; a „desto” helyett „umso” is helyes."
   },
   "mob.challenge": {"de": "Herausfordern", "hu": "Kihívás"},
-  "dungeon.cleared": {"de": "Alle Monster hier sind besiegt!", "hu": "Itt minden szörnyet legyőztél!"}
+  "dungeon.cleared": {"de": "Alle Monster hier sind besiegt!", "hu": "Itt minden szörnyet legyőztél!"},
+  "quiz.cheat": {"de": "Lösung zeigen", "hu": "Megoldás mutatása"}
 }

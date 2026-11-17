@@ -84,6 +84,10 @@ következménye: lásd 9. A „Fliehen” gombbal bármikor kiléphet. Ha minden
       ezért a dungeon-részt (koppintás a szörnyre, eltűnés, kiesés 0 HP-nál) böngészőben nem tudtam futtatni
 - [x] README „Állapot”, `docs/GAME_DESIGN.md` 4–5. rész és `docs/DECISIONS.md` (D12–D14) frissítve
 
+## Kiegészítés (2026-11-17, a felhasználó kérésére)
+- Debug módban (`?debug=1`) „Lösung zeigen” gomb a kérdés-ablakban: az összes elfogadott megoldás (de + hu,
+  `review` jelöléssel), a magyar magyarázat és a kérdés ID-ja. Nem számít válasznak, a haladást nem írja.
+
 ## 11. Lépések
 1. Motor: pool- és kérdésformátum, betöltés, validátor, `review` jelölés + lista; tesztek (még nincs felület).
 2. Mentés v4: `questions`, `unlocks`, `daily` + `Game.state` metódusok, migráció, fixture, tesztek.

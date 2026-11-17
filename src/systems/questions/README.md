@@ -20,6 +20,9 @@ A közös kérdés-motor: minden német feladat ezen fut (dungeon-szörnyek, ké
 | `available(chId, now)` | `daily`: ma még nem teljesítette; `once`: még nincs feloldva; `unlimited`: mindig |
 | `challenge(chId, { need, random, now })` | kihívás: `next()`, `submit(given)`, `flee()`, `status` (lent) |
 
+## Debug
+`index.html?debug=1`: a kérdés-ablakban „Lösung zeigen” gomb (`Game.quiz.toggleCheat`), a fejlesztőnek.
+
 ## Kihívás
 `need` jó válasz kell (a hívó felülírhatja, pl. a szörny `need`-je). Rossz válasz: `wrongDamage` HP
 (a kihívásból, alapból `config.js` → `questions.wrongDamage`); ha a HP 0, `status = 'lost'`. Egy kihíváson belül

@@ -21,7 +21,7 @@ tartalom csak a felhasználó kifejezett jóváhagyásával kerülhet bele.
 - Phaser 3.90 és EasyStar.js 0.4.4 CDN-ről, sima `<script>` tagek, globális `Game.*` névtér, nincs modul,
   nincs npm függőség, nincs build lépés (`docs/DECISIONS.md` D1).
 - Futtatás: `index.html` (`file://`-ról is, a `data/bundle.js` miatt) vagy helyi szerver
-  (`python3 -m http.server`). `index.html?debug=1`: járható / blokkolt mezők.
+  (`python3 -m http.server`). `index.html?debug=1`: járható / blokkolt mezők, megoldás-mutató a kérdés-ablakban.
 - Tesztek: `npm test` (Node 20+, függőség nélkül); minden push után a CI is lefuttatja (`.github/workflows/tests.yml`).
 - Pixel art: `pixelArt: true`, `roundPixels: true` (`src/main.js`), canvas `image-rendering: pixelated`.
   Ezeket ne kapcsold ki; grafikát csak egész számú nagyítással használj.

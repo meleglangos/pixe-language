@@ -82,7 +82,25 @@
     },
   };
 
-  Game.quiz = {
+  const quiz = Game.quiz = {
+    // Csak debug módban (index.html?debug=1): a fejlesztőnek, aki nem tud németül. Megmutatja az összes
+    // elfogadott megoldást németül és magyarul, a magyarázatot és a kérdés ID-ját. Nem számít válasznak.
+    toggleCheat(q) {
+      const panel = ui.modalEl && ui.modalEl.querySelector('.modal');
+      if (!panel) return;
+      const old = panel.querySelector('.quiz-cheat');
+      panel.querySelectorAll('.quiz-choice').forEach(b => b.classList.toggle('cheat-mark', !old && !!b.dataset.correct));
+      if (old) { old.remove(); return; }
+      const S = Game.data.strings;
+      const line = key => ui.el('li', S[key] && S[key].review ? 'review' : '', [
+        ui.el('strong', '', [Game.i18n.de(key)]), ' – ' + Game.i18n.hu(key) + (S[key] && S[key].review ? ' (review)' : ''),
+      ]);
+      const kids = [ui.el('ul', '', q.answers.map(line))];
+      if (q.explain) kids.push(ui.el('p', 'small', [Game.i18n.hu(q.explain)]));
+      kids.push(ui.el('p', 'small', [q.id + ' · ' + q.pool + ' · ' + q.level + ' · ' + q.type]));
+      panel.querySelector('.modal-body').append(ui.el('div', 'quiz-cheat', kids));
+    },
+
     open(opts) {
       const ch = Game.questions.challenge(opts.challenge, { need: opts.need });
       const end = status => { ui.closeModal(); if (opts.onEnd) opts.onEnd(status); };
@@ -106,6 +124,7 @@
           buttons.push(check);
         }
         buttons.push(ui.btn('quiz.flee', flee));
+        if (Game.debug) buttons.push(ui.btn('quiz.cheat', () => quiz.toggleCheat(q), 'cheat'));
         ui.modal({ title: opts.title, closable: false, body, buttons });
         if (part.focus) setTimeout(part.focus, 0);
       }

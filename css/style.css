@@ -180,3 +180,10 @@ html, body {
 .quiz-expected { font-size: 18px; font-weight: 700; }
 .quiz-damage { color: var(--danger-dark); }
 .modal .small { font-size: 15px; color: var(--ink-soft); }
+/* debug: megoldás-mutató (csak index.html?debug=1) */
+.btn.cheat { background: #e8d8f4; border-color: #6b4a8a; box-shadow: 0 3px 0 #6b4a8a; }
+.quiz-choice.cheat-mark { outline: 3px dashed #6b4a8a; outline-offset: 2px; }
+.quiz-cheat { margin-top: 12px; padding: 8px 10px; border: 2px dashed #6b4a8a; border-radius: 6px; background: #f3ecf9; font-size: 15px; }
+.quiz-cheat ul { margin: 0 0 6px; padding-left: 18px; }
+.quiz-cheat li.review { color: #96352f; }
+.quiz-cheat p { margin: 0 0 4px; }
