@@ -103,13 +103,65 @@
       if (!type) { console.warn('Ismeretlen szörny:', m.type); return; }
       const c = this.grid.center(m.x, m.y);
       const mob = new Game.world.Mob(this, type, c.x, c.y);
+      mob.tile = { x: m.x, y: m.y };
+      mob.challenge = type.challenge || this.def.challenge;
       this.mobs.push(mob);
       this.grid.block(m.x, m.y, true);
       const spots = [[0, 1], [-1, 0], [1, 0], [0, -1]].map(([i, j]) => ({ x: m.x + i, y: m.y + j })).filter(s => this.grid.walkable(s.x, s.y));
-      const target = { spots, face: { x: c.x, y: c.y - 4 } };
+      const target = { spots, face: { x: c.x, y: c.y - 4 }, onReach: () => this.challenge(mob) };
       this.grid.redirect[m.x + ',' + m.y] = this.grid.redirect[m.x + ',' + (m.y - 1)] = target;
-      this.pendingSpots.push({ x: c.x, y: c.y - 4, radius: 27, prompt: { type: 'mob.type', name: type.name, desc: type.desc, action: null } });
-      this.holes.push({ x: c.x, y: c.y - 12, r: 30, k: 1 }); // sötét dungeonben is látszódjon
+      const action = mob.challenge ? { key: 'mob.challenge', fn: () => this.challenge(mob) } : null;
+      mob.spot = { x: c.x, y: c.y - 4, radius: 27, prompt: { type: 'mob.type', name: type.name, desc: type.desc, action } };
+      this.pendingSpots.push(mob.spot);
+      mob.hole = { x: c.x, y: c.y - 12, r: 30, k: 1 }; // sötét dungeonben is látszódjon
+      this.holes.push(mob.hole);
+    }
+
+    // ---------- kihívás: a szörny kérdez (src/systems/questions, src/ui/quiz.js) ----------
+    // A legyőzött szörny csak erre a látogatásra tűnik el: a következő belépéskor újra ott van (gyakorlás).
+    challenge(mob) {
+      if (!mob.challenge || mob.defeated || this.leaving || Game.ui.isBlocking()) return;
+      this.stopPath();
+      Game.quiz.open({
+        challenge: mob.challenge,
+        need: mob.type.need,
+        title: mob.type.name,
+        onEnd: status => {
+          if (status === 'won') this.defeatMonster(mob);
+          else if (status === 'lost') this.knockedOut();
+        },
+      });
+    }
+
+    defeatMonster(mob) {
+      mob.defeated = true;
+      const t = mob.tile;
+      this.grid.block(t.x, t.y, false);
+      delete this.grid.redirect[t.x + ',' + t.y];
+      delete this.grid.redirect[t.x + ',' + (t.y - 1)];
+      this.grid.rebuild();
+      this.hotspots = this.hotspots.filter(h => h !== mob.spot);
+      this.tweens.add({ targets: mob.hole, r: 0, duration: 500 });
+      this.tweens.add({
+        targets: mob.container, alpha: 0, y: mob.y - 6, duration: 450, ease: 'Sine.easeIn',
+        onComplete: () => { mob.container.destroy(); this.holes = this.holes.filter(h => h !== mob.hole); },
+      });
+      for (let i = 0; i < 8; i++) {
+        const d = this.add.rectangle(mob.x + (Math.random() - 0.5) * 10, mob.y - 4 - Math.random() * 14, 2, 2, 0xd8d0b0, 0.9).setDepth(90002);
+        this.tweens.add({ targets: d, y: d.y - 10 - Math.random() * 10, alpha: 0, duration: 500 + Math.random() * 400, onComplete: () => d.destroy() });
+      }
+      this.refreshPrompt();
+      if (this.mobs.every(m => m.defeated)) {
+        Game.state.completeDungeon(this.dungeonId);
+        Game.ui.toast('dungeon.cleared');
+      }
+    }
+
+    // Elfogyott az élet: kint, a dungeon bejáratánál tér magához, teljes élettel (spec: 9. pont).
+    knockedOut() {
+      Game.state.setHp(Game.state.maxHp);
+      Game.ui.toast('quiz.lost');
+      this.leaveTo('World');
     }
 
     // ---------- láda (2 mezőt foglal: x és x+1) ----------
@@ -163,7 +215,7 @@
 
     update(time, delta) {
       this.exploreUpdate(delta);
-      for (const m of this.mobs) m.lookAt(this.player);
+      for (const m of this.mobs) if (!m.defeated) m.lookAt(this.player);
       if (this.dark) this.updateDarkness();
     }
   }

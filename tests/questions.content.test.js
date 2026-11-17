@@ -14,15 +14,15 @@ const q = (id, more) => Object.assign({ id, type: 'choice', level: 'B1', tags: [
 function withContent(questions, extra) {
   return raw => {
     Object.assign(raw.strings, S);
-    raw.questionPools = [{ id: 'p1' }, { id: 'p2' }];
-    raw.questions = { p1: questions.p1 || [], p2: questions.p2 || [] };
+    raw.questionPools = raw.questionPools.concat({ id: 'p1' }, { id: 'p2' });
+    raw.questions = { ...raw.questions, p1: questions.p1 || [], p2: questions.p2 || [] };
     if (extra) extra(raw);
   };
 }
 
 test('a poolok kérdései ID szerint, pool-jelöléssel töltődnek be', () => {
   const { Game } = createGame({ content: withContent({ p1: [q('q_a'), q('q_b')], p2: [q('q_c', { type: 'input', wrong: undefined })] }) });
-  assert.deepEqual(Object.keys(Game.data.questions).sort(), ['q_a', 'q_b', 'q_c']);
+  assert.deepEqual(Object.keys(Game.data.questions).filter(id => /^q_[abc]$/.test(id)).sort(), ['q_a', 'q_b', 'q_c']);
   assert.equal(Game.data.questions.q_c.pool, 'p2');
   assert.deepEqual([...Game.data.questionPools.p1.questions], ['q_a', 'q_b']);
   assert.deepEqual([...Game.content.issues], []);

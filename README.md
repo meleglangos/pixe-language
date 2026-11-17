@@ -23,7 +23,7 @@ Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén fris
     - [x] 2. mentés v4: kérdés-haladás, általános `unlocks` / `daily` állapot, migrációval
     - [x] 3. kihívások (`data/challenges.json`), elnéző válasz-ellenőrzés (kis/nagybetű, `ae`↔`ä`, `ss`↔`ß`, szóközök, több helyes megoldás), HP-vesztés
     - [x] 4. kérdés-ablak: választós, beírós, szókártyás
-    - [ ] 5. dungeon: a szörnyek kérdeznek, legyőzés, 0 HP
+    - [x] 5. dungeon: a szörnyek kérdeznek, legyőzés, 0 HP
     - [x] 6. első poolok: kripta (B1), bánya (B1–B2)
     - [ ] 7. dokumentáció
   - [ ] loot szabályok

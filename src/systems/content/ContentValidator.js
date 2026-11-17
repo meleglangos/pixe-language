@@ -93,6 +93,7 @@
       (d.props || []).forEach(p => ref(w + '.props', 'dungeonProps', p[0]));
       if (d.lootTable !== undefined) ref(w + '.lootTable', 'lootTables', d.lootTable);
       if (d.challenge !== undefined) ref(w + '.challenge', 'challenges', d.challenge);
+      else if ((d.monsters || []).some(m => !(byId.monsters[m.type] && byId.monsters[m.type].challenge))) bad(w + ': vannak szörnyei, de nincs kihívása (challenge)');
     });
 
     const rarities = Game.data.config && Game.data.config.rarities;

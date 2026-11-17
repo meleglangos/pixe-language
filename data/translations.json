@@ -501,5 +501,7 @@
   "q.mine_21.explain": {
     "de": "je … desto (auch: je … umso)",
     "hu": "„je … desto” = minél … annál; a „desto” helyett „umso” is helyes."
-  }
+  },
+  "mob.challenge": {"de": "Herausfordern", "hu": "Kihívás"},
+  "dungeon.cleared": {"de": "Alle Monster hier sind besiegt!", "hu": "Itt minden szörnyet legyőztél!"}
 }
