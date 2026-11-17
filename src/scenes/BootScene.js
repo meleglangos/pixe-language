@@ -13,6 +13,12 @@
         const s = a.strips[key];
         this.load.spritesheet(key, url(s.url), { frameWidth: s.frameWidth, frameHeight: s.frameHeight });
       });
+      // tárgy-ikonok (items.json + az arany ikonja): Items16 egyenként, a fegyverlapok 16×16-os rácsként
+      const icons = Object.values(Game.data.items).map(it => it.icon).concat(Game.data.config.loot.goldIcon);
+      Game.itemIcons.files(icons).forEach(f => {
+        if (f.sheet) this.load.spritesheet(f.key, url(f.url), { frameWidth: 16, frameHeight: 16 });
+        else this.load.image(f.key, url(f.url));
+      });
       Object.keys(a.sheets).forEach(key => {
         const s = a.sheets[key];
         if (s.url) this.load.spritesheet(key, url(s.url), { frameWidth: s.frameWidth, frameHeight: s.frameHeight });

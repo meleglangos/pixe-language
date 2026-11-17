@@ -10,6 +10,7 @@ const SCRIPTS = [
   'src/core/events.js',
   'src/config/config.js',
   'src/config/tiles.js',
+  'src/config/assets.js',
   'src/core/i18n.js',
   'src/systems/maps/TiledMap.js',
   'src/systems/content/ContentValidator.js',

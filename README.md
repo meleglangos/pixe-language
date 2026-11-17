@@ -28,7 +28,7 @@ Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén fris
     - [x] 7. dokumentáció
     - [x] 2. kiegészítés: közös kérdéskészlet címkelistával (helyzet-téma + nyelvtan), szint dungeononként, nincs ismétlés egy látogatáson belül, szörnyenként 2 jó válasz, sebzés rétegesen állítható
   - [ ] loot szabályok
-    - [ ] ládanyitás: 1. tárgyak, loot táblák, sorsolás · 2. animáció, kirepülő loot · 3. „Beute” ablak, zárt láda · 4. dokumentáció
+    - [ ] ládanyitás: [x] 1. tárgyak, loot táblák, sorsolás · [x] 2. animáció, kirepülő loot · [x] 3. „Beute” ablak, zárt láda · [ ] 4. dokumentáció
   - [ ] HP
   - [ ] debug mód
 - [ ] 3. szakasz: inventory, gear a karakteren, shop, gold, HP-ital

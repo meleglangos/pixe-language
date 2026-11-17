@@ -1,5 +1,6 @@
 // Közös dungeon jelenet. Mindent a data/dungeons.json leírásából épít fel:
 // pálya, berendezés, ajtók, szörnyek, láda, kijárat, fények, hangulat-effektek.
+// A láda a scenes/dungeon/chest.js-ben van.
 // A kinézetet a téma adja (src/world/dungeonThemes.js), a mozgás az ExploreScene-ben van.
 // A fények, a víz, a hangulat-effektek és a berendezés a scenes/dungeon/ mappában vannak.
 (function () {
@@ -156,6 +157,7 @@
         this.tweens.add({ targets: d, y: d.y - 10 - Math.random() * 10, alpha: 0, duration: 500 + Math.random() * 400, onComplete: () => d.destroy() });
       }
       this.refreshPrompt();
+      this.chestPrompt(); // ha ez volt az utolsó szörny, a láda kinyitható
       if (this.mobs.every(m => m.defeated)) {
         Game.state.completeDungeon(this.dungeonId);
         Game.ui.toast('dungeon.cleared');
@@ -169,54 +171,7 @@
       this.leaveTo('World');
     }
 
-    // ---------- láda (2 mezőt foglal: x és x+1) ----------
-    addChest(ch) {
-      const cx = (ch.x + 1) * TS, py = ch.y * TS + TS - 2;
-      this.chest = { opened: false };
-      this.chest.sprite = this.add.image(cx, py, 'pc_furniture', 'chest_closed').setOrigin(0.5, 1).setDepth(py);
-      this.chest.light = this.addLight(cx, py - 6, { color: 'gold', scale: 0.9, hole: this.def.darkness ? 26 : 0 });
-      (this.sparkles.gold = this.sparkles.gold || []).push({ x: cx, y: py - 8, r: 12 });
-      this.grid.block(ch.x, ch.y, true); this.grid.block(ch.x + 1, ch.y, true);
-      const target = { spots: [{ x: ch.x, y: ch.y + 1 }, { x: ch.x + 1, y: ch.y + 1 }], face: { x: cx, y: py - 20 }, onReach: () => this.openChest() };
-      [[0, 0], [1, 0], [0, -1], [1, -1]].forEach(([i, j]) => { this.grid.redirect[(ch.x + i) + ',' + (ch.y + j)] = target; });
-      this.chest.spot = { x: cx, y: (ch.y + 1) * TS + 10, radius: 22, prompt: null };
-      this.chestPrompt();
-      this.pendingSpots.push(this.chest.spot);
-    }
-
-    chestPrompt() {
-      const o = this.chest.opened;
-      this.chest.spot.prompt = {
-        type: 'chest.type', name: 'chest.name', desc: o ? 'chest.emptyDesc' : 'chest.desc',
-        action: o ? null : { key: 'chest.open', fn: () => this.openChest() },
-      };
-    }
-
-    // Kinyílás: a csomagban a ládának két képkockája van (csukott / nyitott),
-    // ezt váltjuk egy kis kódos "ugrással" és porfelhővel.
-    openChest() {
-      const ch = this.chest;
-      if (ch.opened) return;
-      ch.opened = true;
-      const s = ch.sprite;
-      this.tweens.add({
-        targets: s, scaleY: 0.82, scaleX: 1.1, duration: 90, yoyo: true,
-        onYoyo: () => s.setFrame('chest_open'),
-        onComplete: () => {
-          s.setScale(1);
-          for (let i = 0; i < 6; i++) {
-            const d = this.add.rectangle(s.x + (i - 2.5) * 3, s.y - 14, 2, 2, 0xd8d0b0, 0.9).setDepth(90002);
-            this.tweens.add({ targets: d, y: d.y - 8 - Math.random() * 8, x: d.x + (i - 2.5) * 2, alpha: 0, duration: 500 + Math.random() * 300, onComplete: () => d.destroy() });
-          }
-          Game.ui.toast('chest.empty');
-        },
-      });
-      this.tweens.killTweensOf(ch.light);
-      this.tweens.add({ targets: ch.light, alpha: 0.25, duration: 600 });
-      this.sparkles.gold = [];
-      this.chestPrompt();
-      this.refreshPrompt();
-    }
+    // a láda: scenes/dungeon/chest.js
 
     update(time, delta) {
       this.exploreUpdate(delta);

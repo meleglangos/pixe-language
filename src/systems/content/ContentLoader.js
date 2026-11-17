@@ -29,6 +29,7 @@
     questionPools: { file: 'questions/pools.json', list: true },
     questionTags: { file: 'questions/tags.json', list: true },
     challenges:   { file: 'challenges.json', list: true },
+    chestStyles:  { file: 'chest_styles.json', list: true },
     shop:         { file: 'shop.json', list: true },
   };
 

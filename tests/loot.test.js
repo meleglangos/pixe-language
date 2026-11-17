@@ -38,7 +38,7 @@ test('a valódi ládák: mindig van arany, összesen 2–4 tétel, csak létező
       assert.ok(r[0].gold > 0, id + ': nincs arany');
       const picks = r.slice(1);
       picks.forEach(e => assert.ok(Game.data.items[e.item], e.item));
-      assert.ok(r.length >= 1 && r.length <= 4, id + ': ' + r.length);
+      assert.ok(r.length >= 2 && r.length <= 4, id + ': ' + r.length);
     }
   }
   assert.deepEqual(plain(Game.loot.roll('nincs_ilyen')), []);
@@ -76,4 +76,21 @@ test('a validátor kiszúrja a hibás tárgyakat és loot táblákat', () => {
 test('a dungeonök ládái létező loot táblára mutatnak', () => {
   const { Game } = createGame();
   for (const d of Object.values(Game.data.dungeons)) if (d.chest) assert.ok(Game.data.lootTables[d.lootTable], d.id);
+});
+
+test('láda-stílusok: a valódiak hibátlanok; a validátor kiszúrja az ismeretlen kivágást / csíkot', () => {
+  const { Game } = createGame();
+  assert.ok(Game.data.chestStyles[Game.data.config.loot.chestStyle], 'az alap láda-stílus létezik');
+  const raw = readData();
+  raw.chestStyles = raw.chestStyles.concat(
+    { id: 'cs_frames', closed: 'nincs_ilyen', open: 'chest_open' },
+    { id: 'cs_strip', strip: 'nincs_csik', openFrames: [] },
+  );
+  raw.dungeons = raw.dungeons.map((d, i) => (i ? d : { ...d, chestStyle: 'cs_nincs' }));
+  const issues = Game.contentValidator.validate(raw).join('\n');
+  assert.match(issues, /chestStyles\.cs_frames\.closed: ismeretlen kivágás/);
+  assert.match(issues, /chestStyles\.cs_strip\.strip: ismeretlen csík/);
+  assert.match(issues, /chestStyles\.cs_strip\.openFrames/);
+  assert.match(issues, /chestStyle: ismeretlen chestStyles id: cs_nincs/);
+  assert.doesNotMatch(issues, /pc_wood/);
 });

@@ -2,7 +2,7 @@
 // (a ContentLoader kiírja őket a konzolra, a tesztek pedig elbuknak, ha van ilyen).
 (function () {
   const ID_RE = /^[a-z][a-z0-9_]*$/;
-  const LISTS = ['monsters', 'dungeonProps', 'dungeons', 'items', 'lootTables', 'questionPools', 'questionTags', 'challenges', 'shop'];
+  const LISTS = ['monsters', 'dungeonProps', 'dungeons', 'items', 'lootTables', 'questionPools', 'questionTags', 'challenges', 'chestStyles', 'shop'];
   // Ezek az ID-k kerülhetnek a mentésbe: típusokon átívelően is egyedinek kell lenniük.
   const SAVED = ['dungeons', 'items'];
 
@@ -109,11 +109,26 @@
       if (d.lootTable !== undefined) ref(w + '.lootTable', 'lootTables', d.lootTable);
       if (d.challenge !== undefined) ref(w + '.challenge', 'challenges', d.challenge);
       else if ((d.monsters || []).some(m => !(byId.monsters[m.type] && byId.monsters[m.type].challenge))) bad(w + ': vannak szörnyei, de nincs kihívása (challenge)');
+      if (d.chestStyle !== undefined) ref(w + '.chestStyle', 'chestStyles', d.chestStyle);
+      if (d.chest && d.lootTable === undefined) bad(w + ': van ládája, de nincs loot táblája (lootTable)');
       if (d.monsterStats !== undefined) {
         if (!d.monsterStats || typeof d.monsterStats !== 'object' || Array.isArray(d.monsterStats)) bad(w + '.monsterStats: objektum kell ({ szörnytípus: { need, damage } })');
         else Object.keys(d.monsterStats).forEach(t => { ref(w + '.monsterStats', 'monsters', t); statsOk(w + '.monsterStats.' + t, d.monsterStats[t] || {}); });
       }
     });
+
+    // láda-stílusok: képkockás (closed + open kivágás) vagy animált (strip + openFrames)
+    const assets = Game.data.assets;
+    Object.values(byId.chestStyles).forEach(st => {
+      const w = 'chestStyles.' + st.id;
+      if (st.strip !== undefined) {
+        if (assets && !assets.strips[st.strip]) bad(w + '.strip: ismeretlen csík (src/config/assets.js strips): ' + st.strip);
+        if (!Array.isArray(st.openFrames) || !st.openFrames.length || st.openFrames.some(f => !Number.isInteger(f) || f < 0)) bad(w + '.openFrames: képkocka-sorszámok tömbje');
+      } else {
+        ['closed', 'open'].forEach(k => { if (typeof st[k] !== 'string' || (assets && !assets.frames[st[k]])) bad(w + '.' + k + ': ismeretlen kivágás (src/config/assets.js frames): ' + st[k]); });
+      }
+    });
+    if (Game.data.config && Game.data.config.loot && !byId.chestStyles[Game.data.config.loot.chestStyle]) bad('config.loot.chestStyle: ismeretlen láda-stílus: ' + Game.data.config.loot.chestStyle);
 
     const rarities = Game.data.config && Game.data.config.rarities;
     Object.values(byId.items).forEach(it => {

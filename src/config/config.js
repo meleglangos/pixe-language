@@ -10,6 +10,7 @@ Game.data.config = {
   // Loot (src/systems/loot/): az arany ikonja a "Beute" ablakban és a ládából kirepülve
   loot: {
     goldIcon: 'it:1163',
+    chestStyle: 'pc_wood',  // a láda alap kinézete (data/chest_styles.json); a dungeon "chestStyle"-ja felülírja
   },
 
   // Kérdés-rendszer (src/systems/questions/)

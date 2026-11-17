@@ -13,7 +13,7 @@ const DATA = path.join(__dirname, '..', 'data');
 const FILES = {
   strings: 'translations.json', monsters: 'monsters.json', dungeonProps: 'dungeon_props.json',
   dungeons: 'dungeons.json', items: 'items.json', lootTables: 'loot_tables.json',
-  questionPools: 'questions/pools.json', questionTags: 'questions/tags.json', challenges: 'challenges.json', shop: 'shop.json',
+  questionPools: 'questions/pools.json', questionTags: 'questions/tags.json', challenges: 'challenges.json', chestStyles: 'chest_styles.json', shop: 'shop.json',
 };
 
 // Az összes tartalom egy objektumban (ugyanaz a szerkezet, amit a ContentLoader.install kap).
