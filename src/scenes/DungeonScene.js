@@ -58,7 +58,7 @@
       // látogatások számolása a mentésben
       Game.state.recordDungeonVisit(this.dungeonId);
 
-      if (Game.debug) this.drawDebug();
+      if (Game.grid) this.drawDebug();
       Game.events.emit('scene', { key: 'Dungeon', name: def.name, exit: () => this.exitDungeon() });
       this.events.once('shutdown', () => Game.events.emit('scene', { key: null }));
     }

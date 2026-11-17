@@ -50,7 +50,7 @@
         this.grid.footprint(poi).forEach(([x, y]) => { this.grid.redirect[x + ',' + y] = target; });
       });
 
-      if (Game.debug) this.drawDebug();
+      if (Game.grid) this.drawDebug();
       Game.events.emit('scene', { key: 'World' });
     }
 

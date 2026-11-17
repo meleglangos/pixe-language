@@ -5,5 +5,6 @@ window.Game = {
   gfx: {},       // kódból rajzolt placeholder grafika
   world: {},     // térkép-logika, karakterek
   state: null,   // a központi játékállapot (state/GameState.js)
-  debug: /[?&]debug=1/.test(location.search),
+  debug: /[?&]debug=1/.test(location.search),  // ?debug=1: megoldás-mutató a kérdés-ablakban
+  grid: /[?&]grid=1/.test(location.search),    // ?grid=1: járható (zöld) / blokkolt (piros) mezők a pályán
 };

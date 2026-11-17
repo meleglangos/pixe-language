@@ -39,8 +39,8 @@ Az adatfájlok formátuma: [`data/README.md`](data/README.md).
 A helyszínekre belépést a `Game.poi.handlers[típus]` kezeli (`WorldScene.js`); amíg nincs kezelő,
 a „még zárva” üzenet jelenik meg.
 
-`index.html?debug=1`: kirajzolja a járható (zöld) és blokkolt (piros) mezőket, és a kérdés-ablakban megjelenik
-a „Lösung zeigen” gomb: minden elfogadott megoldás németül és magyarul, a magyarázat és a kérdés ID-ja
+`index.html?grid=1`: kirajzolja a járható (zöld) és blokkolt (piros) mezőket.
+`index.html?debug=1`: a kérdés-ablakban megjelenik a „Lösung zeigen” gomb: minden elfogadott megoldás németül és magyarul, a magyarázat és a kérdés ID-ja
 (a fejlesztőnek, a kérdések ellenőrzéséhez; nem számít válasznak, és normál címmel nem látszik).
 
 ## Játékállapot és események

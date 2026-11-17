@@ -200,7 +200,8 @@
     }
 
     // Az aktuális hotspot paneljének újrarajzolása (ha megváltozott a tartalma).
-    refreshPrompt() { this.nearSpot = null; }
+    // (undefined, nem null: ha a játékos már semmi közelében sincs, a null === null miatt a panel ott maradna)
+    refreshPrompt() { this.nearSpot = undefined; }
   }
 
   Game.scenes.Explore = ExploreScene;
