@@ -214,7 +214,8 @@ html, body {
   -webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; -webkit-user-select: none;
 }
 /* a fény-effektek rétege (pixeles vásznak), a stage-en belül; --cx / --cy / --cb: a láda közepe és alja */
-.cw-fx { --cx: 50%; --cy: 70%; --cb: 95%; position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+.cw-fx { --cx: 50%; --cy: 50%; --cb: 60%; position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; border-radius: 4px; }
+.chest-window > h2, .chest-window > .modal-body, .chest-window > .modal-buttons { position: relative; z-index: 1; }
 .cw-fx canvas { position: absolute; image-rendering: pixelated; pointer-events: none; }
 /* nyitás előtt a láda középen áll, robbanáskor lecsúszik, hogy helyet adjon a kiemelt tárgyaknak */
 .cw-chest-box { transition: transform .4s cubic-bezier(.3, 1.4, .5, 1); }

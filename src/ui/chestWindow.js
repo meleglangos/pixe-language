@@ -241,7 +241,7 @@
       [cracks, lid, inner, glow, rays, pillar].forEach(c => { c.width = c.height = 0; });
       const reveal = ui.el('div', 'cw-reveal');      // ide emelkedik ki a tárgy
       // a koppintható terület egy div (nem <button>), mert benne "?" gombok is vannak
-      const stage = ui.el('div', 'cw-stage centered', [fxLayer, reveal, chestBox]); // nyitás előtt a láda középen áll
+      const stage = ui.el('div', 'cw-stage centered', [reveal, chestBox]); // nyitás előtt a láda középen áll
       stage.setAttribute('role', 'button');
       stage.tabIndex = 0;
       stage.setAttribute('aria-label', Game.i18n.de('chest.name'));
@@ -250,6 +250,9 @@
       const collected = ui.el('div', 'cw-collected');
       const panel = ui.modal({ title: 'chest.name', closable: false, body: [stage, starRow, collected], buttons: [] });
       panel.classList.add('chest-window');
+      // a fény-réteg az egész ablakot kitölti (a tartalom mögött): a fény a csillagok mögé is lenyúlhat, és csak az
+      // ablak széle vágja (nem a láda-terület alja)
+      panel.prepend(fxLayer);
       screenFx.open();
       panel.append(flash);
       panel.dataset.stars = stars;
@@ -258,7 +261,7 @@
       const light = n => starEls.forEach((s, i) => s.classList.toggle('on', i < n));
       // a fény-effektek a láda közepéhez igazodnak (a láda nyitás előtt középen, utána lent áll)
       function placeFx() {
-        const st = stage.getBoundingClientRect(), c = canvas.getBoundingClientRect();
+        const st = fxLayer.getBoundingClientRect(), c = canvas.getBoundingClientRect();
         if (!c.width) return;
         fxLayer.style.setProperty('--cx', (c.left + c.width / 2 - st.left) + 'px');
         fxLayer.style.setProperty('--cy', (c.top + c.height / 2 - st.top) + 'px');
