@@ -9,7 +9,7 @@ Böngészős pixel-art RPG német nyelvtanuláshoz. Nincs build lépés: az `ind
 Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén frissíti (pipák + „Most folyamatban”).
 Új szakaszt vagy tételt csak a felhasználó kérésére vesz fel; az ötletek a `docs/IDEAS.md`-be kerülnek.
 
-**Most folyamatban:** kérdés-rendszer (spec: `docs/features/kerdes_rendszer.md`).
+**Most folyamatban:** semmi. Következő javasolt lépés: HP (gyógyulás) vagy loot szabályok – a szörnyekért még nincs jutalom.
 
 - [x] 1. szakasz: térkép, kattintásos + billentyűs mozgás, kutya, mentés + export/import
 - [ ] 2. szakasz: egy dungeon, feladatrendszer, loot szabályok, HP, debug mód
@@ -18,14 +18,14 @@ Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén fris
   - [x] 2/1: „Die versunkene Gruft” dungeon jelenet, szörnyek (harc nélkül), láda
   - [x] 2/2: „Die Kristallmine” dungeon (pálya és látvány), közös dungeon-rendszer, Credits képernyő
   - [x] dokumentáció: `CLAUDE.md`, `docs/`, slash commandok
-  - [ ] feladatrendszer (kérdés-rendszer): a dungeonök, napi kihívások, petek, bossok közös kérdés-motorja
+  - [x] feladatrendszer (kérdés-rendszer): a dungeonök, napi kihívások, petek, bossok közös kérdés-motorja
     - [x] 1. kérdés-motor és poolok (`data/questions/`), címkék: szint (B1–C1), téma, típus; „ellenőrizendő” (`review`) jelölés, validátorral
     - [x] 2. mentés v4: kérdés-haladás, általános `unlocks` / `daily` állapot, migrációval
     - [x] 3. kihívások (`data/challenges.json`), elnéző válasz-ellenőrzés (kis/nagybetű, `ae`↔`ä`, `ss`↔`ß`, szóközök, több helyes megoldás), HP-vesztés
     - [x] 4. kérdés-ablak: választós, beírós, szókártyás
     - [x] 5. dungeon: a szörnyek kérdeznek, legyőzés, 0 HP
     - [x] 6. első poolok: kripta (B1), bánya (B1–B2)
-    - [ ] 7. dokumentáció
+    - [x] 7. dokumentáció
   - [ ] loot szabályok
   - [ ] HP
   - [ ] debug mód
@@ -44,7 +44,7 @@ a „még zárva” üzenet jelenik meg.
 ## Játékállapot és események
 A játékállapot a `Game.state` (`src/state/GameState.js`). Közvetlenül nem szabad átírni, csak a metódusain át:
 `setHp / damage / heal`, `addGold / spendGold`, `addItem / removeItem`, `equip / unequip`,
-`recordDungeonVisit / completeDungeon`, `addSurprise`, `setFlag`, `setPosition`.
+`recordDungeonVisit / completeDungeon`, `recordAnswer`, `unlock`, `markDaily`, `addSurprise`, `setFlag`, `setPosition`.
 Minden változás eseményt küld (`Game.events.on('state:gold', fn)` stb., a lista a fájl elején);
 a HUD ezekre frissül magától, a SaveManager pedig ezekre ment.
 
@@ -52,7 +52,7 @@ a HUD ezekre frissül magától, a SaveManager pedig ezekre ment.
 - Egyetlen modul ír és olvas: `Game.saveManager` (`src/systems/save/SaveManager.js`).
 - localStorage-kulcsok: `deutsch-abenteuer.save` (fő), `….backup` (az előző sikeres mentés),
   `….broken` (egy betölthetetlen mentés félretett másolata). Sérült fő mentésnél a tartalékból tölt be.
-- Automatikus mentés: loot, arany, felszerelés, dungeon, HP és jelzők változásakor (egy lépésen belül
+- Automatikus mentés: loot, arany, felszerelés, dungeon, megválaszolt kérdés, feloldás, napi kihívás, HP és jelzők változásakor (egy lépésen belül
   egyetlen írás); a pozíció megálláskor és séta közben 4 másodpercenként; a lap bezárásakor.
 - Betöltéskor minden mezőt ellenőriz; az ismeretlen ID-kat eldobja (a konzolra kiírja), nem fagy le.
 - A mentésben verziószám van (`v`). **Ha a szerkezet változik:** növeld a `VERSION`-t a

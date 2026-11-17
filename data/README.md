@@ -76,13 +76,17 @@ nyílik meg, ha van azonos ID-jú bejegyzés a `dungeons.json`-ban.
   "theme": "mine",                   // kinézet: src/world/dungeonThemes.js ('crypt' | 'mine')
   "map": "dungeon_mine",             // térkép: data/maps/dungeon_mine.json
   "darkness": {"color": "#04060e", "alpha": 0.8, "playerLight": 52},  // opcionális: sötét dungeon
-  "ambience": {"dust": true}         // opcionális: lebegő por (a cseppek helye a térkép "drips" rétegében)
+  "ambience": {"dust": true},        // opcionális: lebegő por (a cseppek helye a térkép "drips" rétegében)
+  "challenge": "ch_mine_monster"     // a szörnyei ezt a kihívást adják (challenges.json); kötelező, ha vannak szörnyei
 }
 ```
 
 ## monsters.json
 
-`{ "id", "idle": animációs csík (src/config/assets.js: strips), "name", "desc": szöveg-kulcsok }`
+`{ "id", "idle": animációs csík (src/config/assets.js: strips), "name", "desc": szöveg-kulcsok, "need": 2, "challenge": "ch_…" }`
+
+`need` (opcionális): hány jó válasz kell a legyőzéséhez (felülírja a kihívásét); `challenge` (opcionális):
+saját kihívás a dungeoné helyett. A legyőzött szörny csak az adott látogatásra tűnik el.
 
 ## dungeon_props.json
 

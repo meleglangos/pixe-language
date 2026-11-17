@@ -1,6 +1,6 @@
 # Kérdés-rendszer (közös kérdés-motor)
 
-**Állapot:** folyamatban (jóváhagyva: 2026-11-17)
+**Állapot:** kész (jóváhagyva: 2026-11-17)
 **Ötlet:** README „Állapot” → 2. szakasz → feladatrendszer (kérdés-rendszer); `docs/DECISIONS.md` D6, D7
 
 ## 1. Cél
@@ -74,14 +74,15 @@ következménye: lásd 9. A „Fliehen” gombbal bármikor kiléphet. Ha minden
 - [x] `review` jelölés → **a fordítási fájlban**, a bejegyzésen.
 
 ## 10. Kész, ha
-- [ ] a szörnyre koppintva kérdés jön; jó válaszokra a szörny eltűnik, rossznál a 9. szerinti következmény
-- [ ] választós, beírós és szókártyás kérdés működik, telefonon is kényelmesen
-- [ ] a beírós ellenőrzés a `docs/GERMAN.md` 6. része szerint elnéző, és csak a felsorolt megoldásokat fogadja el
-- [ ] a validátor ellenőrzi a kérdéseket, kihívásokat, hivatkozásokat és a `review` jelölést
-- [ ] `node tools/build-data.js` és `npm test` zöld, új tesztekkel (motor, ellenőrzés, kihívás, migráció)
-- [ ] egy régi (v1, v2, v3) mentés betöltése után is helyesen működik
-- [ ] telefonméretben (iPhone 13 emuláció, érintéssel) kipróbálva
-- [ ] README „Állapot”, `docs/GAME_DESIGN.md` 4–5. rész (HP, kihívások) és `docs/DECISIONS.md` frissítve
+- [x] a szörnyre koppintva kérdés jön; jó válaszokra a szörny eltűnik, rossznál −3 HP és új kérdés
+- [x] választós, beírós és szókártyás kérdés működik, telefonon is kényelmesen (az ablak iPhone 13 emulációban, érintéssel kipróbálva)
+- [x] a beírós ellenőrzés a `docs/GERMAN.md` 6. része szerint elnéző, és csak a felsorolt megoldásokat fogadja el
+- [x] a validátor ellenőrzi a kérdéseket, kihívásokat, hivatkozásokat és a `review` jelölést
+- [x] `node tools/build-data.js` és `npm test` zöld, új tesztekkel (motor, ellenőrzés, kihívás, migráció)
+- [x] egy régi (v1, v2, v3) mentés betöltése után is helyesen működik (tesztek a valódi fixture-ökkel)
+- [ ] a dungeonben, a teljes játékban telefonon kipróbálva — **a felhasználónál**: itt a Phaser CDN nem érhető el,
+      ezért a dungeon-részt (koppintás a szörnyre, eltűnés, kiesés 0 HP-nál) böngészőben nem tudtam futtatni
+- [x] README „Állapot”, `docs/GAME_DESIGN.md` 4–5. rész és `docs/DECISIONS.md` (D12–D14) frissítve
 
 ## 11. Lépések
 1. Motor: pool- és kérdésformátum, betöltés, validátor, `review` jelölés + lista; tesztek (még nincs felület).
@@ -92,6 +93,5 @@ következménye: lásd 9. A „Fliehen” gombbal bármikor kiléphet. Ha minden
 6. Tartalom: a két első pool (kripta B1, bánya B1–B2), `review` jelölésekkel.
 7. Lezárás: dokumentáció (rendszer-README, GAME_DESIGN, DECISIONS, README „Állapot”).
 
-Megjegyzés: egy korai prototípus (a folyamat ismerete nélkül készült, A1-es kérdésekkel) helyben megvan a
-`proto/kerdes-rendszer` branchen (nincs feltöltve). A motor, az ablak és a dungeon-rész kódja jóváhagyás után
-ennek a specnek megfelelően átdolgozva felhasználható; a kérdései nem (szint alattiak).
+Eltérés a tervtől: az 5. és 6. lépés sorrendje megfordult (a kihívásokhoz a validátor már kérdéseket kér).
+A szókártyákon nincs írásjel (`docs/DECISIONS.md` D12).

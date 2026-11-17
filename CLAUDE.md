@@ -32,7 +32,8 @@ tartalom csak a felhasználó kifejezett jóváhagyásával kerülhet bele.
 
 | Hol | Mi |
 | --- | --- |
-| `data/*.json` | minden tartalom: dungeonök, szörnyek, berendezés, tárgyak, loot táblák, feladatok, shop (formátumok: `data/README.md`) |
+| `data/*.json` | minden tartalom: dungeonök, szörnyek, berendezés, tárgyak, loot táblák, kihívások, shop (formátumok: `data/README.md`) |
+| `data/questions/` | a német kérdések poolokban: `pools.json` + `<pool>.json` |
 | `data/translations.json` | a fordítási fájl: minden megjelenő szöveg kulccsal, `de` + `hu` változattal |
 | `data/maps/*.json` | a pályák Tiled formátumban (overworld, dungeon_crypt, dungeon_mine); `tilesets/` = a Tiled képei |
 | `data/bundle.js` | GENERÁLT (`node tools/build-data.js`), a `file://` alóli futáshoz; kézzel ne szerkeszd |
@@ -41,6 +42,7 @@ tartalom csak a felhasználó kifejezett jóváhagyásával kerülhet bele.
 | `src/state/GameState.js` | a központi játékállapot (`Game.state`): HP, arany, inventory, felszerelés, dungeonök, jelzők |
 | `src/systems/save/` | mentés: `SaveManager`, `SaveSchema` (verzió + migrációk), `SaveCodec` (export/import kód) |
 | `src/systems/content/` | a `data/` betöltése és ellenőrzése; `src/systems/maps/`: Tiled olvasó |
+| `src/systems/questions/` | a közös kérdés-motor (`Game.questions`): kiválasztás, ellenőrzés, kihívás; ablak: `src/ui/quiz.js` |
 | `src/scenes/` | Phaser jelenetek: `ExploreScene` (közös mozgás-alap), `WorldScene`, `DungeonScene`; `dungeon/`: fény, víz, hangulat, berendezés |
 | `src/world/` | rács + útkeresés, karakter, kutya, szörny; `dungeonThemes.js`: a dungeonök kinézete |
 | `src/ui/` | DOM felület: HUD, menü, ablakok, „?” buborék |

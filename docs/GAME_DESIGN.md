@@ -38,9 +38,11 @@ Kilenc fokozat alulról felfelé: `common1–3`, `rare1–3`, `epic1–2`, `lege
 ## 4. HP
 
 - Most: maximum 20 (`config.js` → `player.maxHp`), módosítás: `setHp / damage / heal`.
-- **Eldöntendő:** mitől csökken (rossz válasz? szörny?), mitől nő (ital, pihenés?), mi történik 0 HP-nál.
+- Csökken: rossz válasz egy kihívásban (`config.js` → `questions.wrongDamage`, alapból 3; a kihívás felülírhatja).
+- 0 HP: a kihívás elveszett, a játékos kiesik a dungeonből, és kint ébred teljes HP-val (amíg nincs HP-ital).
+- **Eldöntendő:** mitől nő a HP (ital, pihenés?), és a 0 HP később szigorúbb legyen-e.
 
-## 5. Kérdés-kihívások (tervezett, lásd README → Állapot)
+## 5. Kérdés-kihívások
 
 Minden német feladat egy közös motoron fut. Egy új ötlet (napi kérdés, pet, boss, vizsga) lehetőleg csak egy
 új **kihívás** az adatfájlban, nem új kód. Fogalmak:
@@ -56,8 +58,12 @@ Minden német feladat egy közös motoron fut. Egy új ötlet (napi kérdés, pe
   `docs/GERMAN.md`.
 - Feloldások és napi állapot általános listában élnek a mentésben (`unlocks`, `daily`), így egy új feloldható
   tartalomhoz nem kell mentési migráció, csak egy új ID.
-- **Eldöntendő** (a kérdés-rendszer speceben): a kihívás pontos adatformátuma, időlimit, rossz válasz
-  következménye.
+- Kész (spec: `docs/features/kerdes_rendszer.md`, motor: `src/systems/questions/README.md`, formátum: `data/README.md`).
+- Kiválasztás: egy kihíváson belül nincs ismétlés; az új és a rontott kérdés gyakrabban jön, a többször
+  egymás után eltalált ritkábban (a haladás a mentésben: `questions`).
+- Dungeon: minden szörny a dungeon kihívását adja (`dungeons.json` → `challenge`), a `*_warrior` szörnyek 2 jó
+  választ kérnek. A legyőzött szörny csak arra a látogatásra tűnik el; ha mind legyőzve, a dungeon teljesítve.
+- Rossz válasz: HP-vesztés, a szörny marad, új kérdés jön. Nincs időlimit. Szörnyért még nincs jutalom.
 
 ## 6. Pet
 

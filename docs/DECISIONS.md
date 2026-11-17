@@ -55,3 +55,16 @@ a térkép mindkettőben szerepelne, kétszer kerülne a kontextusba, és a két
 Egy fájl, amit minden feladat végén frissíteni kell, de senki nem olvas, csak költség. A haladás a README
 „Állapot” részében, a részletek a git logban vannak. Ha a játékosnak kell újdonságlista, az a játékban
 legyen („Neuigkeiten” ablak, `docs/IDEAS.md`), a fordítási fájlon át.
+
+## D12. A szókártyákon nincs írásjel (2026-11)
+Ugyanannak a mondatnak más szórendjében a vessző másik szóhoz kerül („…Hause, weil…” / „…regnet, bleibe…”),
+ezért a kártyák írásjel nélküliek, és a szókártyás ellenőrzés csak a szavak sorrendjét nézi. A válasz után a
+teljes, írásjeles mondat megjelenik. A vesszőt a beírós feladatok kérik számon.
+
+## D13. Az „ellenőrizendő” jelölés a fordítási fájlban van (2026-11)
+`{"de", "hu", "review": true}` a bejegyzésen, mert minden német szöveg érintett lehet, nem csak a kérdések.
+Lista: `npm run review`. A validátor csak `true`-t enged.
+
+## D14. A legyőzött szörny a következő belépéskor újra ott van (2026-11)
+A dungeon így gyakorlóhely marad; a „teljesítve” jelzés a mentésben megmarad. 0 HP-nál a játékos kint ébred
+teljes HP-val, amíg nincs HP-ital (a felhasználó döntése, spec: `docs/features/kerdes_rendszer.md`).
