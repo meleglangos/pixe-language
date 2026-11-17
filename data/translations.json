@@ -152,5 +152,354 @@
   "quiz.finish": {"de": "Fertig", "hu": "Kész"},
   "quiz.won": {"de": "Gewonnen! Das Monster zerfällt zu Staub.", "hu": "Győztél! A szörny porrá omlik."},
   "quiz.lost": {"de": "Dir wird schwindelig … Du wachst draußen wieder auf.", "hu": "Megszédülsz… Odakint térsz magadhoz."},
-  "quiz.noQuestions": {"de": "Hier gibt es noch keine Fragen.", "hu": "Itt még nincsenek kérdések."}
+  "quiz.noQuestions": {"de": "Hier gibt es noch keine Fragen.", "hu": "Itt még nincsenek kérdések."},
+  "q.crypt_01.prompt": {"de": "Gestern ___ ich lange durch die Gruft gelaufen.", "hu": "Tegnap sokáig bolyongtam a kriptában."},
+  "q.crypt_01.a": {"de": "bin", "hu": "bin"},
+  "q.crypt_01.w1": {"de": "habe", "hu": "habe"},
+  "q.crypt_01.w2": {"de": "war", "hu": "war"},
+  "q.crypt_01.explain": {
+    "de": "Bewegung von A nach B: Perfekt mit »sein«.",
+    "hu": "Helyváltoztatást jelentő ige (laufen): a Perfekt a „sein” igével képződik."
+  },
+  "q.crypt_02.prompt": {"de": "Wir ___ die alte Truhe sofort geöffnet.", "hu": "Azonnal kinyitottuk a régi ládát."},
+  "q.crypt_02.a": {"de": "haben", "hu": "haben"},
+  "q.crypt_02.w1": {"de": "sind", "hu": "sind"},
+  "q.crypt_02.w2": {"de": "habt", "hu": "habt"},
+  "q.crypt_02.explain": {
+    "de": "»öffnen« hat ein Objekt: Perfekt mit »haben«.",
+    "hu": "Tárgyas ige (öffnen): Perfekt a „haben” igével; „wir” mellett „haben”."
+  },
+  "q.crypt_03.prompt": {
+    "de": "Ergänze das Partizip II: Der Wächter hat die Tür ___. (schließen)",
+    "hu": "Egészítsd ki a Partizip II alakkal: Az őr bezárta az ajtót. (schließen)"
+  },
+  "q.crypt_03.a": {"de": "geschlossen", "hu": "bezárt"},
+  "q.crypt_03.explain": {"de": "schließen – schloss – geschlossen", "hu": "Erős ige: schließen – schloss – geschlossen."},
+  "q.crypt_04.prompt": {
+    "de": "Ergänze das Partizip II: Wir sind in die Gruft ___. (gehen)",
+    "hu": "Egészítsd ki a Partizip II alakkal: Bementünk a kriptába. (gehen)"
+  },
+  "q.crypt_04.a": {"de": "gegangen", "hu": "ment"},
+  "q.crypt_04.explain": {"de": "gehen – ging – gegangen", "hu": "Erős ige: gehen – ging – gegangen (Perfekt: „sein”)."},
+  "q.crypt_05.prompt": {
+    "de": "Früher ___ hier ein mächtiger König. (leben, Präteritum)",
+    "hu": "Régen egy hatalmas király élt itt. (leben, Präteritum)"
+  },
+  "q.crypt_05.a": {"de": "lebte", "hu": "lebte"},
+  "q.crypt_05.w1": {"de": "lebt", "hu": "lebt"},
+  "q.crypt_05.w2": {"de": "lebten", "hu": "lebten"},
+  "q.crypt_05.w3": {"de": "gelebt", "hu": "gelebt"},
+  "q.crypt_05.explain": {
+    "de": "Schwaches Verb: leb- + -te; »ein König« ist Singular.",
+    "hu": "Gyenge ige Präteritumban: tő + -te. Az alany egyes számú (ein König), ezért „lebte”."
+  },
+  "q.crypt_06.prompt": {
+    "de": "Setze ins Präteritum: Der Ritter ___ die ganze Nacht nicht. (schlafen)",
+    "hu": "Tedd Präteritumba: A lovag egész éjjel nem aludt. (schlafen)"
+  },
+  "q.crypt_06.a": {"de": "schlief", "hu": "aludt"},
+  "q.crypt_06.explain": {"de": "schlafen – schlief – geschlafen", "hu": "Erős ige: schlafen – schlief – geschlafen."},
+  "q.crypt_07.prompt": {"de": "Die Fackel hängt an ___ Wand.", "hu": "A fáklya a falon lóg."},
+  "q.crypt_07.a": {"de": "der", "hu": "der"},
+  "q.crypt_07.w1": {"de": "die", "hu": "die"},
+  "q.crypt_07.w2": {"de": "den", "hu": "den"},
+  "q.crypt_07.explain": {
+    "de": "Wo? → Dativ: die Wand → an der Wand.",
+    "hu": "Hol? kérdésre részes eset (Dativ): die Wand → an der Wand."
+  },
+  "q.crypt_08.prompt": {"de": "Ich stelle die Kerze auf ___ Tisch.", "hu": "A gyertyát az asztalra teszem."},
+  "q.crypt_08.a": {"de": "den", "hu": "den"},
+  "q.crypt_08.w1": {"de": "dem", "hu": "dem"},
+  "q.crypt_08.w2": {"de": "der", "hu": "der"},
+  "q.crypt_08.explain": {
+    "de": "Wohin? → Akkusativ: der Tisch → auf den Tisch.",
+    "hu": "Hová? kérdésre tárgyeset (Akkusativ): der Tisch → auf den Tisch."
+  },
+  "q.crypt_09.prompt": {"de": "Der Hund läuft mit ___ Knochen weg.", "hu": "A kutya elszalad a csonttal."},
+  "q.crypt_09.a": {"de": "dem", "hu": "dem"},
+  "q.crypt_09.w1": {"de": "den", "hu": "den"},
+  "q.crypt_09.w2": {"de": "der", "hu": "der"},
+  "q.crypt_09.explain": {
+    "de": "»mit« steht immer mit Dativ: der Knochen → mit dem Knochen.",
+    "hu": "A „mit” mindig részes esettel áll: der Knochen → mit dem Knochen."
+  },
+  "q.crypt_10.prompt": {"de": "Ohne ___ Lampe gehen wir nicht weiter.", "hu": "A lámpa nélkül nem megyünk tovább."},
+  "q.crypt_10.a": {"de": "die", "hu": "die"},
+  "q.crypt_10.w1": {"de": "der", "hu": "der"},
+  "q.crypt_10.w2": {"de": "den", "hu": "den"},
+  "q.crypt_10.explain": {
+    "de": "»ohne« steht immer mit Akkusativ: die Lampe → ohne die Lampe.",
+    "hu": "Az „ohne” mindig tárgyesettel áll; nőnemben a tárgyeset is „die”."
+  },
+  "q.crypt_11.prompt": {
+    "de": "Bilde den Satz: »Nem megyek be, mert túl sötét van.«",
+    "hu": "Rakd össze a mondatot: „Nem megyek be, mert túl sötét van.”"
+  },
+  "q.crypt_11.a": {"de": "Ich gehe nicht hinein, weil es zu dunkel ist.", "hu": "Nem megyek be, mert túl sötét van."},
+  "q.crypt_11.a2": {"de": "Weil es zu dunkel ist, gehe ich nicht hinein.", "hu": "Mivel túl sötét van, nem megyek be."},
+  "q.crypt_11.w1": {"de": "denn", "hu": "denn"},
+  "q.crypt_11.explain": {"de": "Nach »weil« steht das Verb am Ende.", "hu": "A „weil” után az ige a mellékmondat végére kerül."},
+  "q.crypt_12.prompt": {"de": "Bilde den Satz: »Tudom, hogy félsz.«", "hu": "Rakd össze a mondatot: „Tudom, hogy félsz.”"},
+  "q.crypt_12.a": {"de": "Ich weiß, dass du Angst hast.", "hu": "Tudom, hogy félsz."},
+  "q.crypt_12.a2": {"de": "Dass du Angst hast, weiß ich.", "hu": "Azt, hogy félsz, tudom."},
+  "q.crypt_12.w1": {"de": "hat", "hu": "hat"},
+  "q.crypt_12.explain": {
+    "de": "Nach »dass« steht das Verb am Ende: … dass du Angst hast.",
+    "hu": "A „dass” után az ige a végére kerül; „du” mellett „hast”."
+  },
+  "q.crypt_13.prompt": {"de": "___ wir müde sind, gehen wir weiter.", "hu": "Bár fáradtak vagyunk, megyünk tovább."},
+  "q.crypt_13.a": {"de": "Obwohl", "hu": "Obwohl"},
+  "q.crypt_13.w1": {"de": "Weil", "hu": "Weil"},
+  "q.crypt_13.w2": {"de": "Deshalb", "hu": "Deshalb"},
+  "q.crypt_13.explain": {
+    "de": "»obwohl« = Gegensatz; das Verb steht am Ende.",
+    "hu": "Az „obwohl” ellentétet fejez ki (bár); utána az ige a végére kerül."
+  },
+  "q.crypt_14.prompt": {
+    "de": "Ergänze: Wir bleiben hier, weil der Weg zu gefährlich ___.",
+    "hu": "Egészítsd ki: Itt maradunk, mert az út túl veszélyes."
+  },
+  "q.crypt_14.a": {"de": "ist", "hu": "van"},
+  "q.crypt_14.explain": {
+    "de": "»weil« → Verb am Ende: … weil der Weg zu gefährlich ist.",
+    "hu": "A „weil” után az ige (ist) a mondat végére kerül."
+  },
+  "q.crypt_15.prompt": {"de": "Im Sarg liegt ein ___ Schwert.", "hu": "A koporsóban egy régi kard fekszik."},
+  "q.crypt_15.a": {"de": "altes", "hu": "altes"},
+  "q.crypt_15.w1": {"de": "alte", "hu": "alte"},
+  "q.crypt_15.w2": {"de": "alter", "hu": "alter"},
+  "q.crypt_15.w3": {"de": "alten", "hu": "alten"},
+  "q.crypt_15.explain": {
+    "de": "das Schwert, Nominativ, »ein«: ein altes Schwert.",
+    "hu": "Semleges nem, alanyeset, határozatlan névelő: a melléknév végződése -es."
+  },
+  "q.crypt_16.prompt": {"de": "Der Ritter trägt einen ___ Helm.", "hu": "A lovag nehéz sisakot visel."},
+  "q.crypt_16.a": {"de": "schweren", "hu": "schweren"},
+  "q.crypt_16.w1": {"de": "schwerer", "hu": "schwerer"},
+  "q.crypt_16.w2": {"de": "schwere", "hu": "schwere"},
+  "q.crypt_16.w3": {"de": "schweres", "hu": "schweres"},
+  "q.crypt_16.explain": {
+    "de": "der Helm, Akkusativ: einen schweren Helm.",
+    "hu": "Hímnem, tárgyeset (einen): a melléknév végződése -en."
+  },
+  "q.crypt_17.prompt": {
+    "de": "Ergänze das Adjektiv: Wir sehen die ___ Mauern. (alt)",
+    "hu": "Egészítsd ki a melléknevet: Látjuk a régi falakat. (alt)"
+  },
+  "q.crypt_17.a": {"de": "alten", "hu": "régi"},
+  "q.crypt_17.explain": {"de": "Plural mit »die«: immer -en.", "hu": "Többes szám határozott névelővel: a végződés mindig -en."},
+  "q.crypt_18.prompt": {"de": "Mit dem ___ Licht sehen wir mehr.", "hu": "A világos fénnyel többet látunk."},
+  "q.crypt_18.a": {"de": "hellen", "hu": "hellen"},
+  "q.crypt_18.w1": {"de": "helle", "hu": "helle"},
+  "q.crypt_18.w2": {"de": "heller", "hu": "heller"},
+  "q.crypt_18.w3": {"de": "helles", "hu": "helles"},
+  "q.crypt_18.explain": {"de": "Dativ nach »dem«: -en.", "hu": "Részes esetben „dem” után a végződés -en."},
+  "q.crypt_19.prompt": {
+    "de": "Bilde den Satz: »A kutya talált egy csontot.«",
+    "hu": "Rakd össze a mondatot: „A kutya talált egy csontot.”"
+  },
+  "q.crypt_19.a": {"de": "Der Hund hat einen Knochen gefunden.", "hu": "A kutya talált egy csontot."},
+  "q.crypt_19.a2": {"de": "Einen Knochen hat der Hund gefunden.", "hu": "Egy csontot talált a kutya.", "review": true},
+  "q.crypt_19.w1": {"de": "ist", "hu": "ist"},
+  "q.crypt_19.explain": {
+    "de": "finden – fand – gefunden (Perfekt mit »haben«)",
+    "hu": "finden – fand – gefunden; tárgyas ige, ezért „haben”."
+  },
+  "q.crypt_20.prompt": {
+    "de": "Wie heißt »koporsó« auf Deutsch? Schreib den Artikel dazu.",
+    "hu": "Hogy mondják németül: „koporsó”? Írd hozzá a névelőt is."
+  },
+  "q.crypt_20.a": {"de": "der Sarg", "hu": "a koporsó"},
+  "q.crypt_20.explain": {"de": "der Sarg, die Särge", "hu": "der Sarg (hímnem), többes szám: die Särge."},
+  "q.crypt_21.prompt": {"de": "Ohne ___ können wir die Tür nicht öffnen.", "hu": "Nélküle nem tudjuk kinyitni az ajtót."},
+  "q.crypt_21.a": {"de": "den Schlüssel", "hu": "a kulcs"},
+  "q.crypt_21.w1": {"de": "das Fenster", "hu": "az ablak"},
+  "q.crypt_21.w2": {"de": "die Treppe", "hu": "a lépcső"},
+  "q.crypt_21.explain": {
+    "de": "der Schlüssel → ohne den Schlüssel (Akkusativ)",
+    "hu": "der Schlüssel = a kulcs; az „ohne” tárgyesetet kér: ohne den Schlüssel."
+  },
+  "q.mine_01.prompt": {"de": "Ich freue ___ auf das Wochenende.", "hu": "Örülök a hétvégének (várom a hétvégét)."},
+  "q.mine_01.a": {"de": "mich", "hu": "mich"},
+  "q.mine_01.w1": {"de": "mir", "hu": "mir"},
+  "q.mine_01.w2": {"de": "sich", "hu": "sich"},
+  "q.mine_01.explain": {
+    "de": "sich freuen auf + Akk.; ich → mich",
+    "hu": "sich freuen auf = előre örülni valaminek; „ich” mellett a visszaható névmás „mich”."
+  },
+  "q.mine_02.prompt": {"de": "Ich wasche ___ die Hände.", "hu": "Kezet mosok."},
+  "q.mine_02.a": {"de": "mir", "hu": "mir"},
+  "q.mine_02.w1": {"de": "mich", "hu": "mich"},
+  "q.mine_02.w2": {"de": "sich", "hu": "sich"},
+  "q.mine_02.explain": {
+    "de": "Es gibt schon ein Akkusativobjekt (die Hände) → Dativ: mir.",
+    "hu": "Ha van már tárgy (die Hände), a visszaható névmás részes esetbe kerül: mir."
+  },
+  "q.mine_03.prompt": {
+    "de": "Ergänze: Die Bergleute treffen ___ jeden Morgen am Eingang.",
+    "hu": "Egészítsd ki: A bányászok minden reggel a bejáratnál találkoznak."
+  },
+  "q.mine_03.a": {"de": "sich", "hu": "magukat"},
+  "q.mine_03.explain": {"de": "sie (Plural) → sich", "hu": "Többes szám 3. személyben a visszaható névmás „sich”."},
+  "q.mine_04.prompt": {
+    "de": "Bilde den Satz: »Viszek egy lámpát, hogy lássak a sötétben.«",
+    "hu": "Rakd össze a mondatot: „Viszek egy lámpát, hogy lássak a sötétben.”"
+  },
+  "q.mine_04.a": {
+    "de": "Ich nehme eine Lampe mit, um im Dunkeln zu sehen.",
+    "hu": "Viszek egy lámpát, hogy lássak a sötétben."
+  },
+  "q.mine_04.a2": {
+    "de": "Um im Dunkeln zu sehen, nehme ich eine Lampe mit.",
+    "hu": "Hogy lássak a sötétben, viszek egy lámpát."
+  },
+  "q.mine_04.w1": {"de": "dass", "hu": "dass"},
+  "q.mine_04.explain": {
+    "de": "»um … zu« + Infinitiv am Ende: um im Dunkeln zu sehen.",
+    "hu": "Célhatározói „um … zu”: a főnévi igenév a végére kerül, előtte „zu”."
+  },
+  "q.mine_05.prompt": {
+    "de": "Wir arbeiten hart, ___ genug Gold zu finden.",
+    "hu": "Keményen dolgozunk, hogy elég aranyat találjunk."
+  },
+  "q.mine_05.a": {"de": "um", "hu": "um"},
+  "q.mine_05.w1": {"de": "damit", "hu": "damit"},
+  "q.mine_05.w2": {"de": "dass", "hu": "dass"},
+  "q.mine_05.w3": {"de": "weil", "hu": "weil"},
+  "q.mine_05.explain": {
+    "de": "Gleiches Subjekt + Infinitiv mit »zu« → »um … zu«.",
+    "hu": "Ha az alany ugyanaz és „zu” + főnévi igenév áll a végén: „um … zu”."
+  },
+  "q.mine_06.prompt": {
+    "de": "Wenn ich mehr Zeit ___, würde ich die ganze Mine erkunden.",
+    "hu": "Ha több időm lenne, bejárnám az egész bányát."
+  },
+  "q.mine_06.a": {"de": "hätte", "hu": "hätte"},
+  "q.mine_06.w1": {"de": "habe", "hu": "habe"},
+  "q.mine_06.w2": {"de": "hatte", "hu": "hatte"},
+  "q.mine_06.w3": {"de": "hätten", "hu": "hätten"},
+  "q.mine_06.explain": {
+    "de": "Irreale Bedingung: Konjunktiv II von »haben« = hätte.",
+    "hu": "Nem valós feltétel: a „haben” Konjunktiv II alakja „hätte”."
+  },
+  "q.mine_07.prompt": {
+    "de": "Wenn ich ein Vogel ___, würde ich aus der Mine fliegen.",
+    "hu": "Ha madár lennék, kirepülnék a bányából."
+  },
+  "q.mine_07.a": {"de": "wäre", "hu": "wäre"},
+  "q.mine_07.w1": {"de": "war", "hu": "war"},
+  "q.mine_07.w2": {"de": "bin", "hu": "bin"},
+  "q.mine_07.w3": {"de": "würde", "hu": "würde"},
+  "q.mine_07.explain": {"de": "Konjunktiv II von »sein« = wäre.", "hu": "A „sein” Konjunktiv II alakja „wäre”."},
+  "q.mine_08.prompt": {
+    "de": "Ergänze den Konjunktiv II: An deiner Stelle ___ ich vorsichtiger. (sein)",
+    "hu": "Egészítsd ki Konjunktiv II-vel: A helyedben óvatosabb lennék. (sein)"
+  },
+  "q.mine_08.a": {"de": "wäre", "hu": "lennék"},
+  "q.mine_08.explain": {"de": "ich wäre, du wärst, er wäre …", "hu": "A „sein” Konjunktiv II-ben: ich wäre, du wärst, er wäre."},
+  "q.mine_09.prompt": {
+    "de": "Bilde den Satz: »Ha erősebb lennék, segítenék neked.«",
+    "hu": "Rakd össze a mondatot: „Ha erősebb lennék, segítenék neked.”"
+  },
+  "q.mine_09.a": {"de": "Wenn ich stärker wäre, würde ich dir helfen.", "hu": "Ha erősebb lennék, segítenék neked."},
+  "q.mine_09.a2": {"de": "Ich würde dir helfen, wenn ich stärker wäre.", "hu": "Segítenék neked, ha erősebb lennék."},
+  "q.mine_09.w1": {"de": "werde", "hu": "werde"},
+  "q.mine_09.explain": {
+    "de": "wenn + Verb am Ende (wäre); Hauptsatz mit »würde« + Infinitiv.",
+    "hu": "A „wenn” után az ige a végére kerül; a főmondatban „würde” + főnévi igenév."
+  },
+  "q.mine_10.prompt": {"de": "Wir warten ___ den Aufzug.", "hu": "A liftre várunk."},
+  "q.mine_10.a": {"de": "auf", "hu": "auf"},
+  "q.mine_10.w1": {"de": "für", "hu": "für"},
+  "q.mine_10.w2": {"de": "an", "hu": "an"},
+  "q.mine_10.w3": {"de": "nach", "hu": "nach"},
+  "q.mine_10.explain": {"de": "warten auf + Akkusativ", "hu": "warten auf + tárgyeset = várni valamire / valakire."},
+  "q.mine_11.prompt": {"de": "Er interessiert sich sehr ___ Edelsteine.", "hu": "Nagyon érdeklődik a drágakövek iránt."},
+  "q.mine_11.a": {"de": "für", "hu": "für"},
+  "q.mine_11.w1": {"de": "an", "hu": "an"},
+  "q.mine_11.w2": {"de": "auf", "hu": "auf"},
+  "q.mine_11.w3": {"de": "über", "hu": "über"},
+  "q.mine_11.explain": {"de": "sich interessieren für + Akkusativ", "hu": "sich interessieren für = érdeklődni valami iránt."},
+  "q.mine_12.prompt": {"de": "Alles hängt ___ dem Wetter ab.", "hu": "Minden az időjárástól függ."},
+  "q.mine_12.a": {"de": "von", "hu": "von"},
+  "q.mine_12.w1": {"de": "an", "hu": "an"},
+  "q.mine_12.w2": {"de": "mit", "hu": "mit"},
+  "q.mine_12.w3": {"de": "auf", "hu": "auf"},
+  "q.mine_12.explain": {"de": "abhängen von + Dativ", "hu": "abhängen von + részes eset = függ valamitől."},
+  "q.mine_13.prompt": {
+    "de": "Ergänze die Präposition: Ich denke oft ___ meine Familie.",
+    "hu": "Egészítsd ki az elöljárót: Gyakran gondolok a családomra."
+  },
+  "q.mine_13.a": {"de": "an", "hu": "rá"},
+  "q.mine_13.explain": {"de": "denken an + Akkusativ", "hu": "denken an + tárgyeset = gondolni valakire / valamire."},
+  "q.mine_14.prompt": {
+    "de": "Freust du dich auf die Pause? – Ja, ich freue mich ___.",
+    "hu": "Várod már a szünetet? – Igen, várom."
+  },
+  "q.mine_14.a": {"de": "darauf", "hu": "darauf"},
+  "q.mine_14.w1": {"de": "dafür", "hu": "dafür"},
+  "q.mine_14.w2": {"de": "worauf", "hu": "worauf"},
+  "q.mine_14.w3": {"de": "daran", "hu": "daran"},
+  "q.mine_14.explain": {
+    "de": "sich freuen auf etwas → darauf (da + r + auf)",
+    "hu": "Dologra visszautalva: da(r) + elöljáró; a „sich freuen auf”-ból „darauf”."
+  },
+  "q.mine_15.prompt": {"de": "___ wartest du? – Auf meinen Bruder.", "hu": "Kire vársz? – A bátyámra."},
+  "q.mine_15.a": {"de": "Auf wen", "hu": "Auf wen"},
+  "q.mine_15.w1": {"de": "Worauf", "hu": "Worauf"},
+  "q.mine_15.w2": {"de": "Wofür", "hu": "Wofür"},
+  "q.mine_15.w3": {"de": "Woran", "hu": "Woran"},
+  "q.mine_15.explain": {
+    "de": "Bei Personen: Präposition + wen/wem, nicht »wo(r)-«.",
+    "hu": "Személyre kérdezve elöljáró + wen/wem kell, a „wo(r)-” alak csak dologra."
+  },
+  "q.mine_16.prompt": {"de": "Hier ___ früher Silber abgebaut.", "hu": "Itt régen ezüstöt bányásztak."},
+  "q.mine_16.a": {"de": "wurde", "hu": "wurde"},
+  "q.mine_16.w1": {"de": "wird", "hu": "wird"},
+  "q.mine_16.w2": {"de": "hat", "hu": "hat"},
+  "q.mine_16.w3": {"de": "ist", "hu": "ist"},
+  "q.mine_16.explain": {
+    "de": "Passiv Präteritum: wurde + Partizip II.",
+    "hu": "Szenvedő szerkezet múlt időben (Präteritum): wurde + Partizip II."
+  },
+  "q.mine_17.prompt": {
+    "de": "Ergänze: Der Tunnel ist letztes Jahr gebaut ___.",
+    "hu": "Egészítsd ki: Az alagutat tavaly építették."
+  },
+  "q.mine_17.a": {"de": "worden", "hu": "worden"},
+  "q.mine_17.explain": {
+    "de": "Passiv Perfekt: ist + Partizip II + worden.",
+    "hu": "Szenvedő szerkezet Perfektben: ist + Partizip II + „worden” (nem „geworden”)."
+  },
+  "q.mine_18.prompt": {
+    "de": "Bilde den Satz: »A bányát 1890-ben bezárták.«",
+    "hu": "Rakd össze a mondatot: „A bányát 1890-ben bezárták.”"
+  },
+  "q.mine_18.a": {"de": "Die Mine wurde 1890 geschlossen.", "hu": "A bányát 1890-ben bezárták."},
+  "q.mine_18.a2": {"de": "1890 wurde die Mine geschlossen.", "hu": "1890-ben bezárták a bányát."},
+  "q.mine_18.w1": {"de": "hat", "hu": "hat"},
+  "q.mine_18.explain": {
+    "de": "Passiv Präteritum: wurde … geschlossen.",
+    "hu": "Szenvedő szerkezet múlt időben: wurde + Partizip II a mondat végén."
+  },
+  "q.mine_19.prompt": {"de": "Kannst du ___ bitte helfen?", "hu": "Tudnál nekem segíteni?"},
+  "q.mine_19.a": {"de": "mir", "hu": "mir"},
+  "q.mine_19.w1": {"de": "mich", "hu": "mich"},
+  "q.mine_19.w2": {"de": "ich", "hu": "ich"},
+  "q.mine_19.explain": {"de": "helfen + Dativ: mir helfen", "hu": "A „helfen” részes esetet kér: mir."},
+  "q.mine_20.prompt": {
+    "de": "Ergänze das Partizip II: Die Kristalle haben im Licht ___. (glänzen)",
+    "hu": "Egészítsd ki a Partizip II alakkal: A kristályok csillogtak a fényben. (glänzen)"
+  },
+  "q.mine_20.a": {"de": "geglänzt", "hu": "csillogott"},
+  "q.mine_20.explain": {"de": "glänzen ist regelmäßig: ge- + glänz + -t.", "hu": "Gyenge (szabályos) ige: ge- + tő + -t."},
+  "q.mine_21.prompt": {"de": "Je tiefer wir gehen, ___ wärmer wird es.", "hu": "Minél mélyebbre megyünk, annál melegebb lesz."},
+  "q.mine_21.a": {"de": "desto", "hu": "desto"},
+  "q.mine_21.w1": {"de": "als", "hu": "als"},
+  "q.mine_21.w2": {"de": "wie", "hu": "wie"},
+  "q.mine_21.w3": {"de": "dann", "hu": "dann"},
+  "q.mine_21.explain": {
+    "de": "je … desto (auch: je … umso)",
+    "hu": "„je … desto” = minél … annál; a „desto” helyett „umso” is helyes."
+  }
 }

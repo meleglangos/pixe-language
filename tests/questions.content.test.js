@@ -105,3 +105,21 @@ test('szókártyák: szóközönként, írásjelek nélkül', () => {
   const { Game } = createGame();
   assert.deepEqual([...Game.questions.tileWords('Ich weiß, dass er „heute“ kommt!')], ['Ich', 'weiß', 'dass', 'er', 'heute', 'kommt']);
 });
+
+test('a valódi poolok: minden kérdés megoldható a saját megoldásaival, és vegyes a típus', () => {
+  const { Game } = createGame();
+  Game.saveManager.load();
+  for (const pool of Object.values(Game.data.questionPools)) {
+    const qs = pool.questions.map(id => Game.data.questions[id]);
+    assert.ok(qs.length >= 15, pool.id + ': kevés kérdés');
+    assert.deepEqual([...new Set(qs.map(q => q.type))].sort(), ['choice', 'input', 'tiles'], pool.id);
+    for (const q of qs) {
+      for (const a of q.answers) {
+        const de = Game.i18n.de(a);
+        const given = q.type === 'choice' ? a : q.type === 'tiles' ? Game.questions.tileWords(de) : de;
+        assert.equal(Game.questions.check(q, given).correct, true, q.id + ': ' + de);
+      }
+      for (const w of q.wrong || []) if (q.type === 'choice') assert.equal(Game.questions.check(q, w).correct, false, q.id);
+    }
+  }
+});
