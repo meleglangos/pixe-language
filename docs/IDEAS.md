@@ -37,7 +37,7 @@ kéri, vagy ha új feature-t kell választani.
 - [ ] Nyelvtani témához kötött boss (pl. Passiv-Golem) — boss rendszer + kérdés-motor
 
 ## Láda és loot
-- [x] Láda-ablak háttér (kész: kincskamra + rúnakör, `docs/features/chest_stars.md` 6. kiegészítés): a pergamen helyett kincskamra / dungeon-fal fáklyákkal, és / vagy izzó rúnakör a láda alatt
+- [x] Láda-ablak háttér (kész: erdei rom + rúnakör, `docs/features/chest_stars.md` 6. kiegészítés): a pergamen helyett kincskamra / dungeon-fal fáklyákkal, és / vagy izzó rúnakör a láda alatt
       (a nyitáskor a ritkaság színében izzik), esetleg díszes ablakkeret. Két út: kész asset (itch.io: Assets → 2D → Pixel
       Art; keresőszavak: `pixel art dungeon background`, `treasure room pixel art`, `pixel art magic circle`,
       `fantasy UI pixel art`, `pixel UI panel 9-slice`; az Anokolisa – Pixel Crawler szerzője – csomagjai illenek a

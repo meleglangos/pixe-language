@@ -32,7 +32,7 @@ Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén fris
     - [x] ládanyitás: tárgyak, loot táblák, sorsolás, animáció, kirepülő loot, „Beute” ablak (a loot még nem tárolódik; a láda bármikor nyitható)
     - [x] láda-ablak csillagokkal: 1–5 csillag (véletlen), több csillag = több és ritkább loot, koppintásra nyílik, a loot kiesik
     - [x] többkoppintásos nyitás: 3 koppintás, tárgyankénti kiemelés ritkaság-előjellel, legendary show; első epic / legendary tárgyak
-    - [x] láda-ablak háttér: kincskamra (fal, fáklyák, zászlók, arany), rúnakör a ritkaság színében
+    - [x] láda-ablak háttér: egész ablakos erdei rom (szobor, vízesés, tó, tábortűz, gombák), rúnakör a ritkaság színében
   - [ ] HP
   - [ ] debug mód
 - [ ] 3. szakasz: inventory, gear a karakteren, shop, gold, HP-ital

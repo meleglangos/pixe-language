@@ -252,6 +252,7 @@
       const sceneEl = ui.el('div', 'cw-scene', [fxLayer, stage, starRow, collected]);
       const panel = ui.modal({ title: 'chest.name', closable: false, body: [sceneEl], buttons: [] });
       panel.classList.add('chest-window');
+      sceneEl.prepend(panel.querySelector('h2')); // a cím is a jelenetben áll
       const scene = Game.chestScene.create(sceneEl, stage);
       screenFx.open();
       panel.append(flash);
@@ -562,6 +563,7 @@
         // az utolsó kiemelt tárgy is a sorba kerül
         setTimeout(() => {
           stash();
+          sceneEl.style.minHeight = sceneEl.offsetHeight + 'px'; // a lista alá kerül, a jelenet nem zsugorodik
           panel.querySelector('.modal-body').append(Game.lootUI.list(loot));
           const done = () => { screenFx.close(); scene.destroy(); ui.closeModal(); if (opts.onDone) opts.onDone(loot, stars); };
           const btns = panel.querySelector('.modal-buttons');

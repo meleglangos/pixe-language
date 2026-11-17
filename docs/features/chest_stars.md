@@ -121,15 +121,19 @@ A rezgés csak Androidon működik (iOS-en a böngésző nem engedi); „csökke
 - Javítva: a fényfolt vászna mindig akkora, mint a folt (nem vágódik le egyenesen); a láda-terület magasabb,
   hogy a kiemelt tárgy felirata ne fusson rá a ládára.
 
-## 6. kiegészítés: kincskamra-háttér (2026-11-17, a felhasználó kérésére)
-- A pergamen helyett a tárgy, a láda, a csillagok és a gyűjtött tárgyak egy **sötét kincskamrában** állnak
-  (`src/ui/chestScene.js`): Pixel Crawler téglafal és kőpadló, két fali fáklya lobogó lánggal és fénnyel, két
-  zászló, aranykupacok (szűk képernyőn ezek elmaradnak), felül és a széleken lépcsős, ditheres sötétítés, lassan
-  felszálló porszemek. A tárgy mögött sincs üres hely.
+## 6. kiegészítés: a láda-ablak háttere (2026-11-17, a felhasználó kérésére)
+- Első változat: sötét kincskamra. A felhasználónak kicsi és unalmas volt, ezért lecseréltük.
+- **Erdei rom, éjszaka** (`src/ui/chestScene.js`), ami **az egész ablakot kitölti** (a cím is benne van; az ablak
+  magas: `min(760px, 100dvh - 24px)`): kétsoros fenyőerdő holdfény-sávokkal, bal oldalt leomlott, mohás romfal
+  lovagszoborral és törött oszloppal, jobb oldalt sziklafal zuhogó **vízeséssel** és csillogó tóval, fű, virágok,
+  világító gombák, tábortűz, bokrok, szentjánosbogarak, kőlapos ösvény.
 - A láda alatt **rúnakör**: nyugalomban halványan dereng, a nyitáskor és a kiemeléskor a láda fényével együtt a
-  ritkaság színében izzik. Feltöltődéskor a kamra sötétedik el (eddig a pergamen).
-- 3× nagyítás, éles pixelek; a vászon a doboz méretéhez igazodik (ResizeObserver). Nem olvas vissza a vászonról,
-  így `file://`-ról is működik. A tárgy neve és ritkasága világos, sötét körvonallal.
+  ritkaság színében izzik. Feltöltődéskor a jelenet sötétedik el. A kiemelt tárgy közvetlenül a láda fölött jelenik meg.
+- Grafika: Pixel Crawler (fű, téglafal, szikla, fenyők, növények, tűz) + saját rajz (`assets/custom/ruins_props.png`,
+  `tools/art/ruins_props.py`): szobor és oszlopok. Víz, lomb, fények kódból. 3× nagyítás, éles pixelek, a vászon a
+  doboz méretéhez igazodik; nem olvas vissza a vászonról (`file://`-ról is működik).
+- Rétegek hátulról előre: háttér → vízesés / tó / tűz → tűz- és gombafény → rúnakör → a láda fényei → szentjánosbogarak
+  → láda, tárgy, csillagok.
 
 ## 11. Lépések
 1. Csillagok a loot-sorsolásban (`rollStars`, `roll(…, { stars })`, `rarityFactor`, `chances`) + validátor + tesztek.
