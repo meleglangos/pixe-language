@@ -65,7 +65,7 @@ következménye: lásd 9. A „Fliehen” gombbal bármikor kiléphet. Ha minden
 - Nincs új: az ablak a meglévő pergamen-stílus; a szörny eltűnése kódból rajzolt porfelhő.
 
 ## 9. Eldöntendő kérdések
-- [x] Rossz válasz következménye? → ~~−3 HP~~ (2. kiegészítés: sima szörny −1, harcos −2) **−3 HP** (`config.js`, kihívásonként felülírható), a szörny marad, új kérdés jön.
+- [x] Rossz válasz következménye? → ~~−3 HP~~ → 2. kiegészítés: **sima szörny −1, harcos −2 HP** (`config.js`, kihívásonként felülírható), a szörny marad, új kérdés jön.
 - [x] 0 HP-nál? → **kiesik a dungeonből**, kint ébred **teljes HP-val** (amíg nincs HP-ital).
 - [x] Legyőzött szörny? → **minden belépéskor újra ott van** (gyakorlás); a „teljesítve” jelzés a mentésben marad.
 - [x] Jutalom a szörnyért? → **még semmi**; a loot szabályok külön tétel.
