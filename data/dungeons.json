@@ -4,7 +4,8 @@
     "name": "poi.dungeon_crypt.name",
     "theme": "crypt",
     "map": "dungeon_crypt",
-    "challenge": "ch_crypt_monster"
+    "challenge": "ch_crypt_monster",
+    "lootTable": "loot_crypt_chest"
   },
   {
     "id": "dungeon_mine",
@@ -13,6 +14,7 @@
     "map": "dungeon_mine",
     "darkness": {"color": "#04060e", "alpha": 0.8, "playerLight": 52},
     "ambience": {"dust": true},
-    "challenge": "ch_mine_monster"
+    "challenge": "ch_mine_monster",
+    "lootTable": "loot_mine_chest"
   }
 ]

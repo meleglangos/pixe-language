@@ -1,6 +1,6 @@
 # Ládanyitás (animáció + kirepülő loot)
 
-**Állapot:** tervezet
+**Állapot:** folyamatban (jóváhagyva: 2026-11-17)
 **Ötlet:** README „Állapot” → 2. szakasz → loot szabályok (első darab: csak a láda, inventory nélkül)
 
 ## 1. Cél

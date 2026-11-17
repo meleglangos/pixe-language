@@ -1,1 +1,66 @@
-[]
+[
+  {
+    "id": "potion_small",
+    "kind": "potion",
+    "rarity": "common1",
+    "icon": "it:903",
+    "name": "item.potion_small.name",
+    "desc": "item.potion_small.desc"
+  },
+  {
+    "id": "gem_blue",
+    "kind": "gem",
+    "rarity": "common2",
+    "icon": "it:543",
+    "name": "item.gem_blue.name",
+    "desc": "item.gem_blue.desc"
+  },
+  {
+    "id": "gem_red",
+    "kind": "gem",
+    "rarity": "rare1",
+    "icon": "it:536",
+    "name": "item.gem_red.name",
+    "desc": "item.gem_red.desc"
+  },
+  {
+    "id": "bone",
+    "kind": "material",
+    "rarity": "common1",
+    "icon": "it:1164",
+    "name": "item.bone.name",
+    "desc": "item.bone.desc"
+  },
+  {
+    "id": "skull",
+    "kind": "material",
+    "rarity": "common2",
+    "icon": "it:1167",
+    "name": "item.skull.name",
+    "desc": "item.skull.desc"
+  },
+  {
+    "id": "key_old",
+    "kind": "key",
+    "rarity": "common3",
+    "icon": "it:691",
+    "name": "item.key_old.name",
+    "desc": "item.key_old.desc"
+  },
+  {
+    "id": "sword_bronze_01",
+    "kind": "weapon",
+    "rarity": "common2",
+    "icon": "wp:bronze c3 r0",
+    "name": "item.sword_bronze_01.name",
+    "desc": "item.sword_bronze_01.desc"
+  },
+  {
+    "id": "dagger_bronze_01",
+    "kind": "weapon",
+    "rarity": "common1",
+    "icon": "wp:bronze c6 r10",
+    "name": "item.dagger_bronze_01.name",
+    "desc": "item.dagger_bronze_01.desc"
+  }
+]

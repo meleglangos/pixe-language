@@ -1,1 +1,31 @@
-[]
+[
+  {
+    "id": "loot_crypt_chest",
+    "always": [{"gold": [5, 15]}],
+    "rolls": [1, 3],
+    "entries": [
+      {"item": "potion_small", "qty": [1, 2], "weight": 4},
+      {"item": "bone", "qty": [1, 3], "weight": 4},
+      {"item": "skull", "weight": 2},
+      {"item": "dagger_bronze_01", "weight": 2},
+      {"item": "sword_bronze_01", "weight": 1},
+      {"item": "key_old", "weight": 1},
+      {"item": "gem_red", "weight": 1},
+      {"gold": [3, 8], "weight": 2}
+    ]
+  },
+  {
+    "id": "loot_mine_chest",
+    "always": [{"gold": [8, 20]}],
+    "rolls": [1, 3],
+    "entries": [
+      {"item": "gem_blue", "qty": [1, 3], "weight": 5},
+      {"item": "potion_small", "qty": [1, 2], "weight": 3},
+      {"item": "gem_red", "weight": 2},
+      {"item": "sword_bronze_01", "weight": 1},
+      {"item": "dagger_bronze_01", "weight": 1},
+      {"item": "key_old", "weight": 1},
+      {"gold": [5, 10], "weight": 2}
+    ]
+  }
+]

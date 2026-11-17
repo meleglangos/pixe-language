@@ -117,10 +117,31 @@
 
     const rarities = Game.data.config && Game.data.config.rarities;
     Object.values(byId.items).forEach(it => {
-      if (it.name !== undefined) str('items.' + it.id, it.name);
-      if (it.rarity !== undefined && rarities && !rarities.some(r => r.id === it.rarity)) bad('items.' + it.id + ': ismeretlen rarity: ' + it.rarity);
+      const w = 'items.' + it.id;
+      str(w + '.name', it.name);
+      str(w + '.desc', it.desc);
+      if (!rarities || !rarities.some(r => r.id === it.rarity)) bad(w + ': ismeretlen rarity: ' + it.rarity);
+      if (ITEM_KINDS.indexOf(it.kind) < 0) bad(w + '.kind: ' + ITEM_KINDS.join(' | '));
+      if (Game.itemIcons && !Game.itemIcons.parse(it.icon)) bad(w + '.icon: hibás ikon: ' + JSON.stringify(it.icon) + ' ("it:<szám>" vagy "wp:<anyag> c<oszlop> r<sor>")');
     });
-    Object.values(byId.lootTables).forEach(t => (t.entries || []).forEach(e => { if (e.item !== undefined) ref('lootTables.' + t.id, 'items', e.item); }));
+    // loot táblák: always (mindig), rolls ([min, max] húzás), entries (súlyozott); egy tétel tárgy (qty) vagy arany
+    const rangeOk = v => (Number.isInteger(v) && v >= 0) || (Array.isArray(v) && v.length === 2 && v.every(x => Number.isInteger(x) && x >= 0) && v[0] <= v[1]);
+    Object.values(byId.lootTables).forEach(t => {
+      const w = 'lootTables.' + t.id;
+      const entry = (where, e, weighted) => {
+        if (!e || typeof e !== 'object') { bad(where + ': objektum kell'); return; }
+        if ((e.item === undefined) === (e.gold === undefined)) bad(where + ': vagy "item", vagy "gold" kell (pontosan az egyik)');
+        if (e.item !== undefined) ref(where, 'items', e.item);
+        if (e.gold !== undefined && !rangeOk(e.gold)) bad(where + '.gold: szám vagy [min, max]');
+        if (e.qty !== undefined && !(rangeOk(e.qty) && (Array.isArray(e.qty) ? e.qty[0] : e.qty) >= 1)) bad(where + '.qty: legalább 1 (szám vagy [min, max])');
+        if (weighted && !(typeof e.weight === 'number' && e.weight > 0)) bad(where + '.weight: pozitív szám kell');
+      };
+      (Array.isArray(t.always) ? t.always : []).forEach((e, i) => entry(w + '.always[' + i + ']', e, false));
+      const entries = Array.isArray(t.entries) ? t.entries : [];
+      entries.forEach((e, i) => entry(w + '.entries[' + i + ']', e, true));
+      if (t.rolls !== undefined && !rangeOk(t.rolls)) bad(w + '.rolls: szám vagy [min, max]');
+      if (!entries.length && !(t.always || []).length) bad(w + ': üres tábla');
+    });
     Object.values(byId.shop).forEach(s => { if (s.item !== undefined) ref('shop.' + s.id, 'items', s.item); });
 
     return issues;
@@ -175,6 +196,7 @@
   // Egy mondat szókártyái: a kérdés-motoré (src/systems/questions), hogy a kettő ugyanúgy vágjon.
   const tileWords = s => Game.questions.tileWords(s);
 
+  const ITEM_KINDS = ['potion', 'gem', 'material', 'key', 'weapon', 'armor', 'treasure'];
   const needOk = v => v === undefined || (Number.isInteger(v) && v >= 1);
   const damageOk = v => v === undefined || (Number.isInteger(v) && v >= 0);
   const TAG_KINDS = ['context', 'grammar'];

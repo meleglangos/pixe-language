@@ -504,5 +504,29 @@
   },
   "mob.challenge": {"de": "Herausfordern", "hu": "Kihívás"},
   "dungeon.cleared": {"de": "Alle Monster hier sind besiegt!", "hu": "Itt minden szörnyet legyőztél!"},
-  "quiz.cheat": {"de": "Lösung zeigen", "hu": "Megoldás mutatása"}
+  "quiz.cheat": {"de": "Lösung zeigen", "hu": "Megoldás mutatása"},
+  "item.potion_small.name": {"de": "der kleine Heiltrank", "hu": "a kis gyógyital"},
+  "item.potion_small.desc": {"de": "Ein roter Trank. Er heilt ein paar Wunden.", "hu": "Piros bájital. Begyógyít néhány sebet."},
+  "item.gem_blue.name": {"de": "der blaue Kristall", "hu": "a kék kristály"},
+  "item.gem_blue.desc": {"de": "Er leuchtet schwach im Dunkeln.", "hu": "Halványan világít a sötétben."},
+  "item.gem_red.name": {"de": "der Rubin", "hu": "a rubin"},
+  "item.gem_red.desc": {"de": "Ein seltener roter Edelstein.", "hu": "Ritka vörös drágakő."},
+  "item.bone.name": {"de": "der Knochen", "hu": "a csont"},
+  "item.bone.desc": {"de": "Ein alter Knochen. Dein Hund mag ihn bestimmt.", "hu": "Egy régi csont. A kutyád biztosan szereti."},
+  "item.skull.name": {"de": "der Schädel", "hu": "a koponya"},
+  "item.skull.desc": {"de": "Er grinst dich an.", "hu": "Rád vigyorog."},
+  "item.key_old.name": {"de": "der alte Schlüssel", "hu": "a régi kulcs"},
+  "item.key_old.desc": {"de": "Welche Tür öffnet er wohl?", "hu": "Vajon melyik ajtót nyitja?"},
+  "item.sword_bronze_01.name": {"de": "das Bronzeschwert", "hu": "a bronzkard"},
+  "item.sword_bronze_01.desc": {"de": "Ein einfaches Schwert aus Bronze.", "hu": "Egyszerű bronzkard."},
+  "item.dagger_bronze_01.name": {"de": "der Bronzedolch", "hu": "a bronztőr"},
+  "item.dagger_bronze_01.desc": {"de": "Klein, aber scharf.", "hu": "Kicsi, de éles."},
+  "loot.title": {"de": "Beute", "hu": "Zsákmány"},
+  "loot.ok": {"de": "Super!", "hu": "Szuper!"},
+  "loot.gold": {"de": "Gold", "hu": "Arany"},
+  "chest.locked": {
+    "de": "Die Truhe ist verschlossen. Besiege zuerst alle Monster!",
+    "hu": "A láda zárva van. Előbb győzd le az összes szörnyet!"
+  },
+  "chest.lockedDesc": {"de": "Verschlossen – hier sind noch Monster.", "hu": "Zárva – még vannak itt szörnyek."}
 }

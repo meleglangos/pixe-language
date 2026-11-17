@@ -19,6 +19,8 @@ const SCRIPTS = [
   'src/systems/save/SaveCodec.js',
   'src/systems/save/SaveManager.js',
   'src/systems/questions/QuestionEngine.js',
+  'src/systems/loot/ItemIcons.js',
+  'src/systems/loot/LootRoller.js',
 ];
 
 // localStorage utánzat. failWrites: minden írás kivételt dob (pl. betelt tárhely).

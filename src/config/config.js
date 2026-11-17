@@ -7,6 +7,11 @@ Game.data.config = {
     speed: 72,        // pixel / másodperc (16 pixel = 1 mező)
     maxHp: 20,
   },
+  // Loot (src/systems/loot/): az arany ikonja a "Beute" ablakban és a ládából kirepülve
+  loot: {
+    goldIcon: 'it:1163',
+  },
+
   // Kérdés-rendszer (src/systems/questions/)
   questions: {
     wrongDamage: 3,     // ennyi HP-t veszít a játékos egy rossz válaszért (a kihívás / szörny felülírhatja)
