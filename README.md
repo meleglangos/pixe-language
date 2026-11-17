@@ -9,7 +9,7 @@ Böngészős pixel-art RPG német nyelvtanuláshoz. Nincs build lépés: az `ind
 Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén frissíti (pipák + „Most folyamatban”).
 Új szakaszt vagy tételt csak a felhasználó kérésére vesz fel; az ötletek a `docs/IDEAS.md`-be kerülnek.
 
-**Most folyamatban:** dokumentáció (`CLAUDE.md`, `docs/`, slash commandok).
+**Most folyamatban:** semmi. Következő javasolt lépés: a kérdés-rendszer (`/uj-feature`).
 
 - [x] 1. szakasz: térkép, kattintásos + billentyűs mozgás, kutya, mentés + export/import
 - [ ] 2. szakasz: egy dungeon, feladatrendszer, loot szabályok, HP, debug mód
@@ -17,7 +17,7 @@ Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén fris
   - [x] alapok 2: fordítási fájl, Tiled térképek, GitHub Pages automatikus közzététel
   - [x] 2/1: „Die versunkene Gruft” dungeon jelenet, szörnyek (harc nélkül), láda
   - [x] 2/2: „Die Kristallmine” dungeon (pálya és látvány), közös dungeon-rendszer, Credits képernyő
-  - [ ] dokumentáció: `CLAUDE.md`, `docs/`, slash commandok
+  - [x] dokumentáció: `CLAUDE.md`, `docs/`, slash commandok
   - [ ] feladatrendszer (kérdés-rendszer): a dungeonök, napi kihívások, petek, bossok közös kérdés-motorja
     - [ ] kérdés-motor és poolok (`data/questions/`), címkék: szint (B1–C1), téma, típus
     - [ ] elnéző válasz-ellenőrzés (kis/nagybetű, `ae`↔`ä`, `ss`↔`ß`, szóközök, több helyes megoldás)
