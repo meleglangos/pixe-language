@@ -1,0 +1,25 @@
+# Automatikus tesztek: minden branchre küldött push után és minden pull requestnél.
+# A játék közzétételét nem ez végzi: a GitHub Pages közvetlenül a main branchből megy
+# (Settings -> Pages -> Deploy from a branch -> main / root).
+name: Tesztek
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Tesztek (mentés, migráció, tartalom, térképek, fordítások)
+        run: npm test
+      - name: A data/bundle.js friss-e
+        run: node tools/build-data.js --check
