@@ -29,7 +29,13 @@
       const world = Game.phaser.scene.getScene('World');
       if (world && world.player && world.scene.isActive()) world.saveNow();
     };
-    document.addEventListener('visibilitychange', () => { if (document.hidden) flush(); });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) flush(); else refreshSize(); });
+    // telefonon a méretváltozás (címsor, elforgatás) jelzése néha elmarad: ilyenkor a játéktér a régi méretben
+    // ragadna, és alatta üres sáv látszana -- több forrásból is kérünk újraméretezést
+    const refreshSize = () => setTimeout(() => Game.phaser.scale.refresh(), 60);
+    window.addEventListener('orientationchange', refreshSize);
+    window.addEventListener('pageshow', refreshSize);
+    if (window.visualViewport) window.visualViewport.addEventListener('resize', refreshSize);
     window.addEventListener('pagehide', flush);
 
     if (!Game.state.flag('introSeen')) Game.menu.intro();

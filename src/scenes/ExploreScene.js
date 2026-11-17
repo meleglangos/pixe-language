@@ -31,6 +31,8 @@
       this.marker = this.add.image(0, 0, 'fx_marker').setDepth(1).setVisible(false);
 
       const cam = this.cameras.main;
+      this.worldW = opts.width; this.worldH = opts.height;
+      this.camShift = 0;  // ennyivel tolja lejjebb a kamerát (világ-pixel), hogy az alsó panel ne takarja a játékost
       cam.setBounds(0, 0, opts.width, opts.height);
       cam.setRoundPixels(true);
       cam.startFollow(this.player.container, true);
@@ -52,10 +54,25 @@
 
     resetKeys() { this.input.keyboard.resetKeys(); }
 
-    // Egész számú nagyítás, hogy a pixel art éles maradjon.
+    // Egész számú nagyítás, hogy a pixel art éles maradjon. (A kamera méretét is a játéktérhez igazítja:
+    // telefonon a címsor megjelenése / eltűnése után néha elmaradt, és a kép csak a képernyő egy részét töltötte ki.)
     applyZoom() {
       const w = this.scale.width, h = this.scale.height;
-      this.cameras.main.setZoom(Math.max(2, Math.round(Math.min(w, h) / 190)));
+      const cam = this.cameras.main;
+      if (cam.width !== w || cam.height !== h) cam.setSize(w, h);
+      cam.setZoom(Math.max(2, Math.round(Math.min(w, h) / 190)));
+    }
+
+    // Az alsó panel (ui.prompt) ne takarja a játékost: amíg látszik, a kamera feljebb tolja a nézetet (a térkép
+    // alján a térkép alá is mehet), finoman, képkockánként közelítve.
+    updateCameraShift() {
+      const cam = this.cameras.main, el = Game.ui.prompt.el;
+      const panel = el ? Math.max(0, this.scale.height - el.getBoundingClientRect().top) : 0;
+      const target = panel / cam.zoom / 2;
+      if (Math.abs(target - this.camShift) < 0.25) { if (this.camShift === target) return; this.camShift = target; }
+      else this.camShift += (target - this.camShift) * 0.18;
+      cam.setBounds(0, 0, this.worldW, this.worldH + this.camShift * 2);
+      cam.setFollowOffset(0, -this.camShift);
     }
 
     // Átváltás másik jelenetre rövid elsötétítéssel.
@@ -183,6 +200,7 @@
       this.pet.follow(p, dt);
       this.pet.update();
       this.checkHotspots();
+      this.updateCameraShift();
       return moved;
     }
 

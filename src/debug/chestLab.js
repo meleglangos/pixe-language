@@ -114,7 +114,7 @@
       const c = g.center(tile.x, tile.y);
       const py = tile.y * map.tileSize + map.tileSize - 1;
       scene.add.image(c.x, py, 'pc_furniture', 'chest_closed').setOrigin(0.5, 1).setDepth(py);
-      scene.add.text(c.x, py - 30, 'DEBUG', { fontFamily: 'monospace', fontSize: '7px', color: '#ff66cc' }).setOrigin(0.5, 1).setDepth(py + 1).setResolution(4);
+      scene.add.text(c.x, py - 30, 'DEBUG', { fontFamily: 'monospace', fontSize: '7px', color: '#ff66cc' }).setOrigin(0.5, 1).setDepth(py + 1);
       g.block(tile.x, tile.y, true);
       g.rebuild();
       const spots = [[0, 1], [-1, 0], [1, 0], [0, -1]].map(([i, j]) => ({ x: tile.x + i, y: tile.y + j })).filter(s => g.walkable(s.x, s.y));
