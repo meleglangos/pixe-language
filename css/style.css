@@ -210,15 +210,15 @@ html, body {
 .chest-window { text-align: center; }
 .cw-stage {
   position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-  width: 100%; height: 300px; padding: 0; border: 0; background: none; cursor: pointer; font: inherit; color: inherit;
+  width: 100%; height: 250px; padding: 0; border: 0; background: none; cursor: pointer; font: inherit; color: inherit;
   -webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; -webkit-user-select: none;
 }
-/* a fény és a sugarak rétege: a stage-en belül marad, és a széle felé lágyan elhalványul (nincs éles levágás) */
-.cw-fx {
-  position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0;
-  -webkit-mask: radial-gradient(ellipse 50% 50% at 50% 50%, #000 55%, transparent 100%);
-  mask: radial-gradient(ellipse 50% 50% at 50% 50%, #000 55%, transparent 100%);
-}
+/* a fény-effektek rétege (pixeles vásznak), a stage-en belül; --cx / --cy / --cb: a láda közepe és alja */
+.cw-fx { --cx: 50%; --cy: 70%; --cb: 95%; position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+.cw-fx canvas { position: absolute; image-rendering: pixelated; pointer-events: none; }
+/* nyitás előtt a láda középen áll, robbanáskor lecsúszik, hogy helyet adjon a kiemelt tárgyaknak */
+.cw-chest-box { transition: transform .4s cubic-bezier(.3, 1.4, .5, 1); }
+.cw-stage.centered .cw-chest-box { transform: translateY(-62px); }
 .cw-stage:focus { outline: none; }
 .cw-stage:focus-visible { outline: 3px solid #8fb6e6; outline-offset: 2px; border-radius: 6px; }
 .chest-window { overflow-x: hidden; }
@@ -235,41 +235,24 @@ html, body {
 .cw-cracks { position: absolute; left: 0; top: 0; image-rendering: pixelated; pointer-events: none; z-index: 3; filter: drop-shadow(0 0 3px #ffe58a); }
 .cw-cracks.hot { --aura: #ffd75a; filter: drop-shadow(0 0 3px var(--aura)) drop-shadow(0 0 9px var(--aura)); animation: cw-crackpulse .45s ease-in-out infinite alternate; }
 @keyframes cw-crackpulse { to { opacity: .65; } }
-.cw-inner {
-  --glow: #ffd75a;
-  position: absolute; left: 12%; right: 12%; top: 8%; height: 50%; border-radius: 40%; pointer-events: none; z-index: 2;
-  background: radial-gradient(ellipse at 50% 60%, #fff 0%, var(--glow) 35%, transparent 72%);
-  mix-blend-mode: screen; opacity: 0; transition: opacity .4s;
-}
-.cw-chest-box.opened .cw-inner { opacity: .9; animation: cw-innerpulse 1.2s ease-in-out infinite; }
-@keyframes cw-innerpulse { 50% { opacity: .55; transform: scale(1.06); } }
+.cw-inner { position: absolute; left: 0; top: 4px; image-rendering: pixelated; pointer-events: none; z-index: 2; opacity: 0; }
+.cw-chest-box.opened .cw-inner { opacity: 1; animation: cw-innerpulse 1.2s steps(3) infinite; }
+@keyframes cw-innerpulse { 50% { opacity: .55; } }
 .cw-lid { position: absolute; left: 0; top: 0; image-rendering: pixelated; pointer-events: none; z-index: 4; }
-.cw-ring { position: absolute; left: 50%; top: calc(100% - 12px); width: 80px; height: 80px; border: 4px solid #fff; border-radius: 50%; pointer-events: none; }
+.cw-ring { position: absolute; left: var(--cx); top: calc(var(--cb) - 6px); width: 80px; height: 80px; border: 4px solid #fff; border-radius: 50%; pointer-events: none; }
 .chest-window { position: relative; }
 .cw-flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 20; border-radius: 4px; }
-.cw-shade { position: absolute; inset: 0; background: radial-gradient(circle at 50% 72%, transparent 22%, rgba(40, 20, 5, .5) 80%); opacity: 0; transition: opacity .6s; }
-.cw-fx.charge .cw-shade { opacity: 1; }
-.cw-rays.leak { opacity: .35; animation: cw-spin 9s linear infinite; }
-.cw-pillar { position: absolute; left: 50%; bottom: 14px; width: 74px; height: 100%; transform-origin: 50% 100%; opacity: 0; filter: blur(3px); border-radius: 40% 40% 0 0; }
-.cw-ember { position: absolute; top: 82%; width: 3px; height: 3px; border-radius: 1px; pointer-events: none; }
-.cw-coin { position: absolute; left: calc(50% - 8px); top: 68%; z-index: 2; }
+.chest-window { transition: background-color .5s steps(4); }
+.chest-window.cw-dim { background-color: #d9c597; }
+.cw-pillar { left: var(--cx); bottom: calc(100% - var(--cb) + 20px); transform-origin: 50% 100%; opacity: 0; }
+.cw-ember { position: absolute; top: calc(var(--cb) - 10px); width: 3px; height: 3px; border-radius: 1px; pointer-events: none; }
+.cw-coin { position: absolute; left: calc(var(--cx) - 8px); top: var(--cy); z-index: 2; }
 .cw-star.hot .cw-star-on { animation: cw-shine .4s ease-in-out infinite; }
 @keyframes cw-bob { 50% { transform: translateY(-5px); } }
 @keyframes cw-tease { 25% { transform: translateX(-2px) rotate(-2deg); } 75% { transform: translateX(2px) rotate(2deg); } }
-.cw-glow {
-  --glow: #ffd75a;
-  position: absolute; left: 50%; top: 72%; width: 180px; height: 180px; transform: translate(-50%, -50%);
-  border-radius: 50%; background: radial-gradient(circle, var(--glow), transparent 65%); opacity: .3; z-index: 1;
-}
-.cw-rays {
-  --rarity: #ffd75a;
-  position: absolute; left: 50%; top: 72%; width: 420px; height: 420px; margin: -210px 0 0 -210px; border-radius: 50%; z-index: 0;
-  background: repeating-conic-gradient(from 0deg, var(--rarity) 0deg 8deg, transparent 8deg 24deg);
-  -webkit-mask: radial-gradient(circle, #000 15%, transparent 70%); mask: radial-gradient(circle, #000 15%, transparent 70%);
-  opacity: 0; transition: opacity .3s; pointer-events: none;
-}
-.cw-rays.on { opacity: .55; animation: cw-spin 6s linear infinite; }
-@keyframes cw-spin { to { transform: rotate(360deg); } }
+.cw-glow { left: var(--cx); top: var(--cy); transform: translate(-50%, -50%); opacity: .3; transition: opacity .3s steps(3); }
+.cw-rays { left: var(--cx); top: var(--cy); transform: translate(-50%, -50%); opacity: 0; transition: opacity .25s steps(3); }
+.cw-rays.on { opacity: 1; }
 .cw-spark { position: absolute; left: 50%; top: 45%; width: 5px; height: 5px; background: #ffe58a; border-radius: 1px; z-index: 3; pointer-events: none; }
 .cw-item { position: absolute; left: 50%; top: 4px; display: grid; justify-items: center; gap: 2px; transform: translate(-50%, 0); width: 260px; }
 .cw-big-icon { filter: drop-shadow(0 0 8px var(--rarity)); }

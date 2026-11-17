@@ -14,6 +14,7 @@
 | **Modern Interiors – Free v2.2**, LimeZu | `modern-interiors/` | Modern belső tér (bútor, konyha, fürdő, iroda), szobaépítő (falak, padlók), 4 modern karakter | A későbbi **ház rendszerhez**. Fantasy dungeonbe nem illik | **Csak nem kereskedelmi célra.** Credit: *Modern Interiors by LimeZu*, https://limezu.itch.io/moderninteriors |
 | **Tiny RPG Character Asset Pack 01 – Free (Soldier & Orc)**, Zerie | `tiny-rpg-01/` | 2 animált karakter 100×100-as kockákban: katona (kard + íj) és ork (fejsze); idle, walk, támadások, hurt, death; nyílvessző lövedék | **Harc-animációk**: a Pixel Crawlerben nincs támadás- és sebződés-animáció a szörnyeknek, itt van. Más stílusú (nagyobb fej, chibi), egymás mellett nem keverendő | A csomagban nincs licencfájl; a letöltési oldalon (itch.io) kell ellenőrizni. Credit: *Tiny RPG Character Asset Pack by Zerie* |
 | **Tiny RPG Character Asset Pack 02 – Free (Demon_A & Blood Monster_A)**, Zerie | `tiny-rpg-02/` | 2 animált szörny 100×100-as kockákban: démon (nagy pengével) és vérszörny; idle, walk, 2 támadás, hurt, death | Boss- vagy szörny-jelöltek harc-animációval | Mint fent |
+| **Saját rajzok** (Das Deutsch-Abenteuer) | `custom/` | A játékhoz készült pixel art: ládák. Kódból generálva (`tools/art/*.py`), módosítás ott, utána újragenerálás | A láda-ablak és a dungeon ládái | Saját, szabadon használható |
 
 A játékban használt kivágások nevei és koordinátái: `src/config/assets.js` (`frames`, `strips`).
 A credit a játékban: Menü → „Mitwirkende” (`src/config/config.js` → `credits`).
@@ -47,6 +48,7 @@ A credit a játékban: Menü → „Mitwirkende” (`src/config/config.js` → `
 | Modern Interiors – Free (LimeZu) | 64 | 64 |
 | Tiny RPG Character Asset Pack 01 – Free: Soldier & Orc (Zerie) | 34 | 34 |
 | Tiny RPG Character Asset Pack 02 – Free: Demon_A & Blood Monster_A (Zerie) | 28 | 28 |
+| Saját rajzok (Das Deutsch-Abenteuer) | 1 | 1 |
 
 ## Tartalom
 
@@ -83,6 +85,8 @@ A credit a játékban: Menü → „Mitwirkende” (`src/config/config.js` → `
   - [Ugyanezek árnyékkal (with shadows)](#t2-arnyekkal) (14)
   - [Karakterek animációi (Demon_A, Blood Monster_A)](#t2-karakter) (12)
   - [Egyben lévő karakterlapok (soronként egy animáció)](#t2-lap) (2)
+- **Saját rajzok (Das Deutsch-Abenteuer)**
+  - [Ládák (saját pixel art)](#cu-lada) (1)
 
 ---
 
@@ -760,4 +764,20 @@ Sorrend a lapon (soronként): idle (6), walk (8), attack01, attack02 (Demon_A: 7
 | --- | --- | --- | --- | --- | --- |
 | `t2:blood-monster-a/lap` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A.png` | 800×600 | – | Vérszörny, összes animáció egy lapon (6 sor) | szörny, vérszörny, atlasz |
 | `t2:demon-a/lap` | `tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A/Demon_A.png` | 800×600 | – | Démon, összes animáció egy lapon (6 sor) | szörny, démon, atlasz |
+
+---
+
+## Saját rajzok (Das Deutsch-Abenteuer)
+
+Útvonal: `custom/`. A játékhoz készült pixel art; minden kép egy Python szkriptből készül (`tools/art/<név>.py`),
+ezért a képet ne szerkeszd kézzel: a szkriptet írd át, és futtasd újra (pl. `python3 tools/art/chest_royal.py`).
+
+<a id="cu-lada"></a>
+### Ládák (saját pixel art)
+
+Előnézet: [`previews/cu-lada.png`](previews/cu-lada.png)
+
+| Azonosító | Fájl | Méret | Képkockák | Leírás | Címkék |
+| --- | --- | --- | --- | --- | --- |
+| `cu:chest-royal` | `custom/chest_royal.png` | 48×22 | 2 kocka, 24×22 | Királyi láda, 2 kocka (24×22): csukott (domború fedél, vas pántok, aranyzár rubinnal) és nyitott (arany a belsejében). Rajz: tools/art/chest_royal.py | láda, kincs, loot, saját |
 

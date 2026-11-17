@@ -134,6 +134,8 @@
     frames,
 
     strips: {
+      // saját rajz (tools/art/chest_royal.py): 0 = csukott, 1 = nyitott
+      chest_royal: { url: 'assets/custom/chest_royal.png', frameWidth: 24, frameHeight: 22, frameRate: 12 },
       girl_idle: strip("Entities/Npc's/Citizen_F/Tavern_A/Idle/Idle_Side-Sheet.png", 64, 64, 5),
       girl_walk: strip("Entities/Npc's/Citizen_F/Tavern_A/Walk/Walk_Side-Sheet.png", 64, 64, 10),
       skel_base_idle: mob('Base'),

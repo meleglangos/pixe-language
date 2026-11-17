@@ -1,3 +1,4 @@
 [
-  {"id": "pc_wood", "closed": "chest_closed", "open": "chest_open"}
+  {"id": "pc_wood", "closed": "chest_closed", "open": "chest_open"},
+  {"id": "royal", "strip": "chest_royal", "closedFrame": 0, "openFrames": [1], "fps": 12}
 ]

@@ -106,6 +106,14 @@ A 3 koppintás három felvonás, egyre erősebben:
    szikrák, az ablak megrázkódik, erős rezgés; a nyitott ládából utána fény árad. Legendarynél minden erősebb.
 A rezgés csak Androidon működik (iOS-en a böngésző nem engedi); „csökkentett mozgás” beállításnál nincs rezgés.
 
+## 4. kiegészítés: pixeles fények, új láda, kevesebb üres hely (2026-11-17)
+- A sima, elmosódó fények (dereng, belső fény, sugarak, fényoszlop) helyett **pixeles fények**: alacsony
+  felbontású vászon, lépcsős sávok, sakktábla-dither a sávhatárokon; a sugarak lépésenként forognak (~12 kép/mp).
+  Feltöltődéskor az egész ablak háttere sötétedik lépcsőzetesen (nem egy téglalap).
+- **Új, saját láda** (`assets/custom/chest_royal.png`, rajz: `tools/art/chest_royal.py`): domború fedél, deszkák,
+  vas pántok és sarkok, aranyzár rubinnal; nyitva arany a belsejében. Ez az alap láda-stílus (`royal`), a pályán is.
+- Nyitás előtt a láda középen áll, robbanáskor lecsúszik (kevesebb üres hely), az ablak alacsonyabb.
+
 ## 11. Lépések
 1. Csillagok a loot-sorsolásban (`rollStars`, `roll(…, { stars })`, `rarityFactor`, `chances`) + validátor + tesztek.
 2. Láda-ablak: nagy láda, csillag-animáció, koppintásra nyitás, kieső loot, lista.

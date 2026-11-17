@@ -87,6 +87,46 @@
     });
   }
 
+  // ---------- pixeles fények: alacsony felbontású vászon, lépcsős sávok, a sávhatárokon sakktábla-dither ----------
+  // (nincs elmosódó, sima átmenet: illik a pixel art stílushoz)
+  const FXPX = 5; // a fény-effektek egy pixele a képernyőn (ugyanaz, mint a ládáé)
+  const BANDS = [[0.3, 0.55], [0.52, 0.36], [0.75, 0.2], [1, 0.08]];
+  const hexRgb = c => { const n = parseInt(String(c).slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
+  function bandAlpha(d, x, y) {
+    for (let i = 0; i < BANDS.length; i++) {
+      const [lim, a] = BANDS[i];
+      if (d < lim - 0.05) return a;
+      if (d < lim + 0.05) return ((x + y) & 1) ? a : (BANDS[i + 1] ? BANDS[i + 1][1] : 0);
+    }
+    return 0;
+  }
+  // a vászon w×h logikai pixel; f(x, y) -> átlátszóság (0..1) minden pixelre
+  function paint(cv, w, h, color, f) {
+    if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
+    cv.style.width = (w * FXPX) + 'px'; cv.style.height = (h * FXPX) + 'px';
+    const ctx = cv.getContext('2d'), img = ctx.createImageData(w, h), [r, g, b] = hexRgb(color);
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      const a = f(x, y), i = (y * w + x) * 4;
+      if (a <= 0) continue;
+      img.data[i] = r; img.data[i + 1] = g; img.data[i + 2] = b; img.data[i + 3] = Math.min(255, a * 255);
+    }
+    ctx.putImageData(img, 0, 0);
+  }
+  // kerek (vagy ellipszis) fényfolt
+  const pixelGlow = (cv, w, h, color, rx, ry) => paint(cv, w, h, color, (x, y) => bandAlpha(Math.hypot((x + 0.5 - w / 2) / rx, (y + 0.5 - h / 2) / ry), x, y));
+  // forgó sugarak: n küllő, a középtől kifelé halványulnak
+  const pixelRays = (cv, w, h, color, rot, n, strength) => paint(cv, w, h, color, (x, y) => {
+    const dx = x + 0.5 - w / 2, dy = y + 0.5 - h / 2, d = Math.hypot(dx, dy) / (Math.min(w, h) / 2);
+    if (d > 1 || d < 0.12) return 0;
+    const t = ((Math.atan2(dy, dx) + rot) / (Math.PI * 2) * n) % 1;
+    return (t < 0 ? t + 1 : t) < 0.32 ? bandAlpha(d, x, y) * strength : 0;
+  });
+  // függőleges fényoszlop: középen erős, felfelé lépcsőzetesen halványul
+  const pixelPillar = (cv, w, h, color) => paint(cv, w, h, color, (x, y) => {
+    const d = Math.abs(x + 0.5 - w / 2) / (w / 2), up = Math.floor((y / h) * 4) / 4; // 4 lépcső
+    return bandAlpha(d, x, y) * 1.6 * (0.25 + up * 0.75);
+  });
+
   // a ritkaság-csoport és színe egy loot-tételhez
   function rarityInfo(e) {
     if (e.gold !== undefined) return { group: 'gold', color: GOLD_COLOR, id: null };
@@ -120,22 +160,21 @@
       // ---------- felépítés ----------
       const canvas = ui.el('canvas', 'cw-chest');
       const cracks = ui.el('canvas', 'cw-cracks');   // izzó repedések a ládán (csak a láda pixelein)
-      const inner = ui.el('div', 'cw-inner');       // a nyitott ládából áradó fény
+      const inner = ui.el('canvas', 'cw-inner');    // a nyitott ládából áradó fény (pixeles)
       const body = ui.el('div', 'cw-body', [canvas, inner, cracks]); // a láda teste: kép + fény + repedések együtt mozognak
       const lid = ui.el('canvas', 'cw-lid');         // a robbanáskor lerepülő fedél (a csukott kép felső része)
       // a fény és a sugarak külön rétegben, ami a széle felé lágyan elhalványul (nincs éles levágás, nincs görgetősáv)
-      const glow = ui.el('div', 'cw-glow');
-      const rays = ui.el('div', 'cw-rays');
-      const shade = ui.el('div', 'cw-shade');        // feltöltődéskor elsötétül a háttér
-      const pillar = ui.el('div', 'cw-pillar');      // robbanáskor fényoszlop
-      const fxLayer = ui.el('div', 'cw-fx', [shade, rays, glow, pillar]);
+      const glow = ui.el('canvas', 'cw-glow');
+      const rays = ui.el('canvas', 'cw-rays');
+      const pillar = ui.el('canvas', 'cw-pillar');   // robbanáskor fényoszlop (pixeles)
+      const fxLayer = ui.el('div', 'cw-fx', [rays, glow, pillar]);
       const chestBox = ui.el('div', 'cw-chest-box', [body, lid]);
       const flash = ui.el('div', 'cw-flash');
       // a vászon alapból 300×150 px: amíg nincs rajta semmi, legyen 0, különben kilóg (görgetősáv, ugrálás)
-      cracks.width = cracks.height = lid.width = lid.height = 0;
+      [cracks, lid, inner, glow, rays, pillar].forEach(c => { c.width = c.height = 0; });
       const reveal = ui.el('div', 'cw-reveal');      // ide emelkedik ki a tárgy
       // a koppintható terület egy div (nem <button>), mert benne "?" gombok is vannak
-      const stage = ui.el('div', 'cw-stage', [fxLayer, reveal, chestBox]);
+      const stage = ui.el('div', 'cw-stage centered', [fxLayer, reveal, chestBox]); // nyitás előtt a láda középen áll
       stage.setAttribute('role', 'button');
       stage.tabIndex = 0;
       stage.setAttribute('aria-label', Game.i18n.de('chest.name'));
@@ -149,11 +188,36 @@
       panel.dataset.phase = 'stars';
 
       const light = n => starEls.forEach((s, i) => s.classList.toggle('on', i < n));
+      // a fény-effektek a láda közepéhez igazodnak (a láda nyitás előtt középen, utána lent áll)
+      function placeFx() {
+        const st = stage.getBoundingClientRect(), c = canvas.getBoundingClientRect();
+        if (!c.width) return;
+        fxLayer.style.setProperty('--cx', (c.left + c.width / 2 - st.left) + 'px');
+        fxLayer.style.setProperty('--cy', (c.top + c.height / 2 - st.top) + 'px');
+        fxLayer.style.setProperty('--cb', (c.bottom - st.top) + 'px');
+      }
       const setGlow = (color, scale, alpha) => {
-        glow.style.setProperty('--glow', color);
-        inner.style.setProperty('--glow', color);
-        fx(glow, [{}, { transform: 'translate(-50%, -50%) scale(' + scale + ')', opacity: alpha }], { duration: 350, fill: 'forwards', easing: 'ease-out' });
+        placeFx();
+        const r = 8 + scale * 7;
+        pixelGlow(glow, 48, 48, color, r, r);
+        pixelGlow(inner, 24, 12, color, 10, 6);
+        glow.style.opacity = alpha;
       };
+      // sugarak: 'off' | 'leak' (halvány, lassú) | 'on' (erős); lépésenként forognak (~12 kép/mp, pixel art érzet)
+      let raysMode = 'off', raysColor = GOLD_COLOR, raysRot = 0, raysTimer = 0;
+      function setRays(mode, color) {
+        raysMode = mode; if (color) raysColor = color;
+        rays.classList.toggle('on', mode !== 'off');
+        clearInterval(raysTimer);
+        if (mode === 'off') return;
+        const tick = () => {
+          if (!rays.isConnected) { clearInterval(raysTimer); return; }
+          raysRot += mode === 'on' ? 0.07 : 0.035;
+          pixelRays(rays, 60, 48, raysColor, raysRot, 10, mode === 'on' ? 1.5 : 0.9);
+        };
+        tick();
+        raysTimer = setInterval(tick, 85);
+      }
       const shake = (amp, ms) => anim(body, [0, -1, 1, -0.8, 0.8, -0.5, 0.5, 0].map(k => ({ transform: 'translateX(' + (k * amp) + 'px) rotate(' + (k * amp * 0.4) + 'deg)' })), { duration: ms });
       const sparks = (n, color, spread) => {
         for (let i = 0; i < n; i++) {
@@ -238,7 +302,7 @@
           if (!fxLayer.isConnected) { clearInterval(embers); return; }
           const e = ui.el('span', 'cw-ember');
           e.style.background = Math.random() < 0.5 ? aura : '#ffe58a';
-          e.style.left = 'calc(50% + ' + Math.round((Math.random() - 0.5) * 120) + 'px)';
+          e.style.left = 'calc(var(--cx) + ' + Math.round((Math.random() - 0.5) * 120) + 'px)';
           fxLayer.append(e);
           fx(e, [{ transform: 'translateY(0) scale(1)', opacity: 0 }, { opacity: 1, offset: 0.2 }, { transform: 'translate(' + Math.round((Math.random() - 0.5) * 30) + 'px, ' + (-90 - Math.random() * 70) + 'px) scale(.4)', opacity: 0 }],
             { duration: 1100 + Math.random() * 600, easing: 'ease-out' }).then(() => e.remove());
@@ -285,9 +349,8 @@
           ring(aura, 3);
           sparks(10, aura, 60);
           setGlow(aura, 1.5 * power, 0.85);
-          rays.style.setProperty('--rarity', aura);
-          rays.classList.add('leak');
-          fxLayer.classList.add('charge');
+          setRays('leak', aura);
+          panel.classList.add('cw-dim'); // "leoltják a villanyt": az ablak háttere lépcsőzetesen elsötétül
           if (stars >= 4) starEls.forEach(st => st.classList.add('hot'));
           startEmbers();
           await hit(1.6);
@@ -306,6 +369,8 @@
         lctx.imageSmoothingEnabled = false;
         lctx.drawImage(canvas, 0, 0, canvas.width, lidH, 0, 0, canvas.width, lidH);
         lid.classList.add('flying');
+        stage.classList.remove('centered');
+        setTimeout(placeFx, 420);
         if (style.strip) {
           for (const f of style.openFrames) { await draw(canvas, frameOf(style, f)); await wait(1000 / (style.fps || 12)); }
         } else await draw(canvas, frameOf(style, 'open'));
@@ -320,16 +385,17 @@
         ], { duration: 900, easing: 'cubic-bezier(.2,.8,.4,1)' }).then(() => { lid.classList.remove('flying'); lid.width = lid.height = 0; });
         ring('#ffffff', 4.5);
         ring(aura, 6, 120);
-        fx(pillar, [{ transform: 'translateX(-50%) scaleY(0)', opacity: 0, background: 'linear-gradient(to top, ' + aura + ', transparent)' },
-          { transform: 'translateX(-50%) scaleY(1)', opacity: 0.9, offset: 0.25 },
-          { transform: 'translateX(-50%) scaleY(1.05)', opacity: 0 }], { duration: bestLevel >= 3 ? 1600 : 1000, easing: 'ease-out' });
+        pixelPillar(pillar, 14, 48, aura);
+        fx(pillar, [{ transform: 'translateX(-50%) scaleY(0)', opacity: 0 },
+          { transform: 'translateX(-50%) scaleY(1)', opacity: 1, offset: 0.25 },
+          { transform: 'translateX(-50%) scaleY(1)', opacity: 0 }], { duration: bestLevel >= 3 ? 1600 : 1000, easing: 'steps(8, end)' });
         coinBurst(8 + stars * 3 + bestLevel * 4);
         sparks(16 + stars * 4, '#fff3b0', 110);
         sparks(8 + bestLevel * 6, aura, 130);
         fx(panel, [0, -1, 1, -0.8, 0.8, -0.5, 0.5, 0].map(k => ({ transform: 'translate(' + k * (5 + stars + bestLevel * 2) + 'px,' + (-k * (3 + stars)) + 'px)' })), { duration: 450 + bestLevel * 100 });
         setGlow(aura, 1.8, 0.9);
-        rays.classList.remove('leak');
-        setTimeout(() => fxLayer.classList.remove('charge'), 500);
+        setRays('off');
+        setTimeout(() => panel.classList.remove('cw-dim'), 500);
         starEls.forEach(st => st.classList.remove('hot'));
         await anim(body, [{ transform: 'scale(.9, 1.15)' }, { transform: 'scale(1.06, .95)', offset: 0.5 }, { transform: 'scale(1, 1)' }], { duration: 320, easing: 'ease-out' });
         await wait(250);
@@ -365,7 +431,7 @@
         collected.append(it.small);
         fx(it.small, [{ transform: 'scale(.2)', opacity: 0 }, { transform: 'scale(1.2)', opacity: 1, offset: 0.7 }, { transform: 'scale(1)', opacity: 1 }], { duration: 300 });
         it.big.remove();
-        rays.classList.remove('on');
+        setRays('off');
       }
 
       async function revealTap() {
@@ -395,8 +461,7 @@
         if (r.group === 'epic') await shake(6 * power, 420);
         if (r.group === 'legendary') { await shake(9 * power, 700); await wait(150); }
         reveal.replaceChildren(big);
-        if (r.group === 'legendary' || r.group === 'epic') rays.classList.add('on');
-        rays.style.setProperty('--rarity', r.color);
+        if (r.group === 'legendary' || r.group === 'epic') setRays('on', r.color);
         if (r.group === 'legendary') fx(panel, [{ boxShadow: '0 0 0 0 #fff0' }, { boxShadow: '0 0 60px 20px ' + r.color }, { boxShadow: '0 0 0 0 #fff0' }], { duration: 900 });
         sparks({ common: 4, gold: 6, rare: 10, epic: 16, legendary: 26 }[r.group] || 4, r.color, 90);
         await anim(big, [
@@ -441,7 +506,7 @@
         } finally { stepping = false; }
       });
 
-      draw(canvas, frameOf(style, 'closed')).then(spinStars, () => spinStars());
+      draw(canvas, frameOf(style, 'closed')).then(() => { placeFx(); spinStars(); }, () => spinStars());
       return { stars, loot };
     },
   };

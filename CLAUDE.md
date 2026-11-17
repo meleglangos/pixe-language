@@ -51,7 +51,7 @@ tartalom csak a felhasználó kifejezett jóváhagyásával kerülhet bele.
 | `src/gfx/placeholders.js` | a kódból rajzolt ideiglenes grafika |
 | `assets/` | grafikai csomagok, katalógus: `assets/ASSETS.md` (a Modern Interiors csak nem kereskedelmi célra használható) |
 | `tests/` | tesztek; `tests/fixtures/`: valódi régi mentések a migrációs tesztekhez |
-| `tools/` | `build-data.js` (bundle + ellenőrzés), `asset_catalog/` (asset-katalógus generátor) |
+| `tools/` | `build-data.js` (bundle + ellenőrzés), `asset_catalog/` (asset-katalógus generátor), `art/` (saját pixel art kódból: `assets/custom/`) |
 | `docs/` | játéktervezés, német szabályok, döntések, ötletek, feature specek (lásd lent) |
 | `.claude/commands/` | slash commandok: `/allapot`, `/uj-otlet`, `/uj-feature`, `/uj-kerdesek`, `/uj-dungeon` |
 

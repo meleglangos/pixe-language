@@ -217,7 +217,7 @@ mi milyen eséllyel jön egy húzásnál.
 {"id": "pc_wood", "closed": "chest_closed", "open": "chest_open"}             // két kivágás (assets.js: frames)
 {"id": "chest_gold", "strip": "chest_gold_open", "closedFrame": 0, "openFrames": [1, 2, 3, 4], "fps": 12}  // animált csík (assets.js: strips)
 ```
-Alapból a `config.js` → `loot.chestStyle`; egy dungeon a `"chestStyle"` mezővel mást választhat. Új láda kipróbálása:
+Alapból a `config.js` → `loot.chestStyle` (most: `royal`, saját rajz); egy dungeon a `"chestStyle"` mezővel mást választhat. Új láda kipróbálása:
 asset + kivágás / csík az `assets.js`-be + egy sor ide, kód nélkül.
 
 ## Tervezett formátumok (a 3. szakaszhoz)
