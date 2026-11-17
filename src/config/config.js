@@ -12,6 +12,20 @@ Game.data.config = {
     goldIcon: 'it:1163',
     chestStyle: 'pc_wood',  // a láda alap kinézete (data/chest_styles.json); a dungeon "chestStyle"-ja felülírja
     lockChestUntilCleared: false, // true: a láda zárva, amíg él szörny a dungeonben (most kikapcsolva)
+    // Láda-csillagok (1–5): a láda minősége. Egy loot tábla "stars" mezője bármelyik részt felülírhatja.
+    stars: {
+      weights: [30, 30, 20, 13, 7],                     // 1…5 csillag esélye
+      rolls: [[1, 1], [1, 2], [2, 3], [3, 4], [4, 5]],  // hány tételt húz csillagonként
+      gold: [1, 1.3, 1.6, 2, 3],                        // az arany mennyiségének szorzója
+      // egy tétel esélye = súly × a ritkaság-csoport szorzója az adott csillagnál (bármi bármiből jöhet)
+      rarityFactor: {   // 1★     2★    3★    4★    5★
+        common:    [1,     0.9,  0.8,  0.6,  0.4],
+        rare:      [0.15,  0.3,  0.5,  0.8,  1.2],
+        epic:      [0.03,  0.06, 0.12, 0.25, 0.5],
+        legendary: [0.005, 0.01, 0.03, 0.06, 0.15],
+        gold:      [1,     1,    1,    1,    1],
+      },
+    },
   },
 
   // Kérdés-rendszer (src/systems/questions/)

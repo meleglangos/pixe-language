@@ -7,8 +7,10 @@ const { createGame, readData, plain, ROOT } = require('./helpers/env');
 
 const seq = (...xs) => { let i = 0; return () => xs[i++ % xs.length]; };
 
+// egy legendary teszt-tárgy (a valódi tárgyak között még nincs ilyen)
+const LEG = { id: 'leg_test', kind: 'treasure', rarity: 'legendary', icon: 'it:1', name: 'loot.gold', desc: 'loot.gold' };
 function withTable(table) {
-  return createGame({ content: raw => { raw.lootTables = raw.lootTables.concat(table); } });
+  return createGame({ content: raw => { raw.lootTables = raw.lootTables.concat(table); raw.items = raw.items.concat(LEG); } });
 }
 
 test('range: [min, max] a határokkal együtt, szám = önmaga', () => {
@@ -23,25 +25,55 @@ test('roll: "always" mindig benne van, a húzások súlyozottak, az azonosak ös
     { item: 'bone', qty: [2, 2], weight: 1 }, { item: 'skull', weight: 3 }, { gold: 5, weight: 1 },
   ] });
   // húzások: 0.1 -> bone (0..1/5), 0.5 -> skull, 0.1 -> bone; a qty / arany tartományok fixek
-  const r = plain(Game.loot.roll('loot_t', seq(0.5, 0.1, 0.5, 0.1)));
+  const r = plain(Game.loot.roll('loot_t', { random: seq(0.5, 0.1, 0.5, 0.1) }));
   assert.deepEqual(r, [{ gold: 10 }, { item: 'bone', qty: 4 }, { item: 'skull', qty: 1 }]);
   // a húzott arany hozzáadódik az "always" aranyhoz: húzások 0.99 -> arany, 0 -> bone, 0.99 -> arany
-  const g = plain(Game.loot.roll('loot_t', seq(0, 0.99)));
+  const g = plain(Game.loot.roll('loot_t', { random: seq(0, 0.99) }));
   assert.deepEqual(g, [{ gold: 10 + 5 + 5 }, { item: 'bone', qty: 2 }]);
 });
 
-test('a valódi ládák: mindig van arany, összesen 2–4 tétel, csak létező tárgyak', () => {
+test('a valódi ládák: csillagonként a megadott számú húzás, csak létező tárgyak, az arany nem kötelező', () => {
   const { Game } = createGame();
+  const rolls = Game.data.config.loot.stars.rolls;
+  let noGold = 0;
   for (const id of ['loot_crypt_chest', 'loot_mine_chest']) {
-    for (let i = 0; i < 300; i++) {
-      const r = Game.loot.roll(id);
-      assert.ok(r[0].gold > 0, id + ': nincs arany');
-      const picks = r.slice(1);
-      picks.forEach(e => assert.ok(Game.data.items[e.item], e.item));
-      assert.ok(r.length >= 2 && r.length <= 4, id + ': ' + r.length);
+    for (let stars = 1; stars <= 5; stars++) {
+      for (let i = 0; i < 200; i++) {
+        const r = Game.loot.roll(id, { stars });
+        const items = r.filter(e => e.item);
+        items.forEach(e => assert.ok(Game.data.items[e.item], e.item));
+        const n = items.reduce((a, e) => a + 1, 0) + (r[0] && r[0].gold ? 1 : 0);
+        assert.ok(n >= 1 && n <= rolls[stars - 1][1], id + ' ' + stars + '★: ' + n);
+        if (!r.some(e => e.gold)) noGold++;
+      }
     }
   }
+  assert.ok(noGold > 0, 'van arany nélküli láda is');
   assert.deepEqual(plain(Game.loot.roll('nincs_ilyen')), []);
+});
+
+test('csillagok: az esélyek a config szerint; több csillag = ritkább tárgyak nagyobb eséllyel, de 1★-ból is jöhet', () => {
+  const { Game } = withTable({ id: 'loot_s', entries: [
+    { item: 'bone', weight: 1 }, { item: 'gem_red', weight: 1 }, { item: 'leg_test', weight: 1 }, { gold: [10, 10], weight: 1 },
+  ] });
+  // a csillagszám eloszlása: 1★ 30, 2★ 30, 3★ 20, 4★ 13, 5★ 7
+  assert.equal(Game.loot.rollStars('loot_s', () => 0), 1);
+  assert.equal(Game.loot.rollStars('loot_s', () => 0.95), 5);
+  const counts = [0, 0, 0, 0, 0, 0];
+  for (let i = 0; i < 1000; i++) counts[Game.loot.rollStars('loot_s', () => i / 1000)]++;
+  assert.deepEqual(counts.slice(1), [300, 300, 200, 130, 70]);
+  const p = (stars, id) => Game.loot.chances('loot_s', stars).find(c => c.item === id).p;
+  assert.ok(p(1, 'leg_test') > 0, 'legendary 1★-ból is jöhet');
+  assert.ok(p(1, 'leg_test') < 0.005, '... de ritkán');
+  assert.ok(p(5, 'leg_test') > 10 * p(1, 'leg_test'));
+  assert.ok(p(5, 'gem_red') > p(1, 'gem_red'));
+  assert.ok(p(5, 'bone') < p(1, 'bone'));
+  const total = Game.loot.chances('loot_s', 3).reduce((a, c) => a + c.p, 0);
+  assert.ok(Math.abs(total - 1) < 1e-9);
+  // az arany szorzója: 5★ = ×3
+  const r = plain(Game.loot.roll('loot_s', { stars: 5, random: () => 0.9999 }));
+  // random 0.9999: 5 húzás (4–5 közül a felső), mindig az utolsó tétel (arany): 5 × 10 × 3
+  assert.deepEqual(r, [{ gold: 150 }]);
 });
 
 test('ikonok: az items.json minden ikonja és az arany ikonja létező fájlra mutat', () => {
@@ -64,12 +96,14 @@ test('a validátor kiszúrja a hibás tárgyakat és loot táblákat', () => {
   raw.lootTables = raw.lootTables.concat(
     { id: 'loot_bad', rolls: [3, 1], always: [{ gold: 'sok' }], entries: [{ item: 'ghost', weight: 1 }, { item: 'bone', gold: 3, weight: 1 }, { item: 'bone', weight: 0 }, { item: 'bone', qty: 0, weight: 1 }] },
     { id: 'loot_empty' },
+    { id: 'loot_stars', entries: [{ item: 'bone', weight: 1 }], stars: { weights: [1, 2], gold: 'x', rarityFactor: { rare: [1, 1, 1, 1, -1] } } },
   );
   const issues = Game.contentValidator.validate(raw).join('\n');
   for (const re of [
     /items\.item_bad\.name: ismeretlen szöveg-kulcs/, /items\.item_bad\.desc/, /item_bad: ismeretlen rarity: mythic/, /item_bad\.kind/, /item_bad\.icon: hibás ikon/,
     /loot_bad\.rolls/, /loot_bad\.always\[0\]\.gold/, /loot_bad\.entries\[0\]: ismeretlen items id: ghost/,
     /loot_bad\.entries\[1\]: vagy "item", vagy "gold"/, /loot_bad\.entries\[2\]\.weight/, /loot_bad\.entries\[3\]\.qty/, /loot_empty: üres tábla/,
+    /loot_stars\.stars\.weights/, /loot_stars\.stars\.gold/, /loot_stars\.stars\.rarityFactor\.rare/,
   ]) assert.match(issues, re);
 });
 

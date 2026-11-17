@@ -139,8 +139,19 @@
       if (ITEM_KINDS.indexOf(it.kind) < 0) bad(w + '.kind: ' + ITEM_KINDS.join(' | '));
       if (Game.itemIcons && !Game.itemIcons.parse(it.icon)) bad(w + '.icon: hibás ikon: ' + JSON.stringify(it.icon) + ' ("it:<szám>" vagy "wp:<anyag> c<oszlop> r<sor>")');
     });
-    // loot táblák: always (mindig), rolls ([min, max] húzás), entries (súlyozott); egy tétel tárgy (qty) vagy arany
     const rangeOk = v => (Number.isInteger(v) && v >= 0) || (Array.isArray(v) && v.length === 2 && v.every(x => Number.isInteger(x) && x >= 0) && v[0] <= v[1]);
+    // láda-csillagok (config.js -> loot.stars, vagy egy tábla "stars" felülírása): minden lista 5 elemű (1…5 csillag)
+    const five = (v, ok) => Array.isArray(v) && v.length === 5 && v.every(ok);
+    const nonNeg = x => typeof x === 'number' && x >= 0;
+    const starsOk = (w, s) => {
+      if (!s || typeof s !== 'object') { bad(w + ': objektum kell'); return; }
+      if (s.weights !== undefined && !five(s.weights, nonNeg)) bad(w + '.weights: 5 nemnegatív szám (1…5 csillag)');
+      if (s.rolls !== undefined && !five(s.rolls, rangeOk)) bad(w + '.rolls: 5 db szám vagy [min, max]');
+      if (s.gold !== undefined && !five(s.gold, nonNeg)) bad(w + '.gold: 5 nemnegatív szorzó');
+      Object.keys(s.rarityFactor || {}).forEach(g => { if (!five(s.rarityFactor[g], nonNeg)) bad(w + '.rarityFactor.' + g + ': 5 nemnegatív szorzó'); });
+    };
+    if (Game.data.config && Game.data.config.loot && Game.data.config.loot.stars) starsOk('config.loot.stars', Game.data.config.loot.stars);
+    // loot táblák: always (mindig), rolls ([min, max] húzás), entries (súlyozott); egy tétel tárgy (qty) vagy arany
     Object.values(byId.lootTables).forEach(t => {
       const w = 'lootTables.' + t.id;
       const entry = (where, e, weighted) => {
@@ -155,6 +166,7 @@
       const entries = Array.isArray(t.entries) ? t.entries : [];
       entries.forEach((e, i) => entry(w + '.entries[' + i + ']', e, true));
       if (t.rolls !== undefined && !rangeOk(t.rolls)) bad(w + '.rolls: szám vagy [min, max]');
+      if (t.stars !== undefined) starsOk(w + '.stars', t.stars);
       if (!entries.length && !(t.always || []).length) bad(w + ': üres tábla');
     });
     Object.values(byId.shop).forEach(s => { if (s.item !== undefined) ref('shop.' + s.id, 'items', s.item); });

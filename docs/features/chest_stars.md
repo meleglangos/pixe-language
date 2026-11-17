@@ -1,6 +1,6 @@
 # Láda-ablak csillagokkal
 
-**Állapot:** tervezet
+**Állapot:** folyamatban (jóváhagyva: 2026-11-17)
 **Ötlet:** a felhasználó kérése (a ládanyitás folytatása: `docs/features/chest_opening.md`)
 
 ## 1. Cél
