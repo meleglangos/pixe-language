@@ -49,7 +49,7 @@
 - [ ] `node tools/build-data.js` és `npm test` zöld, új tesztekkel a feature-re
 - [ ] egy régi mentés betöltése után is helyesen működik
 - [ ] telefonméretben (érintéssel) is kipróbálva
-- [ ] README „Állapot”, `CHANGELOG.md`, szükség esetén `docs/GAME_DESIGN.md` és `docs/DECISIONS.md` frissítve
+- [ ] README „Állapot”, szükség esetén `docs/GAME_DESIGN.md` és `docs/DECISIONS.md` frissítve
 
 ## 11. Lépések
 <Nagy feature-nél kisebb, önállóan működő lépések; mindegyik külön commit.>

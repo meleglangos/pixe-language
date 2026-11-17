@@ -58,7 +58,6 @@ Ha a felhasználó jóváhagyja a változást, írd be a specbe.
 
 ### 8. Lezárás
 - README „Állapot”: pipák, „Most folyamatban” frissítése.
-- `CHANGELOG.md`: játékos szemmel, 2–3 sor.
 - `docs/GAME_DESIGN.md`: ha új szabály született; `docs/DECISIONS.md`: ha fontos döntés született.
 - Új rendszernél: rövid `README.md` a rendszer mappájába (mit csinál, publikus metódusok, események).
 - `docs/IDEAS.md`: az ötlet áthúzva, hivatkozással a specre. A spec állapota: kész.

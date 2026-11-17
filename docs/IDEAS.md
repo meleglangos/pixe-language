@@ -41,6 +41,7 @@ kéri, vagy ha új feature-t kell választani.
 - [ ] Saját szoba / ház, berendezhető a megszerzett bútorokkal — ház rendszer + Modern Interiors assetek
 - [ ] Kozmetikai tárgyak a karakterre / petre — kérdéses: assettől függ (`assets/ASSETS.md`)
 - [ ] Fast travel / teleport napi kérdésért cserébe — kérdés-motor (napi kihívás) + feloldás
+- [ ] „Neuigkeiten” ablak: frissítés után egyszer felugrik, mi az újdonság (németül, magyar segítséggel) — UI + fordítási fájl + mentés (utoljára látott verzió)
 
 ## Easter eggek és események
 - [ ] Személyes easter eggek (közös emlékek, rejtett üzenetek) — adat + kis kód (lásd a fenti figyelmeztetést)

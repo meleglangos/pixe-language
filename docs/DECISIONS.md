@@ -50,3 +50,8 @@ kézzel írnia. Az ötletek a `docs/IDEAS.md`-ben várnak, amíg el nem dől, ho
 ## D10. A mappatérkép csak a `CLAUDE.md`-ben van (2026)
 A `CLAUDE.md` minden munkamenetben betöltődik, a README-t pedig a feladatok elején olvassa Claude, ezért ha
 a térkép mindkettőben szerepelne, kétszer kerülne a kontextusba, és a két példány elcsúszna egymástól.
+
+## D11. Nincs `CHANGELOG.md` (2026)
+Egy fájl, amit minden feladat végén frissíteni kell, de senki nem olvas, csak költség. A haladás a README
+„Állapot” részében, a részletek a git logban vannak. Ha a játékosnak kell újdonságlista, az a játékban
+legyen („Neuigkeiten” ablak, `docs/IDEAS.md`), a fordítási fájlon át.
