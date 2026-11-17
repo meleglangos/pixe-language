@@ -9,7 +9,7 @@ Böngészős pixel-art RPG német nyelvtanuláshoz. Nincs build lépés: az `ind
 Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén frissíti (pipák + „Most folyamatban”).
 Új szakaszt vagy tételt csak a felhasználó kérésére vesz fel; az ötletek a `docs/IDEAS.md`-be kerülnek.
 
-**Most folyamatban:** semmi. Következő: a láda-ablak háttere (`docs/IDEAS.md` → „Láda-ablak háttér”), utána a tárgyrendszer
+**Most folyamatban:** semmi. Következő: a tárgyrendszer
 (ritkaság, tárgycsoportok), majd az inventory (a loot tárolása + „Tasche” ablak).
 
 - [x] 1. szakasz: térkép, kattintásos + billentyűs mozgás, kutya, mentés + export/import
@@ -32,6 +32,7 @@ Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén fris
     - [x] ládanyitás: tárgyak, loot táblák, sorsolás, animáció, kirepülő loot, „Beute” ablak (a loot még nem tárolódik; a láda bármikor nyitható)
     - [x] láda-ablak csillagokkal: 1–5 csillag (véletlen), több csillag = több és ritkább loot, koppintásra nyílik, a loot kiesik
     - [x] többkoppintásos nyitás: 3 koppintás, tárgyankénti kiemelés ritkaság-előjellel, legendary show; első epic / legendary tárgyak
+    - [x] láda-ablak háttér: kincskamra (fal, fáklyák, zászlók, arany), rúnakör a ritkaság színében
   - [ ] HP
   - [ ] debug mód
 - [ ] 3. szakasz: inventory, gear a karakteren, shop, gold, HP-ital

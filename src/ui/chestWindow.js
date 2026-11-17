@@ -248,11 +248,11 @@
       const starEls = [0, 1, 2, 3, 4].map(() => ui.el('span', 'cw-star', [starCanvas('off'), starCanvas('on'), ui.el('span', 'cw-twinkle')]));
       const starRow = ui.el('div', 'cw-stars', starEls);
       const collected = ui.el('div', 'cw-collected');
-      const panel = ui.modal({ title: 'chest.name', closable: false, body: [stage, starRow, collected], buttons: [] });
+      // a jelenet: kincskamra-háttér (src/ui/chestScene.js), benne a tárgy, a láda, a csillagok és a gyűjtött tárgyak
+      const sceneEl = ui.el('div', 'cw-scene', [fxLayer, stage, starRow, collected]);
+      const panel = ui.modal({ title: 'chest.name', closable: false, body: [sceneEl], buttons: [] });
       panel.classList.add('chest-window');
-      // a fény-réteg az egész ablakot kitölti (a tartalom mögött): a fény a csillagok mögé is lenyúlhat, és csak az
-      // ablak széle vágja (nem a láda-terület alja)
-      panel.prepend(fxLayer);
+      const scene = Game.chestScene.create(sceneEl, stage);
       screenFx.open();
       panel.append(flash);
       panel.dataset.stars = stars;
@@ -274,6 +274,7 @@
         pixelGlow(glow, size, size, color, r, r);
         pixelGlow(inner, 24, 12, color, 10, 6);
         glow.style.opacity = alpha;
+        scene.setColor(color, Math.max(0.2, Math.min(1, alpha * alpha * 1.1))); // a rúnakör a láda fényével együtt izzik
       };
       // sugarak: 'off' | 'leak' (halvány, lassú) | 'on' (erős); lépésenként forognak (~12 kép/mp, pixel art érzet)
       let raysMode = 'off', raysColor = GOLD_COLOR, raysRot = 0, raysTimer = 0;
@@ -562,7 +563,7 @@
         setTimeout(() => {
           stash();
           panel.querySelector('.modal-body').append(Game.lootUI.list(loot));
-          const done = () => { screenFx.close(); ui.closeModal(); if (opts.onDone) opts.onDone(loot, stars); };
+          const done = () => { screenFx.close(); scene.destroy(); ui.closeModal(); if (opts.onDone) opts.onDone(loot, stars); };
           const btns = panel.querySelector('.modal-buttons');
           btns.replaceChildren(ui.btn('loot.ok', done, 'primary'));
           const b = btns.querySelector('button');

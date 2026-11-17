@@ -121,6 +121,16 @@ A rezgés csak Androidon működik (iOS-en a böngésző nem engedi); „csökke
 - Javítva: a fényfolt vászna mindig akkora, mint a folt (nem vágódik le egyenesen); a láda-terület magasabb,
   hogy a kiemelt tárgy felirata ne fusson rá a ládára.
 
+## 6. kiegészítés: kincskamra-háttér (2026-11-17, a felhasználó kérésére)
+- A pergamen helyett a tárgy, a láda, a csillagok és a gyűjtött tárgyak egy **sötét kincskamrában** állnak
+  (`src/ui/chestScene.js`): Pixel Crawler téglafal és kőpadló, két fali fáklya lobogó lánggal és fénnyel, két
+  zászló, aranykupacok (szűk képernyőn ezek elmaradnak), felül és a széleken lépcsős, ditheres sötétítés, lassan
+  felszálló porszemek. A tárgy mögött sincs üres hely.
+- A láda alatt **rúnakör**: nyugalomban halványan dereng, a nyitáskor és a kiemeléskor a láda fényével együtt a
+  ritkaság színében izzik. Feltöltődéskor a kamra sötétedik el (eddig a pergamen).
+- 3× nagyítás, éles pixelek; a vászon a doboz méretéhez igazodik (ResizeObserver). Nem olvas vissza a vászonról,
+  így `file://`-ról is működik. A tárgy neve és ritkasága világos, sötét körvonallal.
+
 ## 11. Lépések
 1. Csillagok a loot-sorsolásban (`rollStars`, `roll(…, { stars })`, `rarityFactor`, `chances`) + validátor + tesztek.
 2. Láda-ablak: nagy láda, csillag-animáció, koppintásra nyitás, kieső loot, lista.

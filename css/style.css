@@ -193,6 +193,38 @@ html, body {
 .quiz-cheat li.review { color: #96352f; }
 .quiz-cheat p { margin: 0 0 4px; }
 
+/* láda-ablak háttere: kincskamra (src/ui/chestScene.js); a vásznak 3× nagyítva, éles pixelekkel */
+.cw-scene {
+  position: relative; overflow: hidden; margin: 0 -4px; padding-bottom: 6px; background: #121014;
+  border: 3px solid #2a1d14; border-radius: 4px; box-shadow: inset 0 0 0 2px #4a3a2a;
+}
+.cw-scene > canvas { position: absolute; left: 0; top: 0; image-rendering: pixelated; pointer-events: none; }
+.cw-scene > .cs-bg { z-index: 0; transition: filter .5s steps(4); }
+.cw-scene > .cs-rune { z-index: 0; animation: cs-runepulse 1.6s steps(3) infinite; transition: opacity .3s steps(3); }
+@keyframes cs-runepulse { 50% { filter: brightness(1.35); } }
+.cw-scene > .cs-torchglow { z-index: 0; animation: cs-flicker 1.3s steps(2) infinite; }
+.cw-scene > .cs-torchglow + .cs-torchglow { animation-delay: -.6s; }
+@keyframes cs-flicker { 30% { opacity: .7; } 60% { opacity: 1; } 80% { opacity: .82; } }
+.cw-scene > .cs-flame { z-index: 0; }
+.cw-scene > .cw-fx { z-index: 1; }
+.cw-scene > .cw-stage, .cw-scene > .cw-stars, .cw-scene > .cw-collected { position: relative; z-index: 2; }
+.cs-dust { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.cs-mote {
+  position: absolute; bottom: 10%; width: 3px; height: 3px; background: #ffd99a; opacity: 0;
+  animation: cs-rise var(--dur) steps(40) var(--delay) infinite;
+}
+@keyframes cs-rise {
+  0% { transform: translate(0, 0); opacity: 0; } 15% { opacity: .55; } 70% { opacity: .35; }
+  100% { transform: translate(var(--drift), -240px); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .cs-mote, .cw-scene > .cs-torchglow, .cw-scene > .cs-rune { animation: none; } .cs-mote { display: none; } }
+.chest-window.cw-dim .cs-bg { filter: brightness(.45); }
+/* a jelenetben a szövegek világosak, sötét körvonallal */
+.cw-scene .cw-name, .cw-scene .cw-qty { color: #fff4dc; text-shadow: 0 2px 0 #1a1210, 2px 0 0 #1a1210, -2px 0 0 #1a1210, 0 -2px 0 #1a1210; }
+.cw-scene .cw-rarity { color: color-mix(in srgb, var(--rarity) 70%, #fff); text-shadow: 0 2px 0 #1a1210, 2px 0 0 #1a1210, -2px 0 0 #1a1210, 0 -2px 0 #1a1210; }
+.cw-scene .cw-legend-title { color: #ffd75a; text-shadow: 0 0 8px #b5851f, 0 2px 0 #3a2410; }
+.cw-scene .cw-collected { min-height: 0; }
+
 /* "Beute" ablak (src/ui/loot.js) */
 .loot-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .loot-row {
@@ -243,8 +275,6 @@ html, body {
 .cw-ring { position: absolute; left: var(--cx); top: calc(var(--cb) - 6px); width: 80px; height: 80px; border: 4px solid #fff; border-radius: 50%; pointer-events: none; }
 .chest-window { position: relative; }
 .cw-flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 20; border-radius: 4px; }
-.chest-window { transition: background-color .5s steps(4); }
-.chest-window.cw-dim { background-color: #d9c597; }
 .cw-pillar { left: var(--cx); bottom: calc(100% - var(--cb) + 20px); transform-origin: 50% 100%; opacity: 0; }
 .cw-ember { position: absolute; top: calc(var(--cb) - 10px); width: 3px; height: 3px; border-radius: 1px; pointer-events: none; }
 .cw-coin { position: absolute; left: calc(var(--cx) - 8px); top: var(--cy); z-index: 2; }
