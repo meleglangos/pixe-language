@@ -256,7 +256,7 @@ html, body {
   animation: cw-pulse .8s ease-in-out infinite;
 }
 @keyframes cw-pulse { 50% { transform: scale(1.12); } }
-.cw-stars { display: flex; justify-content: center; gap: 8px; margin: 4px 0 6px; }
+.cw-stars { display: flex; justify-content: center; gap: 8px; margin: 4px 0 12px; }
 .cw-star { position: relative; width: 45px; height: 45px; }
 .cw-star canvas { position: absolute; inset: 0; image-rendering: pixelated; }
 .cw-star .cw-star-on { opacity: 0; transition: opacity .06s; }
@@ -267,10 +267,6 @@ html, body {
   position: absolute; left: 50%; top: 18%; width: 14px; height: 14px; margin-left: -7px; opacity: 0; pointer-events: none;
   background: linear-gradient(#fff, #fff) center / 2px 100% no-repeat, linear-gradient(#fff, #fff) center / 100% 2px no-repeat;
 }
-.cw-caption { min-height: 46px; display: grid; gap: 2px; }
-.cw-count { font-weight: 700; }
-.cw-hint { color: var(--ink-soft); animation: cw-blink 1.4s ease-in-out infinite; }
-@keyframes cw-blink { 50% { opacity: .45; } }
 .cw-collected { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; min-height: 8px; }
 .cw-small { filter: drop-shadow(0 0 4px var(--rarity)); }
 .chest-window .loot-list { margin-top: 10px; text-align: left; }

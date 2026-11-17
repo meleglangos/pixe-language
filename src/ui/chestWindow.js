@@ -132,15 +132,13 @@
       stage.setAttribute('aria-label', Game.i18n.de('chest.name'));
       const starEls = [0, 1, 2, 3, 4].map(() => ui.el('span', 'cw-star', [starCanvas('off'), starCanvas('on'), ui.el('span', 'cw-twinkle')]));
       const starRow = ui.el('div', 'cw-stars', starEls);
-      const caption = ui.el('div', 'cw-caption');
       const collected = ui.el('div', 'cw-collected');
-      const panel = ui.modal({ title: 'chest.name', closable: false, body: [stage, starRow, caption, collected], buttons: [] });
+      const panel = ui.modal({ title: 'chest.name', closable: false, body: [stage, starRow, collected], buttons: [] });
       panel.classList.add('chest-window');
       panel.dataset.stars = stars;
       panel.dataset.phase = 'stars';
 
       const light = n => starEls.forEach((s, i) => s.classList.toggle('on', i < n));
-      const hint = key => caption.replaceChildren(ui.el('div', 'cw-count', [ui.tx('chest.stars', { n: stars })]), ui.el('div', 'cw-hint', [ui.tx(key)]));
       const setGlow = (color, scale, alpha) => {
         glow.style.setProperty('--glow', color);
         fx(glow, [{}, { transform: 'translate(-50%, -50%) scale(' + scale + ')', opacity: alpha }], { duration: 350, fill: 'forwards', easing: 'ease-out' });
@@ -169,7 +167,6 @@
         });
         if (stars === 5) panel.classList.add('cw-five');
         setGlow(GOLD_COLOR, 1, 0.35 + stars * 0.05);
-        hint('chest.tapToOpen');
         phase = 'closed';
         panel.dataset.phase = phase;
         chestBox.classList.add('ready');
@@ -209,14 +206,12 @@
           panel.dataset.phase = phase;
           chestBox.classList.remove('cw-tease');
           setGlow(GOLD_COLOR, 0.9, 0.25);
-          hint('chest.tapNext');
           return;
         }
         const r = rarityInfo(loot[next]);
         const strong = { common: 0, gold: 0, rare: 1, epic: 2, legendary: 3 }[r.group] || 0;
         setGlow(r.color, 1.2 + strong * 0.25, 0.55 + strong * 0.15);
         chestBox.classList.toggle('cw-tease', strong >= 2); // epic / legendary: remeg és lüktet a láda
-        hint('chest.tapNext');
         chestBox.classList.add('ready');
       }
 
@@ -276,7 +271,6 @@
         panel.dataset.phase = phase;
         chestBox.classList.remove('ready', 'cw-tease');
         setGlow(GOLD_COLOR, 0.9, 0.25);
-        caption.replaceChildren(ui.el('div', 'cw-count', [ui.tx('chest.stars', { n: stars })]));
         // az utolsó kiemelt tárgy is a sorba kerül
         setTimeout(() => {
           stash();

@@ -529,8 +529,6 @@
     "hu": "A láda zárva van. Előbb győzd le az összes szörnyet!"
   },
   "chest.lockedDesc": {"de": "Verschlossen – hier sind noch Monster.", "hu": "Zárva – még vannak itt szörnyek."},
-  "chest.tapToOpen": {"de": "Tippe auf die Truhe!", "hu": "Koppints a ládára!"},
-  "chest.stars": {"de": "{n} von 5 Sternen", "hu": "{n} csillag az 5-ből"},
   "debug.type": {"de": "Entwickler", "hu": "Fejlesztő"},
   "debug.chestLab": {"de": "Truhen-Labor", "hu": "Láda-labor"},
   "debug.chestLabDesc": {"de": "Hier kannst du Truhen und ihre Beute testen.", "hu": "Itt kipróbálhatod a ládákat és a lootjukat."},
@@ -563,6 +561,5 @@
   "item.sword_gold_01.desc": {"de": "Es glänzt sogar im Dunkeln.", "hu": "Még a sötétben is csillog."},
   "item.crown_gold.name": {"de": "die goldene Krone", "hu": "az aranykorona"},
   "item.crown_gold.desc": {"de": "Sie gehörte einst einem König.", "hu": "Egykor egy királyé volt."},
-  "chest.tapNext": {"de": "Tippe weiter!", "hu": "Koppints tovább!"},
   "chest.legendary": {"de": "Legendär!", "hu": "Legendás!"}
 }

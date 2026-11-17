@@ -53,7 +53,8 @@ megremeg, kinyílik, és a loot ívben kiesik belőle az ablakban; alul megjelen
 - Telefon: a láda egy nagy koppintható terület (min. 44 px), „Super!” gomb alul; kis képernyőn a lista görgethető.
 
 ## 7. Szövegek
-- `chest.tapToOpen` („Tippe auf die Truhe!”), `chest.stars` („{n} von 5 Sternen” – a „?”-hez), a többi a meglévő.
+- ~~`chest.tapToOpen`, `chest.stars`, `chest.tapNext`~~ – a telefonos teszt után kikerültek (felesleges feliratok):
+  a csillagok magukért beszélnek, a koppintásra a lebegő / remegő láda utal. Marad: `chest.legendary` („Legendär!”).
 
 ## 8. Assetek
 - Nincs új: a láda a meglévő kivágás (`pc_wood`), a csillag kódból rajzolt (CSS / SVG), a fény a meglévő stílus.
