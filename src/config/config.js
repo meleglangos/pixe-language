@@ -11,6 +11,7 @@ Game.data.config = {
   loot: {
     goldIcon: 'it:1163',
     chestStyle: 'pc_wood',  // a láda alap kinézete (data/chest_styles.json); a dungeon "chestStyle"-ja felülírja
+    lockChestUntilCleared: false, // true: a láda zárva, amíg él szörny a dungeonben (most kikapcsolva)
   },
 
   // Kérdés-rendszer (src/systems/questions/)

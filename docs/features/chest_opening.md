@@ -55,17 +55,18 @@ ikonok a játékoshoz repülnek és eltűnnek. Utána a láda üres („Leer –
 ## 9. Eldöntendő kérdések
 - [x] Az arany már most kerüljön be? → **nem, az is csak látvány** (a tárolás az inventory feature-rel jön).
 - [x] Minden belépéskor újra tele a láda? → **igen, most még igen**.
-- [x] Zárva legyen a láda, amíg él szörny? → **igen** („Die Truhe ist verschlossen. Besiege zuerst alle Monster!”).
+- [x] Zárva legyen a láda, amíg él szörny? → ~~igen~~ → 2026-11-17: **most nem**, bármikor nyitható. Beállítás:
+      `config.js` → `loot.lockChestUntilCleared` (a zárás kódja és szövegei megmaradtak).
 - [ ] Hány tárgy jön ki? Javaslat: **2–4**, ebből legalább egy arany.
-- [x] Az animáció **cserélhető** legyen: többféle láda-grafikát / animációt ki fogunk próbálni (pl. Otsoga:
-      Free Treasure Chest, itch.io). A láda kinézete adatból jön (`chest_styles.json`: sprite / képkockák / időzítés),
+- [x] Az animáció **cserélhető** legyen: többféle láda-grafikát / animációt ki fogunk próbálni (az Otsoga ládát végül
+      nem használjuk, saját animáció készül). A láda kinézete adatból jön (`chest_styles.json`: sprite / képkockák / időzítés),
       így egy új láda kipróbálása csak adat + asset, kód nélkül.
 
 ## 10. Kész, ha
 - [x] a láda remeg, kinyílik, a tárgyak ívben kirepülnek, a láda két oldalán földet érnek, és a „Beute” ablak listázza őket
 - [x] a loot a loot táblából jön, súlyozott véletlennel; a validátor ellenőrzi a tárgyakat, táblákat, láda-stílusokat
 - [x] a láda kinézete adatból jön (`chest_styles.json`), egy másik láda-stílus kód nélkül kipróbálható
-- [x] a láda zárva, amíg él szörny (zörög, és üzenet jelzi)
+- [x] a láda zárva, amíg él szörny (zörög, és üzenet jelzi) – később kikapcsolva (`lockChestUntilCleared: false`)
 - [x] `node tools/build-data.js` és `npm test` zöld, új tesztekkel (sorsolás, ikonok, validátor)
 - [x] telefonméretben (iPhone 13 emuláció, érintéssel) a teljes játékban kipróbálva (a Phaser helyi másolatával)
 - [x] README „Állapot”, `docs/GAME_DESIGN.md` 3. rész, `data/README.md`, `CLAUDE.md` frissítve

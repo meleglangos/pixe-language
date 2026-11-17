@@ -28,7 +28,8 @@ Kilenc fokozat alulról felfelé: `common1–3`, `rare1–3`, `epic1–2`, `lege
 
 ## 3. Jutalmak és loot
 
-- Most: a dungeon ládája. Zárva, amíg él szörny a dungeonben; minden belépéskor újra tele van. Kinyitáskor
+- Most: a dungeon ládája. Bármikor kinyitható (a „zárva, amíg él szörny” kikapcsolható: `config.js` →
+  `loot.lockChestUntilCleared`); minden belépéskor újra tele van. Kinyitáskor
   2–4 tétel jön ki (mindig van arany), a zsákmány egyelőre csak látvány: sem a tárgyak, sem az arany nem
   tárolódik (az inventory külön feature). Spec: `docs/features/chest_opening.md`.
 - Loot forrásai (tervezett): láda a dungeonben, kérdés-kihívás, boss, vizsga. Mindegyik loot táblára

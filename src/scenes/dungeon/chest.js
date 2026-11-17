@@ -1,4 +1,4 @@
-// A dungeon ládája: zárva, amíg él szörny; nyitáskor remeg, kinyílik, és a loot ívben kirepül belőle,
+// A dungeon ládája: (ha a config így kéri) zárva, amíg él szörny; nyitáskor remeg, kinyílik, és a loot ívben kirepül belőle,
 // majd a "Beute" ablak (src/ui/loot.js) listázza. A zsákmány a loot táblából jön (Game.loot.roll), és most
 // még nem tárolódik (spec: docs/features/chest_opening.md).
 //
@@ -31,7 +31,8 @@
       this.pendingSpots.push(this.chest.spot);
     },
 
-    chestLocked() { return (this.mobs || []).some(m => !m.defeated); },
+    // zárva, amíg él szörny -- csak ha a config.loot.lockChestUntilCleared be van kapcsolva
+    chestLocked() { return !!Game.data.config.loot.lockChestUntilCleared && (this.mobs || []).some(m => !m.defeated); },
 
     // a panel szövege az állapottól függ: zárva / nyitható / üres (a DungeonScene a szörnyek legyőzése után is hívja)
     chestPrompt() {

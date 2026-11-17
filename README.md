@@ -9,7 +9,7 @@ Böngészős pixel-art RPG német nyelvtanuláshoz. Nincs build lépés: az `ind
 Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén frissíti (pipák + „Most folyamatban”).
 Új szakaszt vagy tételt csak a felhasználó kérésére vesz fel; az ötletek a `docs/IDEAS.md`-be kerülnek.
 
-**Most folyamatban:** semmi. Következő javasolt lépés: az Otsoga láda bekötése (ha feltöltötted), utána inventory.
+**Most folyamatban:** semmi. Következő javasolt lépés: inventory (a loot tárolása + „Tasche” ablak).
 
 - [x] 1. szakasz: térkép, kattintásos + billentyűs mozgás, kutya, mentés + export/import
 - [ ] 2. szakasz: egy dungeon, feladatrendszer, loot szabályok, HP, debug mód
@@ -28,7 +28,7 @@ Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén fris
     - [x] 7. dokumentáció
     - [x] 2. kiegészítés: közös kérdéskészlet címkelistával (helyzet-téma + nyelvtan), szint dungeononként, nincs ismétlés egy látogatáson belül, szörnyenként 2 jó válasz, sebzés rétegesen állítható
   - [ ] loot szabályok
-    - [x] ládanyitás: tárgyak, loot táblák, sorsolás, animáció, kirepülő loot, „Beute” ablak, zárt láda (a loot még nem tárolódik)
+    - [x] ládanyitás: tárgyak, loot táblák, sorsolás, animáció, kirepülő loot, „Beute” ablak (a loot még nem tárolódik; a láda bármikor nyitható)
   - [ ] HP
   - [ ] debug mód
 - [ ] 3. szakasz: inventory, gear a karakteren, shop, gold, HP-ital
