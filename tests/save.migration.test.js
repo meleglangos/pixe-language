@@ -20,7 +20,7 @@ test('v2 mentés (a régi kóddal készült): betöltődik, a dungeon ID-k átne
   assert.equal(storage.getItem(KEY + '.backup'), fixture('save_v2.json'));
 });
 
-test('v1 mentés: v1 -> v2 -> v3 lánc', () => {
+test('v1 mentés: v1 -> v2 -> v3 -> v4 lánc', () => {
   const { Game } = createGame({ storage: { 'deutsch-abenteuer.save': fixture('save_v1.json') } });
   assert.equal(Game.saveManager.load(), 'main');
   const d = plain(Game.state.data);
@@ -29,6 +29,38 @@ test('v1 mentés: v1 -> v2 -> v3 lánc', () => {
   assert.deepEqual(d.player, { x: 7, y: 16, dir: 'up', hp: 20, maxHp: 20 });
   assert.equal(d.gold, 5);
   assert.deepEqual(d.surprises, []);
+  assert.deepEqual([d.questions, d.unlocks], [{}, []]);
+});
+
+test('v3 mentés: betöltődik, üres kérdés-haladással, feloldással és napi állapottal (v3 -> v4)', () => {
+  const { Game, storage, KEY } = createGame({ storage: { 'deutsch-abenteuer.save': fixture('save_v3.json') } });
+  assert.equal(Game.saveManager.load(), 'main');
+  const d = plain(Game.state.data);
+  assert.equal(d.v, Game.saveSchema.VERSION);
+  assert.deepEqual([d.questions, d.unlocks, d.daily], [{}, [], { date: '', done: {} }]);
+  assert.deepEqual(d.player, { x: 20, y: 16, dir: 'down', hp: 11, maxHp: 20 });
+  assert.equal(d.gold, 17);
+  assert.deepEqual(d.dungeons, { dungeon_crypt: { visits: 1, clears: 0 } });
+  assert.equal(Game.state.flag('introSeen'), true);
+  assert.deepEqual(plain(Game.saveManager.lastIssues), []);
+  Game.saveManager.save();
+  assert.equal(JSON.parse(storage.getItem(KEY)).v, Game.saveSchema.VERSION);
+  assert.equal(storage.getItem(KEY + '.backup'), fixture('save_v3.json'));
+});
+
+test('v4: a kérdés-haladás, a feloldások és a napi állapot ellenőrzése', () => {
+  const { Game } = createGame();
+  const d = Game.saveSchema.defaults();
+  d.questions = { q_torolt: { right: 1 } };
+  d.unlocks = ['ch_a', 'ch_a', 5, '', 'ch_b'];
+  d.daily = { date: '2026-11-17', done: { ch_a: '2', ch_b: -1, ch_c: 0 } };
+  const out = Game.saveSchema.parse(d, Game.saveManager.known());
+  assert.deepEqual(plain(out.state.questions), {});
+  assert.deepEqual(plain(out.issues), ['ismeretlen kérdés: q_torolt']);
+  assert.deepEqual(plain(out.state.unlocks), ['ch_a', 'ch_b']);
+  assert.deepEqual(plain(out.state.daily), { date: '2026-11-17', done: { ch_a: 2 } });
+  const bad = Game.saveSchema.parse({ ...Game.saveSchema.defaults(), questions: 'x', daily: { date: 'tegnap', done: [] } }, null).state;
+  assert.deepEqual(plain([bad.questions, bad.daily]), [{}, { date: '', done: {} }]);
 });
 
 test('v2 -> v3: ha a régi és az új ID is szerepel, összeadja őket', () => {

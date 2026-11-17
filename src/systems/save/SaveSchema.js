@@ -10,7 +10,9 @@
   //   v1: 1. szakasz (pozíció, HP, arany, üres inventory/gear/dungeons)
   //   v2: dungeons[id] = { visits, clears }
   //   v3: végleges, beszédes dungeon ID-k (dungeon3 -> dungeon_crypt, ...); inventory = [{ id, qty }]
-  const VERSION = 3;
+  //   v4: kérdés-rendszer: questions[kérdés-id] = { right, wrong, streak }; unlocks: [id]; daily: { date, done }
+  const VERSION = 4;
+  const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
   // v2 -> v3: a helyszínek régi, számozott azonosítói
   const DUNGEON_IDS_V3 = { dungeon1: 'dungeon_cave', dungeon2: 'dungeon_mine', dungeon3: 'dungeon_crypt', boss: 'boss_tower' };
@@ -40,6 +42,12 @@
       // v2-ben az inventory mindig üres volt; ha mégis volt benne szöveges ID, tárgy-bejegyzés lesz belőle
       if (Array.isArray(s.inventory)) s.inventory = s.inventory.map(e => (typeof e === 'string' ? { id: e, qty: 1 } : e));
     },
+    // v3 -> v4: még nem volt kérdés-rendszer: üres haladás, nincs feloldás, nincs napi állapot
+    3(s) {
+      s.questions = {};
+      s.unlocks = [];
+      s.daily = { date: '', done: {} };
+    },
   };
 
   function defaults() {
@@ -52,6 +60,9 @@
       inventory: [],                       // [{ id: tárgy-id, qty }]
       gear: { weapon: null, armor: null }, // { hely: tárgy-id | null }
       dungeons: {},                        // { dungeon-id: { visits, clears } }
+      questions: {},                       // { kérdés-id: { right, wrong, streak } }
+      unlocks: [],                         // feloldott dolgok ID-i (pl. egyszeri kihívás)
+      daily: { date: '', done: {} },       // a mai nap (ÉÉÉÉ-HH-NN) és a ma teljesített napi kihívások: { id: db }
       surprises: [],                       // megszerzett meglepetés-lootok ID-i
       flags: { introSeen: false },
     };
@@ -67,12 +78,13 @@
 
   // Minden mezőt ellenőriz és javít; az ismeretlen ID-kat eldobja (és feljegyzi az issues-ba),
   // így egy hibás vagy régi mentés sem akaszthatja meg a játékot.
-  // known: { items: [id], dungeons: [id] } -- ha egy lista hiányzik, azt a típust nem szűri.
+  // known: { items: [id], dungeons: [id], questions: [id] } -- ha egy lista hiányzik, azt a típust nem szűri.
   function sanitize(s, known) {
     const issues = [];
     const def = defaults();
     const itemOk = id => typeof id === 'string' && (!known || !known.items || known.items.indexOf(id) >= 0);
     const dungeonOk = id => !known || !known.dungeons || known.dungeons.indexOf(id) >= 0;
+    const questionOk = id => !known || !known.questions || known.questions.indexOf(id) >= 0;
 
     s.updatedAt = Number.isFinite(s.updatedAt) ? s.updatedAt : 0;
 
@@ -111,6 +123,22 @@
       const d = isObj(dungeons[id]) ? dungeons[id] : {};
       s.dungeons[id] = { visits: count(d.visits), clears: count(d.clears) };
     });
+
+    const questions = isObj(s.questions) ? s.questions : {};
+    s.questions = {};
+    Object.keys(questions).forEach(id => {
+      if (!questionOk(id)) { issues.push('ismeretlen kérdés: ' + id); return; }
+      const q = isObj(questions[id]) ? questions[id] : {};
+      s.questions[id] = { right: count(q.right), wrong: count(q.wrong), streak: count(q.streak) };
+    });
+
+    // a feloldások ID-it nem szűrjük: egy később törölt tartalom feloldása nem árt, és visszajöhet
+    s.unlocks = [...new Set((Array.isArray(s.unlocks) ? s.unlocks : []).filter(x => typeof x === 'string' && x))];
+
+    const daily = isObj(s.daily) ? s.daily : {};
+    const done = isObj(daily.done) ? daily.done : {};
+    s.daily = { date: typeof daily.date === 'string' && DATE_RE.test(daily.date) ? daily.date : '', done: {} };
+    Object.keys(done).forEach(id => { const n = count(done[id]); if (n) s.daily.done[id] = n; });
 
     s.surprises = [...new Set((Array.isArray(s.surprises) ? s.surprises : []).filter(x => typeof x === 'string'))];
 

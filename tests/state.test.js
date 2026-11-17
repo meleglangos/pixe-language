@@ -6,8 +6,10 @@ const { createGame, plain } = require('./helpers/env');
 const SWORD = { id: 'sword_bronze_01' };
 const SHIELD = { id: 'shield_wood_01' };
 
+// egy teszt-kérdés (a valódi poolok tartalmától függetlenül)
+const Q = { id: 'q_test_01', type: 'input', level: 'B1', tags: ['test'], prompt: 'game.title', answers: ['game.title'] };
 function setup() {
-  const env = createGame({ items: [SWORD, SHIELD] });
+  const env = createGame({ items: [SWORD, SHIELD], content: raw => { raw.questionPools = raw.questionPools.concat({ id: 'test' }); raw.questions = { ...raw.questions, test: [Q] }; } });
   env.Game.saveManager.load();
   env.events = [];
   env.Game.events.on('state:changed', e => env.events.push(e.key));
@@ -77,6 +79,44 @@ test('dungeonök: látogatás és teljesítés', () => {
   assert.deepEqual(plain(Game.state.dungeonRecord('dungeon_mine')), { visits: 2, clears: 1 });
   assert.deepEqual(plain(Game.state.completedDungeons()), ['dungeon_mine']);
   assert.deepEqual(plain(Game.state.dungeonRecord('dungeon_cave')), { visits: 0, clears: 0 });
+});
+
+test('kérdések: a haladás feljegyzése, sorozat nullázása rossz válasznál', () => {
+  const { Game, events } = setup();
+  const seen = [];
+  Game.events.on('state:questions', e => seen.push(plain(e)));
+  Game.state.recordAnswer('q_test_01', true);
+  Game.state.recordAnswer('q_test_01', true);
+  Game.state.recordAnswer('q_test_01', false);
+  Game.state.recordAnswer('q_test_01', true);
+  assert.deepEqual(plain(Game.state.questionRecord('q_test_01')), { right: 3, wrong: 1, streak: 1 });
+  assert.deepEqual(seen[2], { id: 'q_test_01', record: { right: 2, wrong: 1, streak: 0 }, correct: false });
+  assert.equal(Game.state.recordAnswer('q_nincs', true), false);
+  assert.deepEqual(plain(Game.state.questionRecord('q_nincs')), { right: 0, wrong: 0, streak: 0 });
+  assert.deepEqual(events, ['questions', 'questions', 'questions', 'questions']);
+});
+
+test('feloldások: egyszer, eseménnyel', () => {
+  const { Game, events } = setup();
+  assert.equal(Game.state.unlock('ch_a'), true);
+  assert.equal(Game.state.unlock('ch_a'), false);
+  assert.equal(Game.state.unlock(''), false);
+  assert.equal(Game.state.isUnlocked('ch_a'), true);
+  assert.equal(Game.state.isUnlocked('ch_b'), false);
+  assert.deepEqual(events, ['unlocks']);
+});
+
+test('napi állapot: napon belül számol, új napon nulláról indul', () => {
+  const { Game } = setup();
+  const day1 = new Date(2026, 10, 17, 9), day1late = new Date(2026, 10, 17, 23, 59), day2 = new Date(2026, 10, 18, 0, 1);
+  assert.equal(Game.state.today(day1), '2026-11-17');
+  assert.equal(Game.state.dailyCount('ch_d', day1), 0);
+  assert.equal(Game.state.markDaily('ch_d', day1), 1);
+  assert.equal(Game.state.markDaily('ch_d', day1late), 2);
+  assert.equal(Game.state.dailyCount('ch_d', day1late), 2);
+  assert.equal(Game.state.dailyCount('ch_d', day2), 0);
+  assert.equal(Game.state.markDaily('ch_e', day2), 1);
+  assert.deepEqual(plain(Game.state.data.daily), { date: '2026-11-18', done: { ch_e: 1 } });
 });
 
 test('replace (betöltés / import): minden kijelző-eseményt kiküld', () => {

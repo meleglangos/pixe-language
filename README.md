@@ -19,8 +19,8 @@ Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén fris
   - [x] 2/2: „Die Kristallmine” dungeon (pálya és látvány), közös dungeon-rendszer, Credits képernyő
   - [x] dokumentáció: `CLAUDE.md`, `docs/`, slash commandok
   - [ ] feladatrendszer (kérdés-rendszer): a dungeonök, napi kihívások, petek, bossok közös kérdés-motorja
-    - [ ] 1. kérdés-motor és poolok (`data/questions/`), címkék: szint (B1–C1), téma, típus; „ellenőrizendő” (`review`) jelölés, validátorral
-    - [ ] 2. mentés v4: kérdés-haladás, általános `unlocks` / `daily` állapot, migrációval
+    - [x] 1. kérdés-motor és poolok (`data/questions/`), címkék: szint (B1–C1), téma, típus; „ellenőrizendő” (`review`) jelölés, validátorral
+    - [x] 2. mentés v4: kérdés-haladás, általános `unlocks` / `daily` állapot, migrációval
     - [ ] 3. kihívások (`data/challenges.json`), elnéző válasz-ellenőrzés (kis/nagybetű, `ae`↔`ä`, `ss`↔`ß`, szóközök, több helyes megoldás), HP-vesztés
     - [ ] 4. kérdés-ablak: választós, beírós, szókártyás
     - [ ] 5. dungeon: a szörnyek kérdeznek, legyőzés, 0 HP

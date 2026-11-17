@@ -5,11 +5,12 @@
 //   <storageKey>.backup   tartalék: az előző sikeres mentés. Ha a fő mentés sérült, ebből tölt be.
 //   <storageKey>.broken   egy betölthetetlen fő mentés félretett másolata (hogy ne vesszen el nyom nélkül)
 //
-// Automatikus mentés: a fontos állapotváltozásokra (loot, arany, felszerelés, dungeon, HP, jelzők)
+// Automatikus mentés: a fontos állapotváltozásokra (loot, arany, felszerelés, dungeon, kérdés-haladás,
+// feloldás, napi állapot, HP, jelzők)
 // feliratkozik, és ugyanabban a lépésben történt változásokat egyetlen írásba vonja össze.
 // A pozíciót a WorldScene menti (megálláskor, illetve séta közben pár másodpercenként) a save()-vel.
 (function () {
-  const AUTOSAVE_ON = ['hp', 'gold', 'inventory', 'gear', 'dungeons', 'surprises', 'flags'];
+  const AUTOSAVE_ON = ['hp', 'gold', 'inventory', 'gear', 'dungeons', 'questions', 'unlocks', 'daily', 'surprises', 'flags'];
 
   function browserStorage() {
     try { return window.localStorage; } catch (e) { return null; }
@@ -39,7 +40,7 @@
       sm._unsub = AUTOSAVE_ON.map(key => Game.events.on('state:' + key, sm.requestSave));
     },
 
-    known() { return { items: Game.content.ids('items'), dungeons: Game.content.dungeonIds() }; },
+    known() { return { items: Game.content.ids('items'), dungeons: Game.content.dungeonIds(), questions: Game.content.ids('questions') }; },
 
     // Nyers JSON szöveg -> ellenőrzött állapot, vagy null.
     parseText(text) {

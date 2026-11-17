@@ -1,5 +1,5 @@
 // A központi játékállapot. Minden, ami a mentésbe kerül, itt él: pozíció, HP, arany, inventory,
-// felszerelés, dungeonök, meglepetés-lootok, jelzők.
+// felszerelés, dungeonök, kérdés-haladás, feloldások, napi állapot, meglepetés-lootok, jelzők.
 //
 // Az állapotot CSAK ezeken a metódusokon át szabad módosítani. Minden változás eseményt küld
 // (Game.events), így a felület (HUD) és a mentés (SaveManager) magától frissül:
@@ -8,6 +8,9 @@
 //   state:inventory  { inventory }
 //   state:gear       { slot, item }
 //   state:dungeons   { id, record }
+//   state:questions  { id, record, correct }   (egy megválaszolt kérdés)
+//   state:unlocks    { id }                    (új feloldás)
+//   state:daily      { id, count, date }       (egy napi kihívás teljesítve)
 //   state:surprises  { surprises }
 //   state:flags      { name, value }
 //   state:position   { x, y, dir }        (ez nem vált ki automatikus mentést, lásd WorldScene)
@@ -17,6 +20,9 @@
 // A mentésben csak ID-k szerepelnek (tárgy, dungeon), a tartalom a data/*.json-ból jön.
 (function () {
   const clampInt = (v, lo, hi) => Math.min(hi, Math.max(lo, Math.round(v)));
+  const pad = n => (n < 10 ? '0' : '') + n;
+  // a helyi naptári nap ÉÉÉÉ-HH-NN alakban (a napi kihívásokhoz)
+  const localDate = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
 
   class GameState {
     constructor(data) { this.data = data; }
@@ -30,7 +36,7 @@
     replace(data) {
       this.data = data;
       Game.events.emit('state:replaced', {});
-      ['hp', 'gold', 'inventory', 'gear', 'dungeons', 'surprises', 'flags', 'position'].forEach(key => Game.events.emit('state:' + key, {}));
+      ['hp', 'gold', 'inventory', 'gear', 'dungeons', 'questions', 'unlocks', 'daily', 'surprises', 'flags', 'position'].forEach(key => Game.events.emit('state:' + key, {}));
       Game.events.emit('state:changed', { key: 'replaced' });
     }
 
@@ -120,6 +126,38 @@
       const r = this.data.dungeons[id] || (this.data.dungeons[id] = { visits: 0, clears: 0 });
       r[field]++;
       this.emit('dungeons', { id, record: this.dungeonRecord(id) });
+    }
+
+    // ---------- kérdések: { id: { right, wrong, streak } } ----------
+    // streak: hányszor válaszolt helyesen egymás után (rossz válasznál nullázódik)
+    questionRecord(id) { const r = this.data.questions[id]; return r ? { right: r.right, wrong: r.wrong, streak: r.streak } : { right: 0, wrong: 0, streak: 0 }; }
+    recordAnswer(id, correct) {
+      if (!Game.data.questions[id]) { console.warn('Ismeretlen kérdés:', id); return false; }
+      const r = this.data.questions[id] || (this.data.questions[id] = { right: 0, wrong: 0, streak: 0 });
+      if (correct) { r.right++; r.streak++; } else { r.wrong++; r.streak = 0; }
+      this.emit('questions', { id, record: this.questionRecord(id), correct: !!correct });
+      return true;
+    }
+
+    // ---------- feloldások: [id] ----------
+    isUnlocked(id) { return this.data.unlocks.indexOf(id) >= 0; }
+    unlock(id) {
+      if (typeof id !== 'string' || !id || this.isUnlocked(id)) return false;
+      this.data.unlocks.push(id);
+      this.emit('unlocks', { id });
+      return true;
+    }
+
+    // ---------- napi állapot: { date, done: { id: db } } ----------
+    // Új napon a számlálók maguktól nullázódnak. now: tesztekhez (Date), alapból a mostani idő.
+    today(now) { return localDate(now || new Date()); }
+    dailyCount(id, now) { const d = this.data.daily; return d.date === this.today(now) ? d.done[id] || 0 : 0; }
+    markDaily(id, now) {
+      const date = this.today(now), d = this.data.daily;
+      if (d.date !== date) { d.date = date; d.done = {}; }
+      d.done[id] = (d.done[id] || 0) + 1;
+      this.emit('daily', { id, count: d.done[id], date });
+      return d.done[id];
     }
 
     // ---------- meglepetés-lootok: [id] ----------
