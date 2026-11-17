@@ -22,7 +22,7 @@ Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén fris
     - [x] 1. kérdés-motor és poolok (`data/questions/`), címkék: szint (B1–C1), téma, típus; „ellenőrizendő” (`review`) jelölés, validátorral
     - [x] 2. mentés v4: kérdés-haladás, általános `unlocks` / `daily` állapot, migrációval
     - [x] 3. kihívások (`data/challenges.json`), elnéző válasz-ellenőrzés (kis/nagybetű, `ae`↔`ä`, `ss`↔`ß`, szóközök, több helyes megoldás), HP-vesztés
-    - [ ] 4. kérdés-ablak: választós, beírós, szókártyás
+    - [x] 4. kérdés-ablak: választós, beírós, szókártyás
     - [ ] 5. dungeon: a szörnyek kérdeznek, legyőzés, 0 HP
     - [ ] 6. első poolok: kripta (B1), bánya (B1–B2)
     - [ ] 7. dokumentáció

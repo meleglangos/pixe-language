@@ -140,5 +140,17 @@
     "de": "Das Spiel konnte nicht geladen werden. Bitte prüfe deine Internetverbindung und lade die Seite neu.",
     "hu": "A játékot nem sikerült betölteni. Kérlek, ellenőrizd az internetkapcsolatot, és töltsd újra az oldalt."
   },
-  "ui.translation": {"de": "Übersetzung", "hu": "Fordítás"}
+  "ui.translation": {"de": "Übersetzung", "hu": "Fordítás"},
+  "quiz.progress": {"de": "Richtige Antworten: {right} von {need}", "hu": "Helyes válaszok: {right} / {need}"},
+  "quiz.placeholder": {"de": "Deine Antwort …", "hu": "A válaszod …"},
+  "quiz.check": {"de": "Prüfen", "hu": "Ellenőrzés"},
+  "quiz.correct": {"de": "Richtig!", "hu": "Helyes!"},
+  "quiz.wrong": {"de": "Leider falsch. Richtig ist:", "hu": "Sajnos nem jó. A helyes válasz:"},
+  "quiz.damage": {"de": "Du verlierst {n} Leben.", "hu": "{n} életet veszítesz."},
+  "quiz.next": {"de": "Weiter", "hu": "Tovább"},
+  "quiz.flee": {"de": "Fliehen", "hu": "Menekülés"},
+  "quiz.finish": {"de": "Fertig", "hu": "Kész"},
+  "quiz.won": {"de": "Gewonnen! Das Monster zerfällt zu Staub.", "hu": "Győztél! A szörny porrá omlik."},
+  "quiz.lost": {"de": "Dir wird schwindelig … Du wachst draußen wieder auf.", "hu": "Megszédülsz… Odakint térsz magadhoz."},
+  "quiz.noQuestions": {"de": "Hier gibt es noch keine Fragen.", "hu": "Itt még nincsenek kérdések."}
 }
