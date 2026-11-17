@@ -10,11 +10,12 @@ const S = {
   't.s2': { de: 'Gestern bin ich gekommen.', hu: 'Tegnap jöttem.' }, 't.s3': { de: 'Ich bin heute gekommen.', hu: 'Ma jöttem.' },
   't.w1': { de: 'habe', hu: 'van' }, 't.w2': { de: 'zwei Wörter', hu: 'két szó' },
 };
-const q = (id, more) => Object.assign({ id, type: 'choice', level: 'B1', tags: ['test'], prompt: 't.p', answers: ['t.a'], wrong: ['t.b', 't.c'] }, more);
+const q = (id, more) => Object.assign({ id, type: 'choice', level: 'B1', tags: ['tctx', 'test'], prompt: 't.p', answers: ['t.a'], wrong: ['t.b', 't.c'] }, more);
 function withContent(questions, extra) {
   return raw => {
     Object.assign(raw.strings, S);
     raw.questionPools = raw.questionPools.concat({ id: 'p1' }, { id: 'p2' });
+    raw.questionTags = raw.questionTags.concat({ id: 'tctx', kind: 'context' }, { id: 'test', kind: 'grammar' }, { id: 'other', kind: 'grammar' });
     raw.questions = { ...raw.questions, p1: questions.p1 || [], p2: questions.p2 || [] };
     if (extra) extra(raw);
   };
@@ -40,6 +41,7 @@ test('a validátor kiszúrja a hibás kérdéseket', () => {
     p1: [
       q('q_dup'), q('q_dup'), q('Bad'),
       q('q_type', { type: 'essay' }), q('q_level', { level: 'A1' }), q('q_tags', { tags: [] }),
+      q('q_unknown_tag', { tags: ['tctx', 'test', 'tiere_typo'] }), q('q_no_ctx', { tags: ['test'] }),
       q('q_key', { prompt: 'nincs.ilyen' }),
       q('q_two', { answers: ['t.a', 't.b'] }), q('q_few', { wrong: ['t.b'] }), q('q_same', { wrong: ['t.a', 't.b'] }),
       q('q_in', { type: 'input' }),
@@ -56,6 +58,8 @@ test('a validátor kiszúrja a hibás kérdéseket', () => {
     /q_type: ismeretlen típus: essay/, /q_level\.level/, /q_tags\.tags/, /q_key\.prompt: ismeretlen szöveg-kulcs: nincs\.ilyen/,
     /q_two\.answers: választós kérdésnek pontosan egy/, /q_few\.wrong: választós kérdéshez 2–3/, /q_same: két lehetőség szövege azonos/,
     /q_in\.wrong: beírós kérdésnél nincs rossz lehetőség/,
+    /q_unknown_tag\.tags: ismeretlen címke: tiere_typo/, /q_no_ctx\.tags: legalább egy context címke kell/,
+    /q_tags\.tags: legalább egy grammar címke kell/,
     /q_t2\.answers: t\.s3 nem ugyanazokból a szavakból áll/, /q_t2\.wrong: t\.w2: szókártyás rossz lehetőség egyetlen szó/,
   ]) assert.match(issues, re);
   assert.doesNotMatch(issues, /q_t1/);
@@ -64,12 +68,14 @@ test('a validátor kiszúrja a hibás kérdéseket', () => {
 test('a validátor ellenőrzi a kihívásokat és a hivatkozásokat', () => {
   const { Game } = createGame();
   const raw = readData();
-  withContent({ p1: [q('q_a'), q('q_b', { tags: ['other'] })] }, r => {
+  withContent({ p1: [q('q_a'), q('q_b', { tags: ['tctx', 'other'] })] }, r => {
     r.challenges = [
       { id: 'ch_ok', pools: ['p1'], need: 2, repeat: 'unlimited' },
       { id: 'ch_bad', pools: ['p9'], need: 0, repeat: 'sometimes', wrongDamage: -1, levels: ['A2'] },
       { id: 'ch_few', pools: ['p1'], tags: ['other'], need: 2, repeat: 'daily' },
+      { id: 'ch_ctx', context: ['test', 'nincs'], contextShare: 2, need: 1, repeat: 'once' },
     ];
+    r.dungeons = r.dungeons.map((d, i) => (i ? { ...d, monsterStats: { skeleton: { need: 0, damage: -1 }, dragon: {} } } : d));
     r.monsters = r.monsters.map((m, i) => (i ? m : { ...m, need: 1.5, challenge: 'ch_nope' }));
     r.dungeons = r.dungeons.map((d, i) => (i ? d : { ...d, challenge: 'ch_nope2' }));
   })(raw);
@@ -78,6 +84,8 @@ test('a validátor ellenőrzi a kihívásokat és a hivatkozásokat', () => {
     /challenges\.ch_bad\.pools: ismeretlen questionPools id: p9/, /ch_bad\.need/, /ch_bad\.repeat/, /ch_bad\.wrongDamage/, /ch_bad\.levels/,
     /challenges\.ch_few: kevés kérdés felel meg neki \(1\)/, /\.need: pozitív egész/, /challenge: ismeretlen challenges id: ch_nope\b/,
     /challenge: ismeretlen challenges id: ch_nope2/,
+    /ch_ctx\.context: nem context címke: test/, /ch_ctx\.context: ismeretlen címke: nincs/, /ch_ctx\.contextShare/,
+    /monsterStats\.skeleton\.need/, /monsterStats\.skeleton\.damage/, /monsterStats: ismeretlen monsters id: dragon/,
   ]) assert.match(issues, re);
   assert.doesNotMatch(issues, /ch_ok/);
 });
@@ -106,13 +114,14 @@ test('szókártyák: szóközönként, írásjelek nélkül', () => {
   assert.deepEqual([...Game.questions.tileWords('Ich weiß, dass er „heute“ kommt!')], ['Ich', 'weiß', 'dass', 'er', 'heute', 'kommt']);
 });
 
-test('a valódi poolok: minden kérdés megoldható a saját megoldásaival, és vegyes a típus', () => {
+test('a valódi kérdések: mind megoldható a saját megoldásaival; a dungeon-téma vegyes típusú', () => {
   const { Game } = createGame();
   Game.saveManager.load();
-  for (const pool of Object.values(Game.data.questionPools)) {
-    const qs = pool.questions.map(id => Game.data.questions[id]);
-    assert.ok(qs.length >= 15, pool.id + ': kevés kérdés');
-    assert.deepEqual([...new Set(qs.map(q => q.type))].sort(), ['choice', 'input', 'tiles'], pool.id);
+  const dungeon = Game.questions.select({ context: ['dungeon'] });
+  assert.ok(dungeon.length >= 20, 'kevés dungeon-kérdés');
+  assert.deepEqual([...new Set(dungeon.map(q => q.type))].sort(), ['choice', 'input', 'tiles']);
+  {
+    const qs = Object.values(Game.data.questions);
     for (const q of qs) {
       for (const a of q.answers) {
         const de = Game.i18n.de(a);

@@ -16,12 +16,14 @@
     return t.replace(/\s+/g, ' ').replace(/ ([,;:.!?])/g, '$1').trim().replace(/[.!?]+$/, '').trim();
   }
 
-  // filter: { pools: [id], tags: [címke], levels: [szint] } -- a hiányzó / üres feltétel nem szűr
+  // filter: { pools: [id], tags: [címke], context: [címke], levels: [szint] } -- a hiányzó / üres feltétel nem szűr.
+  // A tags és a context is "bármelyik egyezzen"; a kettő együtt: mindkettőnek teljesülnie kell.
   function select(filter) {
     const f = filter || {};
     const has = (list, v) => !Array.isArray(list) || !list.length || list.indexOf(v) >= 0;
+    const anyTag = (list, q) => !Array.isArray(list) || !list.length || (q.tags || []).some(t => list.indexOf(t) >= 0);
     return Object.values(Game.data.questions || {}).filter(q => has(f.pools, q.pool) && has(f.levels, q.level)
-      && (!Array.isArray(f.tags) || !f.tags.length || (q.tags || []).some(t => f.tags.indexOf(t) >= 0)));
+      && anyTag(f.tags, q) && anyTag(f.context, q));
   }
 
   // Súly a haladás szerint: az új és a rontott kérdés gyakrabban jön, a sokszor eltalált egyre ritkábban
@@ -39,17 +41,36 @@
     return a;
   }
 
+  // Súlyozott véletlen választás egy listából.
+  function weighted(list, random) {
+    if (!list.length) return null;
+    const w = list.map(weight);
+    let x = (random || Math.random)() * w.reduce((a, b) => a + b, 0);
+    for (let i = 0; i < list.length; i++) { x -= w[i]; if (x < 0) return list[i]; }
+    return list[list.length - 1];
+  }
+
   // opts: { exclude: [kérdés-id], random }. Ha minden kérdés ki van zárva, ismételhet. Nincs kérdés: null.
   function pick(filter, opts) {
     opts = opts || {};
     const all = select(filter);
     const fresh = all.filter(q => (opts.exclude || []).indexOf(q.id) < 0);
-    const list = fresh.length ? fresh : all;
-    if (!list.length) return null;
-    const w = list.map(weight);
-    let x = (opts.random || Math.random)() * w.reduce((a, b) => a + b, 0);
-    for (let i = 0; i < list.length; i++) { x -= w[i]; if (x < 0) return list[i]; }
-    return list[list.length - 1];
+    return weighted(fresh.length ? fresh : all, opts.random);
+  }
+
+  // Kihívás kérdése: contextShare eséllyel a helyzet-témából, különben bármelyik a szűrésen belül.
+  // Mindig a még nem látott kérdések közül, amíg van; ha a témából elfogyott, a többiből; ha minden elfogyott, ismétel.
+  function pickFor(ch, exclude, random) {
+    const rnd = random || Math.random;
+    const base = { pools: ch.pools, tags: ch.tags, levels: ch.levels };
+    const fresh = list => list.filter(q => exclude.indexOf(q.id) < 0);
+    const share = typeof ch.contextShare === 'number' ? ch.contextShare : cfg().contextShare;
+    const ctx = Array.isArray(ch.context) && ch.context.length && rnd() < share
+      ? fresh(select(Object.assign({ context: ch.context }, base))) : [];
+    if (ctx.length) return weighted(ctx, rnd);
+    const all = select(base);
+    const rest = fresh(all);
+    return weighted(rest.length ? rest : all, rnd);
   }
 
   // Választós kérdés lehetőségei, keverve: [{ key, correct }]
@@ -94,7 +115,9 @@
 
   // Kihívás: `need` jó válasz kell; minden rossz válasz sebez. Ha a HP elfogy: elveszett.
   // Egy kihíváson belül nem ismétlődik kérdés, amíg van másik.
-  //   const c = Game.questions.challenge('ch_crypt_monster', { need: 2 });
+  //   const c = Game.questions.challenge('ch_crypt_monster', { need: 2, damage: 1, asked: [] });
+  //     need / damage: felülírja a kihívásét (pl. a szörny értékei); asked: közös lista a már feltett
+  //     kérdésekről (pl. egy dungeon-látogatás összes szörnyére), hogy ne ismétlődjön
   //   c.next()        -> a következő kérdés (null, ha vége, vagy nincs kérdés)
   //   c.submit(given) -> { correct, expected, damage, done, won, lost } (null, ha most nem lehet válaszolni)
   //   c.flee()        -> feladás: nem sebez
@@ -104,14 +127,13 @@
     const ch = Game.data.challenges[chId];
     if (!ch) { console.warn('Ismeretlen kihívás:', chId); return null; }
     const need = Math.max(1, Math.floor(opts.need || ch.need || 1));
-    const damage = Number.isInteger(ch.wrongDamage) ? ch.wrongDamage : cfg().wrongDamage;
-    const filter = { pools: ch.pools, tags: ch.tags, levels: ch.levels };
-    const asked = [];
+    const damage = Number.isInteger(opts.damage) ? opts.damage : Number.isInteger(ch.wrongDamage) ? ch.wrongDamage : cfg().wrongDamage;
+    const asked = Array.isArray(opts.asked) ? opts.asked : [];
     const c = {
-      id: ch.id, need, right: 0, wrong: 0, status: 'active', question: null,
+      id: ch.id, need, damage, right: 0, wrong: 0, status: 'active', question: null,
       next() {
         if (c.status !== 'active') return null;
-        c.question = pick(filter, { exclude: asked, random: opts.random });
+        c.question = pickFor(ch, asked, opts.random);
         if (c.question) asked.push(c.question.id);
         return c.question;
       },
@@ -134,5 +156,5 @@
     return c;
   }
 
-  Game.questions = { normalize, select, weight, pick, choices, tiles, check, answer, available, challenge, tileWords };
+  Game.questions = { normalize, select, weight, weighted, pick, choices, tiles, check, answer, available, challenge, tileWords };
 })();

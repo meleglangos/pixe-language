@@ -1,0 +1,22 @@
+[
+  {"id": "dungeon", "kind": "context"},
+  {"id": "alltag", "kind": "context"},
+  {"id": "perfekt", "kind": "grammar"},
+  {"id": "praeteritum", "kind": "grammar"},
+  {"id": "praepositionen", "kind": "grammar"},
+  {"id": "dativ", "kind": "grammar"},
+  {"id": "akkusativ", "kind": "grammar"},
+  {"id": "nebensatz", "kind": "grammar"},
+  {"id": "weil", "kind": "grammar"},
+  {"id": "dass", "kind": "grammar"},
+  {"id": "obwohl", "kind": "grammar"},
+  {"id": "adjektiv", "kind": "grammar"},
+  {"id": "wortschatz", "kind": "grammar"},
+  {"id": "reflexiv", "kind": "grammar"},
+  {"id": "um_zu", "kind": "grammar"},
+  {"id": "konjunktiv2", "kind": "grammar"},
+  {"id": "verben_praeposition", "kind": "grammar"},
+  {"id": "pronominaladverb", "kind": "grammar"},
+  {"id": "passiv", "kind": "grammar"},
+  {"id": "je_desto", "kind": "grammar"}
+]

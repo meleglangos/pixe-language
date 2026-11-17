@@ -38,7 +38,8 @@ Kilenc fokozat alulról felfelé: `common1–3`, `rare1–3`, `epic1–2`, `lege
 ## 4. HP
 
 - Most: maximum 20 (`config.js` → `player.maxHp`), módosítás: `setHp / damage / heal`.
-- Csökken: rossz válasz egy kihívásban (`config.js` → `questions.wrongDamage`, alapból 3; a kihívás felülírhatja).
+- Csökken: rossz válasz egy kihívásban. Most: sima szörny −1, harcos −2 HP. Állítható, az erősebb nyer:
+  dungeon `monsterStats` > szörnytípus `damage` > kihívás `wrongDamage` > `config.js` (`data/README.md`).
 - 0 HP: a kihívás elveszett, a játékos kiesik a dungeonből, és kint ébred teljes HP-val (amíg nincs HP-ital).
 - **Eldöntendő:** mitől nő a HP (ital, pihenés?), és a 0 HP később szigorúbb legyen-e.
 
@@ -61,9 +62,11 @@ Minden német feladat egy közös motoron fut. Egy új ötlet (napi kérdés, pe
 - Kész (spec: `docs/features/kerdes_rendszer.md`, motor: `src/systems/questions/README.md`, formátum: `data/README.md`).
 - Kiválasztás: egy kihíváson belül nincs ismétlés; az új és a rontott kérdés gyakrabban jön, a többször
   egymás után eltalált ritkábban (a haladás a mentésben: `questions`).
-- Dungeon: minden szörny a dungeon kihívását adja (`dungeons.json` → `challenge`), a `*_warrior` szörnyek 2 jó
-  választ kérnek. A legyőzött szörny csak arra a látogatásra tűnik el; ha mind legyőzve, a dungeon teljesítve.
-- Rossz válasz: HP-vesztés, a szörny marad, új kérdés jön. Nincs időlimit. Szörnyért még nincs jutalom.
+- Egy közös kérdéskészlet címkékkel: `context` (helyzet-téma: `dungeon`, `alltag`…) és `grammar`. A kihívás a
+  szintre szűr, és `contextShare` (0,7) eséllyel a helyzet-témából kérdez, különben bármiből a szinten belül.
+- Dungeon: minden szörny a dungeon kihívását adja (`dungeons.json` → `challenge`), 2 jó választ kér (a harcos is);
+  egy látogatáson belül nincs ismétlődő kérdés. Kripta: B1, bánya: B1–B2. A legyőzött szörny csak arra a látogatásra tűnik el; ha mind legyőzve, a dungeon teljesítve.
+- Rossz válasz: HP-vesztés (sima szörny 1, harcos 2), a szörny marad, új kérdés jön. Nincs időlimit. Szörnyért még nincs jutalom.
 
 ## 6. Pet
 

@@ -9,7 +9,8 @@ Game.data.config = {
   },
   // Kérdés-rendszer (src/systems/questions/)
   questions: {
-    wrongDamage: 3,   // ennyi HP-t veszít a játékos egy rossz válaszért (a kihívás felülírhatja)
+    wrongDamage: 3,     // ennyi HP-t veszít a játékos egy rossz válaszért (a kihívás / szörny felülírhatja)
+    contextShare: 0.7,  // ekkora eséllyel jön a kihívás helyzet-témájából a kérdés (különben bármi a szinten belül)
   },
   pet: {
     followDistance: 18, // ennyivel marad le a kutya (pixel)

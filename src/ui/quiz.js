@@ -1,6 +1,7 @@
 // A kérdés-ablak: egy kihívás (Game.questions.challenge) kérdéseit mutatja egymás után.
 //
-//   Game.quiz.open({ challenge: kihívás-id, need: szám (opcionális), title: szöveg-kulcs, onEnd(status) })
+//   Game.quiz.open({ challenge: kihívás-id, title: szöveg-kulcs, onEnd(status), need, damage, asked (opcionálisak,
+//                    lásd Game.questions.challenge) })
 //     status: 'won' | 'lost' | 'fled' | 'empty' (nincs kérdés a kihíváshoz)
 //
 // Típusok: választós (nagy gombok), beírós (szövegmező, Enter is beküld), szókártyás (koppintás a szavakra).
@@ -102,7 +103,7 @@
     },
 
     open(opts) {
-      const ch = Game.questions.challenge(opts.challenge, { need: opts.need });
+      const ch = Game.questions.challenge(opts.challenge, { need: opts.need, damage: opts.damage, asked: opts.asked });
       const end = status => { ui.closeModal(); if (opts.onEnd) opts.onEnd(status); };
       if (!ch) { end('empty'); return; }
       const flee = () => { ch.flee(); end('fled'); };

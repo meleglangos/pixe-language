@@ -2,7 +2,7 @@
 // (a ContentLoader kiírja őket a konzolra, a tesztek pedig elbuknak, ha van ilyen).
 (function () {
   const ID_RE = /^[a-z][a-z0-9_]*$/;
-  const LISTS = ['monsters', 'dungeonProps', 'dungeons', 'items', 'lootTables', 'questionPools', 'challenges', 'shop'];
+  const LISTS = ['monsters', 'dungeonProps', 'dungeons', 'items', 'lootTables', 'questionPools', 'questionTags', 'challenges', 'shop'];
   // Ezek az ID-k kerülhetnek a mentésbe: típusokon átívelően is egyedinek kell lenniük.
   const SAVED = ['dungeons', 'items'];
 
@@ -57,28 +57,43 @@
       if (rows.length !== map.height || rows.some(r => r.length !== map.width)) bad('map.' + layer + ': a mérete nem ' + map.width + 'x' + map.height);
     });
 
-    // kérdések (data/questions/<pool>.json) és kihívások
+    // címkék (data/questions/tags.json), kérdések (data/questions/<pool>.json) és kihívások
+    Object.values(byId.questionTags).forEach(t => { if (TAG_KINDS.indexOf(t.kind) < 0) bad('questionTags.' + t.id + '.kind: ' + TAG_KINDS.join(' | ')); });
     const questions = validateQuestions(raw, byId, bad, str, de);
+    const tagKind = id => byId.questionTags[id] && byId.questionTags[id].kind;
+    const tagList = (where, list, kind) => {
+      if (list === undefined) return [];
+      if (!Array.isArray(list)) { bad(where + ': tömbnek kell lennie'); return []; }
+      list.forEach(t => { if (!tagKind(t)) bad(where + ': ismeretlen címke: ' + t + ' (data/questions/tags.json)'); else if (kind && tagKind(t) !== kind) bad(where + ': nem ' + kind + ' címke: ' + t); });
+      return list;
+    };
+    const any = (list, v) => !list.length || list.indexOf(v) >= 0;
+    const anyTag = (list, q) => !list.length || (q.tags || []).some(t => list.indexOf(t) >= 0);
     Object.values(byId.challenges).forEach(ch => {
       const w = 'challenges.' + ch.id;
-      const pools = Array.isArray(ch.pools) ? ch.pools : [];
-      if (!pools.length) bad(w + '.pools: legalább egy pool kell');
-      pools.forEach(p => ref(w + '.pools', 'questionPools', p));
-      if (ch.tags !== undefined && !Array.isArray(ch.tags)) bad(w + '.tags: tömbnek kell lennie');
+      const pools = ch.pools === undefined ? [] : ch.pools;
+      if (!Array.isArray(pools)) bad(w + '.pools: tömbnek kell lennie');
+      else pools.forEach(p => ref(w + '.pools', 'questionPools', p));
+      const tags = tagList(w + '.tags', ch.tags);
+      const context = tagList(w + '.context', ch.context, 'context');
+      const levels = Array.isArray(ch.levels) ? ch.levels : [];
       if (ch.levels !== undefined && (!Array.isArray(ch.levels) || ch.levels.some(l => LEVELS.indexOf(l) < 0))) bad(w + '.levels: ' + LEVELS.join(' | '));
+      if (ch.contextShare !== undefined && !(typeof ch.contextShare === 'number' && ch.contextShare >= 0 && ch.contextShare <= 1)) bad(w + '.contextShare: 0 és 1 közötti szám');
       if (!(Number.isInteger(ch.need) && ch.need >= 1)) bad(w + '.need: pozitív egész szám kell');
-      if (ch.wrongDamage !== undefined && !(Number.isInteger(ch.wrongDamage) && ch.wrongDamage >= 0)) bad(w + '.wrongDamage: nemnegatív egész szám kell');
+      if (!damageOk(ch.wrongDamage)) bad(w + '.wrongDamage: nemnegatív egész szám kell');
       if (REPEATS.indexOf(ch.repeat) < 0) bad(w + '.repeat: ' + REPEATS.join(' | '));
-      const sel = questions.filter(q => pools.indexOf(q.pool) >= 0
-        && (!ch.tags || !ch.tags.length || (q.tags || []).some(t => ch.tags.indexOf(t) >= 0))
-        && (!ch.levels || !ch.levels.length || ch.levels.indexOf(q.level) >= 0));
+      const sel = questions.filter(q => any(Array.isArray(pools) ? pools : [], q.pool) && any(levels, q.level) && anyTag(tags, q));
       if (sel.length < (ch.need || 1)) bad(w + ': kevés kérdés felel meg neki (' + sel.length + ')');
+      else if (context.length && !sel.some(q => anyTag(context, q))) bad(w + '.context: egy kérdés sincs ebből a témából a szűrésen belül');
     });
-    const needOk = v => v === undefined || (Number.isInteger(v) && v >= 1);
+    const statsOk = (where, o) => {
+      if (!needOk(o.need)) bad(where + '.need: pozitív egész szám kell');
+      if (!damageOk(o.damage)) bad(where + '.damage: nemnegatív egész szám kell');
+    };
 
     Object.values(byId.monsters).forEach(m => {
       str('monsters.' + m.id, m.name); str('monsters.' + m.id, m.desc);
-      if (!needOk(m.need)) bad('monsters.' + m.id + '.need: pozitív egész szám kell');
+      statsOk('monsters.' + m.id, m);
       if (m.challenge !== undefined) ref('monsters.' + m.id + '.challenge', 'challenges', m.challenge);
     });
 
@@ -94,6 +109,10 @@
       if (d.lootTable !== undefined) ref(w + '.lootTable', 'lootTables', d.lootTable);
       if (d.challenge !== undefined) ref(w + '.challenge', 'challenges', d.challenge);
       else if ((d.monsters || []).some(m => !(byId.monsters[m.type] && byId.monsters[m.type].challenge))) bad(w + ': vannak szörnyei, de nincs kihívása (challenge)');
+      if (d.monsterStats !== undefined) {
+        if (!d.monsterStats || typeof d.monsterStats !== 'object' || Array.isArray(d.monsterStats)) bad(w + '.monsterStats: objektum kell ({ szörnytípus: { need, damage } })');
+        else Object.keys(d.monsterStats).forEach(t => { ref(w + '.monsterStats', 'monsters', t); statsOk(w + '.monsterStats.' + t, d.monsterStats[t] || {}); });
+      }
     });
 
     const rarities = Game.data.config && Game.data.config.rarities;
@@ -123,7 +142,9 @@
         const w = 'questions.' + id;
         if (QTYPES.indexOf(q.type) < 0) bad(w + ': ismeretlen típus: ' + q.type + ' (' + QTYPES.join(' | ') + ')');
         if (LEVELS.indexOf(q.level) < 0) bad(w + '.level: ' + LEVELS.join(' | '));
-        if (!Array.isArray(q.tags) || !q.tags.length || q.tags.some(t => typeof t !== 'string' || !ID_RE.test(t))) bad(w + '.tags: legalább egy címke kell (kisbetű, szám, _)');
+        const tags = Array.isArray(q.tags) ? q.tags : [];
+        tags.forEach(t => { if (!byId.questionTags[t]) bad(w + '.tags: ismeretlen címke: ' + t + ' (data/questions/tags.json)'); });
+        ['context', 'grammar'].forEach(k => { if (!tags.some(t => byId.questionTags[t] && byId.questionTags[t].kind === k)) bad(w + '.tags: legalább egy ' + k + ' címke kell'); });
         str(w + '.prompt', q.prompt);
         if (q.explain !== undefined) str(w + '.explain', q.explain);
         if (q.caseSensitive !== undefined && typeof q.caseSensitive !== 'boolean') bad(w + '.caseSensitive: true / false');
@@ -154,6 +175,9 @@
   // Egy mondat szókártyái: a kérdés-motoré (src/systems/questions), hogy a kettő ugyanúgy vágjon.
   const tileWords = s => Game.questions.tileWords(s);
 
+  const needOk = v => v === undefined || (Number.isInteger(v) && v >= 1);
+  const damageOk = v => v === undefined || (Number.isInteger(v) && v >= 0);
+  const TAG_KINDS = ['context', 'grammar'];
   const QTYPES = ['choice', 'input', 'tiles'];
   const LEVELS = ['B1', 'B2', 'C1'];
   const REPEATS = ['unlimited', 'daily', 'once'];

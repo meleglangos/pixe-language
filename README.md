@@ -26,6 +26,7 @@ Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén fris
     - [x] 5. dungeon: a szörnyek kérdeznek, legyőzés, 0 HP
     - [x] 6. első poolok: kripta (B1), bánya (B1–B2)
     - [x] 7. dokumentáció
+    - [x] 2. kiegészítés: közös kérdéskészlet címkelistával (helyzet-téma + nyelvtan), szint dungeononként, nincs ismétlés egy látogatáson belül, szörnyenként 2 jó válasz, sebzés rétegesen állítható
   - [ ] loot szabályok
   - [ ] HP
   - [ ] debug mód

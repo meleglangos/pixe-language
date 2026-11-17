@@ -68,3 +68,12 @@ Lista: `npm run review`. A validátor csak `true`-t enged.
 ## D14. A legyőzött szörny a következő belépéskor újra ott van (2026-11)
 A dungeon így gyakorlóhely marad; a „teljesítve” jelzés a mentésben megmarad. 0 HP-nál a játékos kint ébred
 teljes HP-val, amíg nincs HP-ital (a felhasználó döntése, spec: `docs/features/kerdes_rendszer.md`).
+
+## D15. Egy közös kérdéskészlet, helyzet-téma + nyelvtani címkével (2026-11)
+A kérdés aszerint jön, mivel lép interakcióba a játékos (szörny, pet, bolt: `context` címke), a szinten belül
+súlyozott véletlennel; 30% eséllyel bármiből a szinten belül, hogy egy kis téma se fogyjon ki. A címkék rögzített
+listában vannak (`data/questions/tags.json`), a fájlok csak rendezésre valók.
+
+## D16. Kérdésszám és sebzés rétegesen állítható (2026-11)
+Dungeon `monsterStats` > szörnytípus > kihívás > `config.js`. A nehezebb dungeonök és a bossok más értékeket
+kapnak, ehhez nem kell kód, csak adat.

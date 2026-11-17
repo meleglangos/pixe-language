@@ -33,7 +33,7 @@ tartalom csak a felhasználó kifejezett jóváhagyásával kerülhet bele.
 | Hol | Mi |
 | --- | --- |
 | `data/*.json` | minden tartalom: dungeonök, szörnyek, berendezés, tárgyak, loot táblák, kihívások, shop (formátumok: `data/README.md`) |
-| `data/questions/` | a német kérdések poolokban: `pools.json` + `<pool>.json` |
+| `data/questions/` | a német kérdések egy közös készletben: `pools.json` (fájllista) + `<fájl>.json`, `tags.json` (címkelista) |
 | `data/translations.json` | a fordítási fájl: minden megjelenő szöveg kulccsal, `de` + `hu` változattal |
 | `data/maps/*.json` | a pályák Tiled formátumban (overworld, dungeon_crypt, dungeon_mine); `tilesets/` = a Tiled képei |
 | `data/bundle.js` | GENERÁLT (`node tools/build-data.js`), a `file://` alóli futáshoz; kézzel ne szerkeszd |

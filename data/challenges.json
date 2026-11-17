@@ -1,4 +1,4 @@
 [
-  {"id": "ch_crypt_monster", "pools": ["crypt"], "need": 1, "repeat": "unlimited"},
-  {"id": "ch_mine_monster", "pools": ["mine"], "need": 1, "repeat": "unlimited"}
+  {"id": "ch_crypt_monster", "levels": ["B1"], "context": ["dungeon"], "need": 2, "repeat": "unlimited"},
+  {"id": "ch_mine_monster", "levels": ["B1", "B2"], "context": ["dungeon"], "need": 2, "repeat": "unlimited"}
 ]

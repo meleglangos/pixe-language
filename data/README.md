@@ -22,7 +22,8 @@ lehet hozzáadni. **Minden módosítás után futtasd:** `node tools/build-data.
 | `dungeon_props.json` | dungeon-berendezés (fáklya, koporsó, kristály…) | pl. `torch` |
 | `items.json` | tárgyak (még üres) | pl. `sword_bronze_01` |
 | `loot_tables.json` | loot táblák (még üres) | pl. `loot_crypt_chest` |
-| `questions/pools.json` + `questions/<pool>.json` | **a német kérdések** poolokban (a lista + poolonként egy fájl) | pl. `q_crypt_perfekt_01` |
+| `questions/pools.json` + `questions/<fájl>.json` | **a német kérdések**: egy közös készlet, rendezésből több fájlban | pl. `q_crypt_04` |
+| `questions/tags.json` | a kérdés-címkék rögzített listája (helyzet-téma / nyelvtan) | pl. `dungeon`, `perfekt` |
 | `challenges.json` | kihívások: melyik poolból, hány jó válasz kell, rossz válasz ára | pl. `ch_crypt_monster` |
 | `shop.json` | a bolt kínálata (még üres) | pl. `offer_potion_small` |
 
@@ -77,16 +78,17 @@ nyílik meg, ha van azonos ID-jú bejegyzés a `dungeons.json`-ban.
   "map": "dungeon_mine",             // térkép: data/maps/dungeon_mine.json
   "darkness": {"color": "#04060e", "alpha": 0.8, "playerLight": 52},  // opcionális: sötét dungeon
   "ambience": {"dust": true},        // opcionális: lebegő por (a cseppek helye a térkép "drips" rétegében)
-  "challenge": "ch_mine_monster"     // a szörnyei ezt a kihívást adják (challenges.json); kötelező, ha vannak szörnyei
+  "challenge": "ch_mine_monster",    // a szörnyei ezt a kihívást adják (challenges.json); kötelező, ha vannak szörnyei
+  "monsterStats": {"orc": {"damage": 2}}  // opcionális: szörnytípusonként más need / damage ebben a dungeonben
 }
 ```
 
 ## monsters.json
 
-`{ "id", "idle": animációs csík (src/config/assets.js: strips), "name", "desc": szöveg-kulcsok, "need": 2, "challenge": "ch_…" }`
+`{ "id", "idle": animációs csík (src/config/assets.js: strips), "name", "desc": szöveg-kulcsok, "damage": 1, "need": 2, "challenge": "ch_…" }`
 
-`need` (opcionális): hány jó válasz kell a legyőzéséhez (felülírja a kihívásét); `challenge` (opcionális):
-saját kihívás a dungeoné helyett. A legyőzött szörny csak az adott látogatásra tűnik el.
+`damage` / `need` (opcionális): HP-vesztés rossz válaszért / hány jó válasz kell (felülírja a kihívásét; egy dungeon
+`monsterStats`-a ezt is felülírhatja, lásd challenges.json); `challenge` (opcionális): saját kihívás a dungeoné helyett. A legyőzött szörny csak az adott látogatásra tűnik el.
 
 ## dungeon_props.json
 
@@ -107,16 +109,24 @@ További mezők:
 
 ## questions/ – a kérdések
 
-A német kérdések poolokban vannak. `questions/pools.json` a poolok listája (`[{"id": "crypt"}, …]`), minden
-poolnak saját fájlja van: `questions/<id>.json` (kérdések tömbje). Új pool: új sor a listába + új fájl.
-A kérdés ID-ja az összes poolban egyedi, és a mentésbe kerül (a haladás miatt): kiadott ID-t ne nevezz át.
+A német kérdések **egy közös készletet** alkotnak; a fájlok csak a rendezést szolgálják (most: `dungeon.json`,
+`alltag.json`). `questions/pools.json` a fájlok listája (`[{"id": "dungeon"}, …]`), minden bejegyzéshez tartozik
+egy `questions/<id>.json` (kérdések tömbje). Új fájl: új sor a listába + új fájl. Egy kérdés áthelyezhető másik
+fájlba; az ID-ja az összes fájlban egyedi, és a mentésbe kerül (a haladás miatt): kiadott ID-t ne nevezz át.
+
+**Címkék** (`questions/tags.json`, rögzített lista: `{"id": "dungeon", "kind": "context"}`). Kétféle van:
+- `context` – helyzet-téma: hol / mivel kapcsolatban jön a kérdés (`dungeon`, `alltag`, később pl. `tiere`, `laden`),
+- `grammar` – nyelvtani téma vagy szókincs (`perfekt`, `dativ`, `wortschatz`…).
+
+Minden kérdésnek legalább egy `context` és egy `grammar` címkéje van. Új címkét előbb a listába kell felvenni
+(a validátor szól, ha egy címke nincs rajta – így nem lesz egyszer `tiere`, máskor `tier`).
 
 ```jsonc
 {
   "id": "q_crypt_perfekt_01",
   "type": "choice",                    // choice: választós | input: beírós | tiles: szókártyás mondatépítés
   "level": "B1",                       // B1 | B2 | C1 (docs/GERMAN.md 4. rész)
-  "tags": ["perfekt"],                 // téma-címkék (kisbetű, szám, _), a kihívás szűrhet rájuk
+  "tags": ["dungeon", "perfekt"],      // címkék a questions/tags.json-ból: legalább egy context + egy grammar
   "prompt": "q.crypt_perfekt_01.prompt",
   "answers": ["q.crypt_perfekt_01.a"], // MINDEN helyes megoldás (szöveg-kulcsok); a játék csak ezeket fogadja el
   "wrong": ["q.crypt_perfekt_01.w1", "q.crypt_perfekt_01.w2"],
@@ -142,13 +152,26 @@ A kérdés ID-ja az összes poolban egyedi, és a mentésbe kerül (a haladás m
 ```jsonc
 {
   "id": "ch_crypt_monster",
-  "pools": ["crypt"],        // innen jönnek a kérdések
-  "tags": [],                // opcionális szűrés címkére (bármelyik egyezik)
-  "levels": ["B1"],          // opcionális szűrés szintre
-  "need": 1,                 // ennyi jó válasz kell a győzelemhez (a szörny "need" mezője felülírja)
-  "wrongDamage": 3,          // opcionális: HP-vesztés rossz válaszért (alap: config.js -> questions.wrongDamage)
+  "levels": ["B1"],          // szint-szűrés (a dungeonök haladva nehezednek: B1 -> C1)
+  "context": ["dungeon"],    // helyzet-téma: ebből jön a kérdés contextShare eséllyel ...
+  "contextShare": 0.7,       // ... (opcionális, alap: config.js), különben bármelyik kérdés a szűrésen belül
+  "tags": [],                // opcionális kemény szűrés címkére (bármelyik egyezik), pl. egy nyelvtani bossnál
+  "pools": [],               // opcionális kemény szűrés fájlra
+  "need": 2,                 // ennyi jó válasz kell a győzelemhez
+  "wrongDamage": 3,          // opcionális: HP-vesztés rossz válaszért
   "repeat": "unlimited"      // unlimited | daily (naponta egyszer) | once (egyszer, utána feloldva)
 }
+```
+
+Egy kihíváson belül nincs ismétlés; a dungeon egy látogatáson belül sem ismétel, amíg van még nem látott kérdés.
+
+**Kérdésszám és sebzés – az erősebb nyer:**
+`dungeons.json` → `monsterStats[szörnytípus]` > `monsters.json` szörnytípus > kihívás (`need`, `wrongDamage`) > `config.js`.
+```jsonc
+// monsters.json: a szörnytípus alapértékei
+{"id": "skeleton_warrior", …, "damage": 2}               // "need" is megadható
+// dungeons.json: egy nehezebb dungeonben ugyanaz a szörny más értékekkel
+{"id": "dungeon_tower", …, "challenge": "ch_tower_monster", "monsterStats": {"skeleton": {"need": 3, "damage": 2}}}
 ```
 
 ## translations.json – „ellenőrizendő” jelölés

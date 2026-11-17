@@ -30,6 +30,7 @@
       this.holes = [];      // fénykörök a sötétségben
       this.sparkles = {};   // szín -> csillogás-pontok
       this.tick = 0;
+      this.askedQuestions = []; // az ezen a látogatáson már feltett kérdések
 
       // talaj + falak egy textúrán
       if (this.textures.exists('dungeon_ground')) this.textures.remove('dungeon_ground');
@@ -122,9 +123,13 @@
     challenge(mob) {
       if (!mob.challenge || mob.defeated || this.leaving || Game.ui.isBlocking()) return;
       this.stopPath();
+      // need / damage: a dungeon monsterStats-a > a szörnytípus > a kihívás > config.js
+      const stats = Object.assign({}, { need: mob.type.need, damage: mob.type.damage }, (this.def.monsterStats || {})[mob.type.id]);
       Game.quiz.open({
         challenge: mob.challenge,
-        need: mob.type.need,
+        need: stats.need,
+        damage: stats.damage,
+        asked: this.askedQuestions, // egy látogatáson belül nincs ismétlés
         title: mob.type.name,
         onEnd: status => {
           if (status === 'won') this.defeatMonster(mob);

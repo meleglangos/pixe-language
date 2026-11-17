@@ -65,12 +65,12 @@ következménye: lásd 9. A „Fliehen” gombbal bármikor kiléphet. Ha minden
 - Nincs új: az ablak a meglévő pergamen-stílus; a szörny eltűnése kódból rajzolt porfelhő.
 
 ## 9. Eldöntendő kérdések
-- [x] Rossz válasz következménye? → **−3 HP** (`config.js`, kihívásonként felülírható), a szörny marad, új kérdés jön.
+- [x] Rossz válasz következménye? → ~~−3 HP~~ (2. kiegészítés: sima szörny −1, harcos −2) **−3 HP** (`config.js`, kihívásonként felülírható), a szörny marad, új kérdés jön.
 - [x] 0 HP-nál? → **kiesik a dungeonből**, kint ébred **teljes HP-val** (amíg nincs HP-ital).
 - [x] Legyőzött szörny? → **minden belépéskor újra ott van** (gyakorlás); a „teljesítve” jelzés a mentésben marad.
 - [x] Jutalom a szörnyért? → **még semmi**; a loot szabályok külön tétel.
 - [x] Időlimit? → **nincs**.
-- [x] Erősebb szörny (`*_warrior`) **2** jó választ kér, a többi 1-et.
+- [x] ~~Erősebb szörny (`*_warrior`) 2 jó választ kér, a többi 1-et.~~ → 2. kiegészítés: minden szörny 2-t.
 - [x] `review` jelölés → **a fordítási fájlban**, a bejegyzésen.
 
 ## 10. Kész, ha
@@ -104,6 +104,9 @@ illő témából jön kérdés, a szinten belül véletlenszerűen (a haladás s
   dungeonben ugyanaz a szörny többet sebezhet, a boss / vizsga pedig saját kihívást kap.
 - Mentés nem változik. A meglévő 42 kérdés helyzet-témát kap (`dungeon` / `alltag`), a fájlok `dungeon.json`
   és `alltag.json` lesznek (a kérdés-ID-k nem változnak).
+
+Kész: címkelista + validátor, kihívás `levels` / `context` / `contextShare`, közös `asked`, `monsterStats`,
+szörnyenként `damage`, a 42 kérdés átrendezve (`dungeon.json` 33, `alltag.json` 9), tesztek; D15, D16.
 
 ## 11. Lépések
 1. Motor: pool- és kérdésformátum, betöltés, validátor, `review` jelölés + lista; tesztek (még nincs felület).

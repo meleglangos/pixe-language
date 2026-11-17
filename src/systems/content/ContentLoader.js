@@ -8,6 +8,7 @@
 //   Game.data.dungeons[id], .monsters[id], .dungeonProps[id], .items[id], .lootTables[id], .challenges[id], .shop[id]
 //   Game.data.questions[id]: minden kérdés, az összes poolból (a kérdés .pool mezője: melyik poolból jött)
 //   Game.data.questionPools[id]: a poolok (data/questions/pools.json) + .questions: a pool kérdés-ID-i
+//   Game.data.questionTags[id]: a címkék rögzített listája ({ id, kind: 'context' | 'grammar' })
 //   Game.data.strings (fordítások: kulcs -> { de, hu }, data/translations.json), Game.data.map (világtérkép)
 //   Game.data.maps[id]: a nyers Tiled térképek (data/maps/<id>.json) -- a BootScene a Phaser cache-be is beteszi
 //
@@ -26,6 +27,7 @@
     items:        { file: 'items.json', list: true },
     lootTables:   { file: 'loot_tables.json', list: true },
     questionPools: { file: 'questions/pools.json', list: true },
+    questionTags: { file: 'questions/tags.json', list: true },
     challenges:   { file: 'challenges.json', list: true },
     shop:         { file: 'shop.json', list: true },
   };

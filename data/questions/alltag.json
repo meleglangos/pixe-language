@@ -1,0 +1,90 @@
+[
+  {
+    "id": "q_mine_01",
+    "type": "choice",
+    "level": "B1",
+    "tags": ["alltag", "reflexiv"],
+    "prompt": "q.mine_01.prompt",
+    "answers": ["q.mine_01.a"],
+    "wrong": ["q.mine_01.w1", "q.mine_01.w2"],
+    "explain": "q.mine_01.explain"
+  },
+  {
+    "id": "q_mine_02",
+    "type": "choice",
+    "level": "B1",
+    "tags": ["alltag", "reflexiv", "dativ"],
+    "prompt": "q.mine_02.prompt",
+    "answers": ["q.mine_02.a"],
+    "wrong": ["q.mine_02.w1", "q.mine_02.w2"],
+    "explain": "q.mine_02.explain"
+  },
+  {
+    "id": "q_mine_08",
+    "type": "input",
+    "level": "B2",
+    "tags": ["alltag", "konjunktiv2"],
+    "prompt": "q.mine_08.prompt",
+    "answers": ["q.mine_08.a"],
+    "explain": "q.mine_08.explain"
+  },
+  {
+    "id": "q_mine_09",
+    "type": "tiles",
+    "level": "B2",
+    "tags": ["alltag", "konjunktiv2", "nebensatz"],
+    "prompt": "q.mine_09.prompt",
+    "answers": ["q.mine_09.a", "q.mine_09.a2"],
+    "wrong": ["q.mine_09.w1"],
+    "explain": "q.mine_09.explain"
+  },
+  {
+    "id": "q_mine_12",
+    "type": "choice",
+    "level": "B2",
+    "tags": ["alltag", "verben_praeposition"],
+    "prompt": "q.mine_12.prompt",
+    "answers": ["q.mine_12.a"],
+    "wrong": ["q.mine_12.w1", "q.mine_12.w2", "q.mine_12.w3"],
+    "explain": "q.mine_12.explain"
+  },
+  {
+    "id": "q_mine_13",
+    "type": "input",
+    "level": "B2",
+    "tags": ["alltag", "verben_praeposition"],
+    "prompt": "q.mine_13.prompt",
+    "answers": ["q.mine_13.a"],
+    "explain": "q.mine_13.explain"
+  },
+  {
+    "id": "q_mine_14",
+    "type": "choice",
+    "level": "B2",
+    "tags": ["alltag", "pronominaladverb"],
+    "prompt": "q.mine_14.prompt",
+    "answers": ["q.mine_14.a"],
+    "wrong": ["q.mine_14.w1", "q.mine_14.w2", "q.mine_14.w3"],
+    "explain": "q.mine_14.explain"
+  },
+  {
+    "id": "q_mine_15",
+    "type": "choice",
+    "level": "B2",
+    "tags": ["alltag", "pronominaladverb", "verben_praeposition"],
+    "prompt": "q.mine_15.prompt",
+    "answers": ["q.mine_15.a"],
+    "wrong": ["q.mine_15.w1", "q.mine_15.w2", "q.mine_15.w3"],
+    "explain": "q.mine_15.explain"
+  },
+  {
+    "id": "q_mine_19",
+    "type": "choice",
+    "level": "B1",
+    "tags": ["alltag", "dativ"],
+    "prompt": "q.mine_19.prompt",
+    "answers": ["q.mine_19.a"],
+    "wrong": ["q.mine_19.w1", "q.mine_19.w2"],
+    "explain": "q.mine_19.explain"
+  }
+]
