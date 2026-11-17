@@ -128,7 +128,8 @@ A kérdés ID-ja az összes poolban egyedi, és a mentésbe kerül (a haladás m
 | `tiles` | a helyes mondat(ok); a kártyák az elsőből készülnek, a többi ugyanazokból a szavakból más sorrend | opcionális: egy-egy szavas „csali” kártyák |
 
 - A szöveg a kulcsok mögött a `translations.json`-ban van; a kérdés kulcsai: `q.<id q_ nélkül>.<prompt|a|a2|w1|explain>`.
-- Szókártya = a mondat egy szava (a vessző a szónál marad, a mondat végi írásjel elmarad).
+- Szókártya = a mondat egy szava, írásjel nélkül (más szórendnél a vessző máshová kerülne); a szókártyás
+  ellenőrzés csak a szavak sorrendjét nézi. A válasz után a teljes, írásjeles mondat jelenik meg.
 - Ellenőrzés (`docs/GERMAN.md` 6. rész): nem számít a kis-/nagybetű (kivéve `caseSensitive`), a felesleges
   szóköz, a mondat végi írásjel, és `ae`/`oe`/`ue`/`ss` = `ä`/`ö`/`ü`/`ß`. Minden más eltérés hiba.
 

@@ -10,6 +10,7 @@ const SCRIPTS = [
   'src/core/events.js',
   'src/config/config.js',
   'src/config/tiles.js',
+  'src/core/i18n.js',
   'src/systems/maps/TiledMap.js',
   'src/systems/content/ContentValidator.js',
   'src/systems/content/ContentLoader.js',
@@ -17,6 +18,7 @@ const SCRIPTS = [
   'src/systems/save/SaveSchema.js',
   'src/systems/save/SaveCodec.js',
   'src/systems/save/SaveManager.js',
+  'src/systems/questions/QuestionEngine.js',
 ];
 
 // localStorage utánzat. failWrites: minden írás kivételt dob (pl. betelt tárhely).

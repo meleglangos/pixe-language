@@ -150,12 +150,12 @@
     return out;
   }
 
-  // Egy mondat szókártyái: szóközönként, a mondat végi írásjel nélkül (a vessző a szónál marad).
-  const tileWords = s => String(s).replace(/[.!?]+$/, '').trim().split(/\s+/).filter(Boolean);
+  // Egy mondat szókártyái: a kérdés-motoré (src/systems/questions), hogy a kettő ugyanúgy vágjon.
+  const tileWords = s => Game.questions.tileWords(s);
 
   const QTYPES = ['choice', 'input', 'tiles'];
   const LEVELS = ['B1', 'B2', 'C1'];
   const REPEATS = ['unlimited', 'daily', 'once'];
 
-  Game.contentValidator = { validate, ID_RE, QTYPES, LEVELS, REPEATS, tileWords };
+  Game.contentValidator = { validate, ID_RE, QTYPES, LEVELS, REPEATS };
 })();

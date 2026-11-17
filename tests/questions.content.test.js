@@ -101,7 +101,7 @@ test('review-list: a jelölt szövegeket listázza', () => {
   list.forEach(e => { assert.equal(typeof e.key, 'string'); assert.equal(typeof e.de, 'string'); });
 });
 
-test('szókártyák: szóközönként, a mondat végi írásjel nélkül', () => {
+test('szókártyák: szóközönként, írásjelek nélkül', () => {
   const { Game } = createGame();
-  assert.deepEqual([...Game.contentValidator.tileWords('Ich weiß, dass er kommt.')], ['Ich', 'weiß,', 'dass', 'er', 'kommt']);
+  assert.deepEqual([...Game.questions.tileWords('Ich weiß, dass er „heute“ kommt!')], ['Ich', 'weiß', 'dass', 'er', 'heute', 'kommt']);
 });

@@ -7,6 +7,10 @@ Game.data.config = {
     speed: 72,        // pixel / másodperc (16 pixel = 1 mező)
     maxHp: 20,
   },
+  // Kérdés-rendszer (src/systems/questions/)
+  questions: {
+    wrongDamage: 3,   // ennyi HP-t veszít a játékos egy rossz válaszért (a kihívás felülírhatja)
+  },
   pet: {
     followDistance: 18, // ennyivel marad le a kutya (pixel)
     speedFactor: 1.25,  // a játékos sebességéhez képest
