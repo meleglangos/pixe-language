@@ -2,7 +2,7 @@
 // (a ContentLoader kiírja őket a konzolra, a tesztek pedig elbuknak, ha van ilyen).
 (function () {
   const ID_RE = /^[a-z][a-z0-9_]*$/;
-  const LISTS = ['monsters', 'dungeonProps', 'dungeons', 'items', 'lootTables', 'tasks', 'shop'];
+  const LISTS = ['monsters', 'dungeonProps', 'dungeons', 'items', 'lootTables', 'questionPools', 'challenges', 'shop'];
   // Ezek az ID-k kerülhetnek a mentésbe: típusokon átívelően is egyedinek kell lenniük.
   const SAVED = ['dungeons', 'items'];
 
@@ -30,6 +30,15 @@
 
     const strings = raw.strings || {};
     const str = (where, key) => { if (typeof key !== 'string' || !strings[key]) bad(where + ': ismeretlen szöveg-kulcs: ' + key); };
+    const de = key => (strings[key] && strings[key].de) || '';
+
+    // fordítási fájl: csak de, hu és az "ellenőrizendő" jelölés (review: true)
+    Object.keys(strings).forEach(key => {
+      const e = strings[key];
+      if (!e || typeof e !== 'object') { bad('strings.' + key + ': objektum kell ({ de, hu })'); return; }
+      Object.keys(e).forEach(f => { if (['de', 'hu', 'review'].indexOf(f) < 0) bad('strings.' + key + ': ismeretlen mező: ' + f); });
+      if ('review' in e && e.review !== true) bad('strings.' + key + '.review: csak true lehet (vagy hagyd el)');
+    });
     const ref = (where, key, id) => { if (!byId[key][id]) bad(where + ': ismeretlen ' + key + ' id: ' + id); };
 
     // térkép
@@ -48,7 +57,30 @@
       if (rows.length !== map.height || rows.some(r => r.length !== map.width)) bad('map.' + layer + ': a mérete nem ' + map.width + 'x' + map.height);
     });
 
-    Object.values(byId.monsters).forEach(m => { str('monsters.' + m.id, m.name); str('monsters.' + m.id, m.desc); });
+    // kérdések (data/questions/<pool>.json) és kihívások
+    const questions = validateQuestions(raw, byId, bad, str, de);
+    Object.values(byId.challenges).forEach(ch => {
+      const w = 'challenges.' + ch.id;
+      const pools = Array.isArray(ch.pools) ? ch.pools : [];
+      if (!pools.length) bad(w + '.pools: legalább egy pool kell');
+      pools.forEach(p => ref(w + '.pools', 'questionPools', p));
+      if (ch.tags !== undefined && !Array.isArray(ch.tags)) bad(w + '.tags: tömbnek kell lennie');
+      if (ch.levels !== undefined && (!Array.isArray(ch.levels) || ch.levels.some(l => LEVELS.indexOf(l) < 0))) bad(w + '.levels: ' + LEVELS.join(' | '));
+      if (!(Number.isInteger(ch.need) && ch.need >= 1)) bad(w + '.need: pozitív egész szám kell');
+      if (ch.wrongDamage !== undefined && !(Number.isInteger(ch.wrongDamage) && ch.wrongDamage >= 0)) bad(w + '.wrongDamage: nemnegatív egész szám kell');
+      if (REPEATS.indexOf(ch.repeat) < 0) bad(w + '.repeat: ' + REPEATS.join(' | '));
+      const sel = questions.filter(q => pools.indexOf(q.pool) >= 0
+        && (!ch.tags || !ch.tags.length || (q.tags || []).some(t => ch.tags.indexOf(t) >= 0))
+        && (!ch.levels || !ch.levels.length || ch.levels.indexOf(q.level) >= 0));
+      if (sel.length < (ch.need || 1)) bad(w + ': kevés kérdés felel meg neki (' + sel.length + ')');
+    });
+    const needOk = v => v === undefined || (Number.isInteger(v) && v >= 1);
+
+    Object.values(byId.monsters).forEach(m => {
+      str('monsters.' + m.id, m.name); str('monsters.' + m.id, m.desc);
+      if (!needOk(m.need)) bad('monsters.' + m.id + '.need: pozitív egész szám kell');
+      if (m.challenge !== undefined) ref('monsters.' + m.id + '.challenge', 'challenges', m.challenge);
+    });
 
     Object.values(byId.dungeons).forEach(d => {
       const w = 'dungeons.' + d.id;
@@ -60,6 +92,7 @@
       (d.monsters || []).forEach(m => ref(w + '.monsters', 'monsters', m.type));
       (d.props || []).forEach(p => ref(w + '.props', 'dungeonProps', p[0]));
       if (d.lootTable !== undefined) ref(w + '.lootTable', 'lootTables', d.lootTable);
+      if (d.challenge !== undefined) ref(w + '.challenge', 'challenges', d.challenge);
     });
 
     const rarities = Game.data.config && Game.data.config.rarities;
@@ -73,5 +106,56 @@
     return issues;
   }
 
-  Game.contentValidator = { validate, ID_RE };
+  // Kérdések: ID-k az összes poolban egyediek; típusonként a kötelező mezők; a választós lehetőségek
+  // különbözők; a szókártyás válaszok ugyanazokból a szavakból állnak. Visszatér: a kérdések listája (pool mezővel).
+  function validateQuestions(raw, byId, bad, str, de) {
+    const out = [], seen = {};
+    Object.keys(byId.questionPools).forEach(pid => {
+      const list = raw.questions && raw.questions[pid];
+      if (!Array.isArray(list)) { bad('questions/' + pid + '.json: hiányzik, vagy nem tömb'); return; }
+      list.forEach((q, i) => {
+        const id = q && q.id;
+        if (typeof id !== 'string' || !ID_RE.test(id)) { bad('questions/' + pid + '[' + i + ']: hiányzó vagy hibás id (' + JSON.stringify(id) + ')'); return; }
+        if (seen[id]) { bad('questions: ismétlődő id: ' + id + ' (' + seen[id] + ', ' + pid + ')'); return; }
+        seen[id] = pid;
+        out.push(Object.assign({}, q, { pool: pid }));
+        const w = 'questions.' + id;
+        if (QTYPES.indexOf(q.type) < 0) bad(w + ': ismeretlen típus: ' + q.type + ' (' + QTYPES.join(' | ') + ')');
+        if (LEVELS.indexOf(q.level) < 0) bad(w + '.level: ' + LEVELS.join(' | '));
+        if (!Array.isArray(q.tags) || !q.tags.length || q.tags.some(t => typeof t !== 'string' || !ID_RE.test(t))) bad(w + '.tags: legalább egy címke kell (kisbetű, szám, _)');
+        str(w + '.prompt', q.prompt);
+        if (q.explain !== undefined) str(w + '.explain', q.explain);
+        if (q.caseSensitive !== undefined && typeof q.caseSensitive !== 'boolean') bad(w + '.caseSensitive: true / false');
+        const answers = Array.isArray(q.answers) ? q.answers : [];
+        const wrong = q.wrong === undefined ? [] : q.wrong;
+        if (!answers.length) bad(w + '.answers: legalább egy helyes megoldás kell');
+        if (!Array.isArray(wrong)) { bad(w + '.wrong: tömbnek kell lennie'); return; }
+        answers.concat(wrong).forEach(k => str(w, k));
+        const norm = k => de(k).toLowerCase().replace(/[.!?]+$/, '').trim();
+        if (q.type === 'choice') {
+          if (answers.length !== 1) bad(w + '.answers: választós kérdésnek pontosan egy helyes megoldása van');
+          if (wrong.length < 2 || wrong.length > 3) bad(w + '.wrong: választós kérdéshez 2–3 rossz lehetőség kell');
+          const texts = answers.concat(wrong).map(norm);
+          if (new Set(texts).size !== texts.length) bad(w + ': két lehetőség szövege azonos');
+        } else if (q.type === 'input') {
+          if (wrong.length) bad(w + '.wrong: beírós kérdésnél nincs rossz lehetőség');
+        } else if (q.type === 'tiles') {
+          const bag = k => tileWords(de(k)).map(x => x.toLowerCase()).sort().join(' ');
+          if (answers.length && tileWords(de(answers[0])).length < 2) bad(w + ': szókártyás kérdéshez legalább 2 szó kell');
+          answers.forEach(k => { if (bag(k) !== bag(answers[0])) bad(w + '.answers: ' + k + ' nem ugyanazokból a szavakból áll, mint az első megoldás'); });
+          wrong.forEach(k => { if (tileWords(de(k)).length !== 1) bad(w + '.wrong: ' + k + ': szókártyás rossz lehetőség egyetlen szó lehet'); });
+        }
+      });
+    });
+    return out;
+  }
+
+  // Egy mondat szókártyái: szóközönként, a mondat végi írásjel nélkül (a vessző a szónál marad).
+  const tileWords = s => String(s).replace(/[.!?]+$/, '').trim().split(/\s+/).filter(Boolean);
+
+  const QTYPES = ['choice', 'input', 'tiles'];
+  const LEVELS = ['B1', 'B2', 'C1'];
+  const REPEATS = ['unlimited', 'daily', 'once'];
+
+  Game.contentValidator = { validate, ID_RE, QTYPES, LEVELS, REPEATS, tileWords };
 })();

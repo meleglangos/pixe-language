@@ -22,7 +22,8 @@ lehet hozzáadni. **Minden módosítás után futtasd:** `node tools/build-data.
 | `dungeon_props.json` | dungeon-berendezés (fáklya, koporsó, kristály…) | pl. `torch` |
 | `items.json` | tárgyak (még üres) | pl. `sword_bronze_01` |
 | `loot_tables.json` | loot táblák (még üres) | pl. `loot_crypt_chest` |
-| `tasks.json` | nyelvi feladatok (még üres) | pl. `task_articles_01` |
+| `questions/pools.json` + `questions/<pool>.json` | **a német kérdések** poolokban (a lista + poolonként egy fájl) | pl. `q_crypt_perfekt_01` |
+| `challenges.json` | kihívások: melyik poolból, hány jó válasz kell, rossz válasz ára | pl. `ch_crypt_monster` |
 | `shop.json` | a bolt kínálata (még üres) | pl. `offer_potion_small` |
 
 ## translations.json – minden szöveg innen jön
@@ -100,6 +101,56 @@ További mezők:
 - `sparkle: szín` – csillogó részecskék körülötte
 - `alpha`, `dx`, `dy`, `originX`, `shadow`: finomhangolás
 
+## questions/ – a kérdések
+
+A német kérdések poolokban vannak. `questions/pools.json` a poolok listája (`[{"id": "crypt"}, …]`), minden
+poolnak saját fájlja van: `questions/<id>.json` (kérdések tömbje). Új pool: új sor a listába + új fájl.
+A kérdés ID-ja az összes poolban egyedi, és a mentésbe kerül (a haladás miatt): kiadott ID-t ne nevezz át.
+
+```jsonc
+{
+  "id": "q_crypt_perfekt_01",
+  "type": "choice",                    // choice: választós | input: beírós | tiles: szókártyás mondatépítés
+  "level": "B1",                       // B1 | B2 | C1 (docs/GERMAN.md 4. rész)
+  "tags": ["perfekt"],                 // téma-címkék (kisbetű, szám, _), a kihívás szűrhet rájuk
+  "prompt": "q.crypt_perfekt_01.prompt",
+  "answers": ["q.crypt_perfekt_01.a"], // MINDEN helyes megoldás (szöveg-kulcsok); a játék csak ezeket fogadja el
+  "wrong": ["q.crypt_perfekt_01.w1", "q.crypt_perfekt_01.w2"],
+  "explain": "q.crypt_perfekt_01.explain",  // opcionális: rövid magyarázat a válasz után
+  "caseSensitive": false               // opcionális: true, ha a feladat éppen a kis-/nagybetűt kérdezi
+}
+```
+
+| Típus | `answers` | `wrong` |
+| --- | --- | --- |
+| `choice` | pontosan 1 (a helyes lehetőség) | 2–3 rossz lehetőség; a lehetőségek keverve jelennek meg |
+| `input` | 1 vagy több: minden elfogadható alak (szinonima, névelővel / nélküle…) | nincs |
+| `tiles` | a helyes mondat(ok); a kártyák az elsőből készülnek, a többi ugyanazokból a szavakból más sorrend | opcionális: egy-egy szavas „csali” kártyák |
+
+- A szöveg a kulcsok mögött a `translations.json`-ban van; a kérdés kulcsai: `q.<id q_ nélkül>.<prompt|a|a2|w1|explain>`.
+- Szókártya = a mondat egy szava (a vessző a szónál marad, a mondat végi írásjel elmarad).
+- Ellenőrzés (`docs/GERMAN.md` 6. rész): nem számít a kis-/nagybetű (kivéve `caseSensitive`), a felesleges
+  szóköz, a mondat végi írásjel, és `ae`/`oe`/`ue`/`ss` = `ä`/`ö`/`ü`/`ß`. Minden más eltérés hiba.
+
+## challenges.json – kihívások
+
+```jsonc
+{
+  "id": "ch_crypt_monster",
+  "pools": ["crypt"],        // innen jönnek a kérdések
+  "tags": [],                // opcionális szűrés címkére (bármelyik egyezik)
+  "levels": ["B1"],          // opcionális szűrés szintre
+  "need": 1,                 // ennyi jó válasz kell a győzelemhez (a szörny "need" mezője felülírja)
+  "wrongDamage": 3,          // opcionális: HP-vesztés rossz válaszért (alap: config.js -> questions.wrongDamage)
+  "repeat": "unlimited"      // unlimited | daily (naponta egyszer) | once (egyszer, utána feloldva)
+}
+```
+
+## translations.json – „ellenőrizendő” jelölés
+
+Ha egy német szövegben nem vagy 100%-ig biztos: `{"de": "…", "hu": "…", "review": true}`. A listájuk:
+`npm run review`. Más mező nem lehet a bejegyzésben (a validátor ellenőrzi).
+
 ## Tervezett formátumok (a 3–4. szakaszhoz)
 
 A validátor ezeket a mezőket már most ellenőrzi; a többi mező szabadon bővíthető.
@@ -111,8 +162,6 @@ A validátor ezeket a mezőket már most ellenőrzi; a többi mező szabadon bő
 {"id": "loot_crypt_chest", "entries": [{"item": "sword_bronze_01", "weight": 3}, {"gold": [5, 15], "weight": 5}]}
 // shop.json
 {"id": "offer_sword_bronze_01", "item": "sword_bronze_01", "price": 40}
-// tasks.json
-{"id": "task_articles_01", "type": "choice", "prompt": "task.articles_01.prompt", "answers": ["der", "die", "das"], "correct": 0}
 ```
 
 A `rarity` a `src/config/config.js` → `rarities` egyik `id`-ja.

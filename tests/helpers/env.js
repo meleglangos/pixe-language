@@ -32,10 +32,11 @@ function memoryStorage(initial) {
   };
 }
 
-// a teljes nyers tartalom (data/*.json + data/maps/*.json), ugyanúgy, ahogy a bundle-be kerül
+// a teljes nyers tartalom (data/*.json + data/maps/*.json + data/questions/*.json), ugyanúgy, ahogy a bundle-be kerül
 const readData = () => require('../../tools/build-data.js').readContent();
 
 // opts.items: extra tárgyak a tesztekhez (a data/items.json még üres)
+// opts.content(raw): a nyers tartalom módosítása a telepítés előtt (pl. teszt-kérdések, -szövegek)
 // opts.storage: kezdeti localStorage tartalom ({ kulcs: szöveg })
 function createGame(opts = {}) {
   const warnings = [];
@@ -48,6 +49,7 @@ function createGame(opts = {}) {
   const Game = ctx.Game;
   const raw = readData();
   if (opts.items) raw.items = raw.items.concat(opts.items);
+  if (opts.content) opts.content(raw);
   Game.content.install(raw);
   Game.saveManager.init(storage);
   return { Game, storage, warnings, KEY: Game.data.config.storageKey };

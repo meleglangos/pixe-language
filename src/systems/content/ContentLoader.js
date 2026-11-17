@@ -5,12 +5,17 @@
 // ilyenkor a data/bundle.js-ben lévő másolatot használja (`node tools/build-data.js` frissíti).
 //
 // Betöltés után a tartalom a Game.data alatt érhető el, ID szerint kulcsolva:
-//   Game.data.dungeons[id], .monsters[id], .dungeonProps[id], .items[id], .lootTables[id], .tasks[id], .shop[id]
+//   Game.data.dungeons[id], .monsters[id], .dungeonProps[id], .items[id], .lootTables[id], .challenges[id], .shop[id]
+//   Game.data.questions[id]: minden kérdés, az összes poolból (a kérdés .pool mezője: melyik poolból jött)
+//   Game.data.questionPools[id]: a poolok (data/questions/pools.json) + .questions: a pool kérdés-ID-i
 //   Game.data.strings (fordítások: kulcs -> { de, hu }, data/translations.json), Game.data.map (világtérkép)
 //   Game.data.maps[id]: a nyers Tiled térképek (data/maps/<id>.json) -- a BootScene a Phaser cache-be is beteszi
 //
 // A térképek (data/maps/*.json) Tiled formátumúak; a világtérkép az "overworld", a dungeonöké a
 // dungeons.json "map" mezője. A Game.data.map és a Game.data.dungeons[id] ezekből készül (systems/maps/TiledMap.js).
+//
+// A kérdések poolokban vannak: a lista a data/questions/pools.json, minden pool egy fájl: data/questions/<id>.json
+// (a böngésző nem tud mappát listázni, ezért kell a lista).
 (function () {
   // kulcs a Game.data alatt -> fájlnév a data/ mappában. `list`: tömb, amit ID szerint indexelünk.
   const FILES = {
@@ -20,7 +25,8 @@
     dungeons:     { file: 'dungeons.json', list: true },
     items:        { file: 'items.json', list: true },
     lootTables:   { file: 'loot_tables.json', list: true },
-    tasks:        { file: 'tasks.json', list: true },
+    questionPools: { file: 'questions/pools.json', list: true },
+    challenges:   { file: 'challenges.json', list: true },
     shop:         { file: 'shop.json', list: true },
   };
 
@@ -34,6 +40,9 @@
   const color = v => (typeof v === 'string' && /^#[0-9a-f]{6}$/i.test(v) ? parseInt(v.slice(1), 16) : v);
 
   const MAPS_DIR = 'maps/';
+  const QUESTIONS_DIR = 'questions/';
+  // a betöltendő kérdés-poolok ID-i (data/questions/pools.json)
+  const poolIds = pools => [...new Set((Array.isArray(pools) ? pools : []).map(p => p && p.id).filter(id => typeof id === 'string'))];
   const OVERWORLD = 'overworld';
   // a betöltendő térképek: a világtérkép + minden dungeon "map" mezője
   const mapIds = dungeons => [OVERWORLD, ...new Set((Array.isArray(dungeons) ? dungeons : []).map(d => d && d.map).filter(id => typeof id === 'string'))];
@@ -44,9 +53,10 @@
     return res.json();
   }
   async function fetchAll(base) {
-    const raw = { maps: {} };
+    const raw = { maps: {}, questions: {} };
     await Promise.all(Object.keys(FILES).map(async key => { raw[key] = await fetchJson(base + FILES[key].file); }));
     await Promise.all(mapIds(raw.dungeons).map(async id => { raw.maps[id] = await fetchJson(base + MAPS_DIR + id + '.json'); }));
+    await Promise.all(poolIds(raw.questionPools).map(async id => { raw.questions[id] = await fetchJson(base + QUESTIONS_DIR + id + '.json'); }));
     return raw;
   }
 
@@ -73,10 +83,28 @@
     return { expanded: out, issues };
   }
 
+  // A poolok kérdései egy ID szerinti táblába; a pool megkapja a kérdései ID-it.
+  function installQuestions(raw) {
+    const questions = {}, pools = {};
+    poolIds(raw.questionPools).forEach(pid => {
+      const pool = Object.assign({}, (raw.questionPools || []).find(p => p && p.id === pid), { questions: [] });
+      (Array.isArray(raw.questions && raw.questions[pid]) ? raw.questions[pid] : []).forEach(q => {
+        if (!q || typeof q.id !== 'string' || q.id in questions) return; // a validátor jelzi
+        questions[q.id] = Object.assign({}, q, { pool: pid });
+        pool.questions.push(q.id);
+      });
+      pools[pid] = pool;
+    });
+    Game.data.questions = questions;
+    Game.data.questionPools = pools;
+  }
+
   const content = Game.content = {
     FILES,
     MAPS_DIR,
     mapIds,
+    QUESTIONS_DIR,
+    poolIds,
     issues: [],
 
     // Betölti és telepíti a tartalmat. Promise; hiba esetén elutasít.
@@ -101,6 +129,7 @@
       });
       Game.data.map = expanded.map;
       Game.data.maps = raw.maps || {};
+      installQuestions(raw);
       Object.values(Game.data.dungeons).forEach(d => { if (d.darkness) d.darkness.color = color(d.darkness.color); });
       content.issues = issues.concat(Game.contentValidator ? Game.contentValidator.validate(expanded) : []);
       content.issues.forEach(msg => console.warn('Tartalom:', msg));

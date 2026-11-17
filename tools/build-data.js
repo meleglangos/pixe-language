@@ -1,4 +1,4 @@
-// A data/*.json és data/maps/*.json fájlokból elkészíti a data/bundle.js-t, amit a játék file:// alóli futáskor használ
+// A data/*.json, data/maps/*.json és data/questions/*.json fájlokból elkészíti a data/bundle.js-t, amit a játék file:// alóli futáskor használ
 // (ott a böngésző nem engedi a JSON-ok betöltését). Weboldalként a JSON-ok töltődnek be közvetlenül.
 //
 //   node tools/build-data.js           -- újragenerálja a bundle-t
@@ -12,7 +12,8 @@ const DATA = path.join(__dirname, '..', 'data');
 // Ugyanaz a lista, mint a src/systems/content/ContentLoader.js-ben (FILES).
 const FILES = {
   strings: 'translations.json', monsters: 'monsters.json', dungeonProps: 'dungeon_props.json',
-  dungeons: 'dungeons.json', items: 'items.json', lootTables: 'loot_tables.json', tasks: 'tasks.json', shop: 'shop.json',
+  dungeons: 'dungeons.json', items: 'items.json', lootTables: 'loot_tables.json',
+  questionPools: 'questions/pools.json', challenges: 'challenges.json', shop: 'shop.json',
 };
 
 // Az összes tartalom egy objektumban (ugyanaz a szerkezet, amit a ContentLoader.install kap).
@@ -27,6 +28,12 @@ function readContent() {
   for (const id of ['overworld', ...new Set(content.dungeons.map(d => d.map))]) {
     const file = path.join(DATA, 'maps', id + '.json');
     try { content.maps[id] = JSON.parse(fs.readFileSync(file, 'utf8')); } catch (e) { throw new Error('maps/' + id + '.json: ' + e.message); }
+  }
+  // kérdés-poolok: data/questions/<id>.json (ugyanaz, mint a ContentLoader poolIds-e)
+  content.questions = {};
+  for (const id of [...new Set(content.questionPools.map(p => p && p.id))]) {
+    const file = path.join(DATA, 'questions', id + '.json');
+    try { content.questions[id] = JSON.parse(fs.readFileSync(file, 'utf8')); } catch (e) { throw new Error('questions/' + id + '.json: ' + e.message); }
   }
   return content;
 }
