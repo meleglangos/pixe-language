@@ -159,6 +159,9 @@
       pc_pines: PC + 'Environment/Props/Static/Trees/Model_02/Size_05.png',
       // saját rajz (tools/art/ruins_props.py): lovagszobor, oszlopok a láda-ablak hátteréhez
       ruins_props: 'assets/custom/ruins_props.png',
+      // a láda-ablak kép-hátterei (tools/art/backgrounds.py)
+      bg_campfire: 'assets/backgrounds/chest_campfire.png',
+      bg_waterfall: 'assets/backgrounds/chest_waterfall.png',
     },
     frames,
 

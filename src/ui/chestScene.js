@@ -1,17 +1,21 @@
-// A láda-ablak háttere: éjszakai erdei rom. Bal oldalt mohos romfal lovagszoborral és törött oszloppal, jobb oldalt
-// sziklafal vízeséssel és tóval, középen fűben álló rúnakör (a láda alatt), tábortűz, világító gombák, virágok,
-// bokrok, szentjánosbogarak. Az egész ablakot kitölti (a cím, a tárgy, a láda, a csillagok mind benne állnak).
+// A láda-ablak háttere: az egész ablakot kitöltő jelenet (a cím, a tárgy, a láda, a csillagok, a végén a lista is
+// benne áll). Több háttér közül minden nyitáskor véletlenül választ (a láda-laborban kiválasztható):
+//   campfire  - éjszakai erdő tábortűzzel és egy pihenő lovaggal (kép, lobogó tűzfény, szikrák)
+//   waterfall - szurdok nagy vízeséssel (kép, rajta zuhogó csíkok és hab, permet)
+//   ruins     - erdei rom: romfal lovagszoborral, sziklafal vízeséssel, tó, tábortűz, gombák (kódból rakva össze)
+// A láda alatt mindegyikben rúnakör, ami a nyitáskor a ritkaság színében izzik.
 //
-//   const sc = Game.chestScene.create(sceneEl, stageEl)   // sceneEl: a jelenet doboza (position: relative)
+//   const sc = Game.chestScene.create(sceneEl, stageEl, theme?)   // theme nélkül véletlen; sc.theme: a választott
 //   sc.layout()            // újrarajzol, ha a doboz mérete változott (magától is figyeli)
-//   sc.setColor(color, a)  // a rúnakör színe és erőssége (0..1): a nyitáskor a ritkaság színében izzik
+//   sc.setColor(color, a)  // a rúnakör színe és erőssége (0..1)
 //   sc.destroy()
+//   Game.chestScene.THEMES // a hátterek azonosítói
 //
-// Rétegek hátulról előre: háttér (statikus) -> mozgó réteg (vízesés, tó csillogása, tábortűz lángja) -> fények
-// (tűz, gombák; lobognak) -> rúnakör -> [a láda-ablak fény-effektjei] -> szentjánosbogarak -> [láda, tárgy, csillagok].
-// Grafika: Pixel Crawler (fű, téglafal, szikla, növények, tűz) + saját rajz (tools/art/ruins_props.py); a víz, a lomb
-// és a fények kódból. Alacsony felbontású vásznak, egész számú nagyítás (SCALE), lépcsős sávok ditherrel.
-// A vászonról nem olvas vissza (file://-ról a kép "tainted", a getImageData ott hibát dobna).
+// Rétegek hátulról előre: háttér (statikus) -> mozgó réteg (víz, láng) -> fények (lobognak) -> rúnakör ->
+// [a láda-ablak fény-effektjei] -> részecskék -> [láda, tárgy, csillagok, lista].
+// A kép-hátterek letöltött képekből készült valódi pixel art (tools/art/backgrounds.py), a rom Pixel Crawler +
+// saját rajz (tools/art/ruins_props.py). Alacsony felbontású vásznak, egész számú nagyítás (SCALE = 3), lépcsős
+// sávok ditherrel. A vászonról nem olvas vissza (file://-ról a kép "tainted", a getImageData ott hibát dobna).
 (function () {
   const SCALE = 3;
   const TS = 16;
@@ -25,9 +29,9 @@
     return cache[url];
   }
   function loadAll() {
-    const a = Game.data.assets, keys = ['pc_floors', 'pc_walls', 'pc_veg', 'pc_pines', 'ruins_props'], out = {};
+    const a = Game.data.assets, keys = ['pc_floors', 'pc_walls', 'pc_veg', 'pc_pines', 'ruins_props', 'bg_campfire', 'bg_waterfall'], out = {};
     return Promise.all([
-      ...keys.map(k => image(k, a.files[k]).then(im => { out[k] = im; })),
+      ...keys.map(k => image(k, a.files[k]).then(im => { out[k] = im; }, () => { /* hiányzó kép: kihagyjuk */ })),
       image('fire_small', a.strips.fire_small.url).then(im => { out.fire = im; }),
     ]).then(() => out);
   }
@@ -245,13 +249,13 @@
       return d <= 0 ? 0 : band(1 - Math.min(1, d), x, y);
     });
     return {
-      rc, fall, pond, fire,
+      rc, fall, pond, fire, motes: 'flies',
       lights: [{ x: fire.x, y: fire.y - 6, r: 20, c: '#ff9a3c', a: 0.3 }].concat(mush.map(m => ({ x: m.x + 5, y: m.y - 6, r: 9, c: m.c, a: 0.3 }))),
     };
   }
 
   // ---------- mozgó réteg: vízesés, tó csillogása, a tábortűz lángja ----------
-  function paintAnim(ctx, imgs, W, H, g, k) {
+  function animRuins(ctx, imgs, W, H, g, k) {
     ctx.clearRect(0, 0, W, H);
     const f = g.fall;
     // oszloponként más ütemű, más hosszú csíkok: a víz lefelé zuhog
@@ -283,27 +287,106 @@
     }
   }
 
+  // ---------- kép-hátterek (assets/backgrounds, tools/art/backgrounds.py) ----------
+  // A kép egy pontja (focus: a talaj a kép közepe táján) a láda alá kerül; ahol a kép nem ér el (alul, a lista
+  // mögött), a kép alsó sorai tükrözve folytatódnak, egyre sötétebben. Képkoordinátákban: fények, vízesés, szikrák.
+  function paintImage(T) {
+    return function (ctx, imgs, W, H, chestY) {
+      const im = imgs[T.image], cx = Math.floor(W / 2);
+      if (!im) { ctx.fillStyle = '#0a1416'; ctx.fillRect(0, 0, W, H); return { rc: { x: cx, y: chestY - 2, rx: 26, ry: 7 }, lights: [] }; }
+      const iw = im.width, ih = im.height;
+      const ox = Math.max(W - iw, Math.min(0, cx - T.focus[0])), oy = chestY - T.focus[1];
+      ctx.fillStyle = '#05080a'; ctx.fillRect(0, 0, W, H);
+      ctx.drawImage(im, ox, oy);
+      // fölötte (ha a kép alacsonyabb a doboznál) az első sor, alatta a tükrözött alsó sorok
+      for (let y = 0; y < oy; y++) ctx.drawImage(im, 0, 0, iw, 1, ox, y, iw, 1);
+      for (let y = oy + ih, k = 0; y < H; y++, k++) ctx.drawImage(im, 0, ih - 1 - (k % ih), iw, 1, ox, y, iw, 1);
+      const below = oy + ih;
+      if (below < H) tint(ctx, 0, below, W, H - below, '#05080a', 0.85, (x, y) => band(1 - Math.min(1, (y - below) / 24), x, y));
+      // felül sötétebb (a cím olvasható legyen)
+      tint(ctx, 0, 0, W, 40, '#05080a', 0.75, (x, y) => (y < 40 ? band(y / 40, x, y) : 0));
+      const at = p => ({ x: p.x + ox, y: p.y + oy });
+      return {
+        rc: { x: cx, y: chestY - 2, rx: 26, ry: 7 },
+        lights: (T.lights || []).map(l => Object.assign({}, l, at(l))),
+        fall: T.fall ? Object.assign({}, T.fall, at(T.fall)) : null,
+        source: T.source ? at(T.source) : null,
+        motes: T.motes,
+      };
+    };
+  }
+  // vízesés: lefelé futó világos csíkok a kép vízesésén (áttetszőn), alján hab
+  function animImage(ctx, imgs, W, H, g, k) {
+    ctx.clearRect(0, 0, W, H);
+    const f = g.fall;
+    if (!f) return;
+    for (let x = 0; x < f.w; x++) {
+      const v = 2 + ((x * 5) % 3 === 0 ? 1 : 0), L = 9 + ((x * 3) % 7), ph = (x * 13) % L;
+      for (let y = 0; y < f.h; y++) {
+        const s = (((y - k * v + ph) % L) + L) % L;
+        if (s > 1) continue;
+        ctx.fillStyle = s === 0 ? 'rgba(240,250,255,0.55)' : 'rgba(170,215,245,0.35)';
+        ctx.fillRect(f.x + x, f.y + y, 1, 1);
+      }
+    }
+    for (let i = 0; i < 18; i++) {
+      const x = f.x - 4 + ((i * 7 + k * 3) % (f.w + 8)), y = f.y + f.h - 3 + ((i * 3 + k) % 6);
+      ctx.fillStyle = i % 3 ? 'rgba(235,248,255,0.8)' : 'rgba(160,210,245,0.7)';
+      ctx.fillRect(x, y, 1, 1);
+    }
+  }
+
+  // a választható hátterek (a láda-labor a nevüket a "debug.scene.<id>" kulcsból mutatja)
+  const THEMES = {
+    campfire: {
+      paint: paintImage({ image: 'bg_campfire', focus: [86, 240], lights: [{ x: 57, y: 214, r: 30, c: '#ff9a3c', a: 0.32 }], source: { x: 57, y: 196 }, motes: 'embers' }),
+      anim: null,
+    },
+    waterfall: {
+      paint: paintImage({ image: 'bg_waterfall', focus: [77, 238], fall: { x: 68, y: 60, w: 19, h: 168 }, source: { x: 77, y: 228 }, motes: 'mist' }),
+      anim: animImage,
+    },
+    ruins: { paint: paintRuins, anim: animRuins },
+  };
+
+  // apró részecskék (CSS-sel mozognak): szentjánosbogár, szikra a tűzből, permet a vízesésnél
+  function placeMotes(box, g) {
+    const kind = g.motes || 'flies', src = g.source;
+    box.className = 'cs-motes cs-' + kind;
+    [...box.children].forEach((d, i) => {
+      if (kind === 'flies' || !src) {
+        d.style.left = (4 + Math.random() * 92) + '%';
+        d.style.top = (20 + Math.random() * 70) + '%';
+      } else {
+        d.style.left = ((src.x + (Math.random() - 0.5) * (kind === 'mist' ? 34 : 10)) * SCALE) + 'px';
+        d.style.top = ((src.y + (Math.random() - 0.5) * 6) * SCALE) + 'px';
+      }
+      d.style.setProperty('--dur', ((kind === 'embers' ? 1.6 : 5) + Math.random() * (kind === 'embers' ? 1.6 : 6)).toFixed(1) + 's');
+      d.style.setProperty('--delay', (-Math.random() * 6).toFixed(1) + 's');
+      const dx = (Math.random() - 0.5) * (kind === 'flies' ? 14 : kind === 'mist' ? 20 : 8);
+      const dy = kind === 'embers' ? -30 - Math.random() * 30 : kind === 'mist' ? -6 - Math.random() * 10 : -4 - Math.random() * 10;
+      d.style.setProperty('--dx', Math.round(dx) * SCALE + 'px');
+      d.style.setProperty('--dy', Math.round(dy) * SCALE + 'px');
+    });
+  }
+
   Game.chestScene = {
     SCALE,
-    create(sceneEl, stageEl) {
+    THEMES: Object.keys(THEMES),
+    // theme: 'campfire' | 'waterfall' | 'ruins'; ha nincs megadva (vagy ismeretlen), véletlen
+    create(sceneEl, stageEl, theme) {
+      const id = THEMES[theme] ? theme : Object.keys(THEMES)[Math.floor(Math.random() * Object.keys(THEMES).length)];
+      const T = THEMES[id];
+      sceneEl.dataset.scene = id;
       const bg = ui.el('canvas', 'cs-bg');
       const anim = ui.el('canvas', 'cs-anim');
       const glow = ui.el('canvas', 'cs-glow');
       const rune = ui.el('canvas', 'cs-rune');
-      const flies = ui.el('div', 'cs-flies');
-      for (let i = 0; i < 14; i++) {
-        const d = ui.el('span', 'cs-fly');
-        d.style.left = (4 + Math.random() * 92) + '%';
-        d.style.top = (20 + Math.random() * 70) + '%';
-        d.style.setProperty('--dur', (5 + Math.random() * 6).toFixed(1) + 's');
-        d.style.setProperty('--delay', (-Math.random() * 10).toFixed(1) + 's');
-        d.style.setProperty('--dx', Math.round((Math.random() - 0.5) * 14) * SCALE + 'px');
-        d.style.setProperty('--dy', Math.round(-4 - Math.random() * 10) * SCALE + 'px');
-        flies.append(d);
-      }
+      const motes = ui.el('div', 'cs-motes');
+      for (let i = 0; i < 16; i++) motes.append(ui.el('span', 'cs-mote'));
       [bg, anim, glow, rune].forEach(c => { c.width = c.height = 0; });
       sceneEl.prepend(bg, anim, glow, rune);
-      sceneEl.append(flies);
+      sceneEl.append(motes);
 
       let imgs = null, lastKey = '', runeColor = '#ffd75a', runeAlpha = 0.4, geo = null, timer = 0, frameNo = 0, alive = true;
 
@@ -322,7 +405,7 @@
 
       function tick() {
         if (!sceneEl.isConnected) { api.destroy(); return; }
-        if (geo) paintAnim(anim.getContext('2d'), imgs, geo.W, geo.H, geo, ++frameNo);
+        if (geo && T.anim) T.anim(anim.getContext('2d'), imgs, geo.W, geo.H, geo, ++frameNo);
       }
 
       function paint() {
@@ -334,18 +417,20 @@
         if (key === lastKey) return;
         lastKey = key;
         const W = Math.ceil(cw / SCALE), H = Math.ceil(ch / SCALE);
-        const chestY = Math.round((st + sh - 8) / SCALE); // a nyitott láda alja: itt áll a fűben
-        const g = paintRuins(sizeCanvas(bg, W, H), imgs, W, H, chestY);
-        // fények: tűz és gombák (külön réteg, lobog)
+        const chestY = Math.round((st + sh - 8) / SCALE); // a nyitott láda alja: itt áll a talajon
+        const g = T.paint(sizeCanvas(bg, W, H), imgs, W, H, chestY);
+        // fények (tűz, gombák): külön réteg, lobog
         const gctx = sizeCanvas(glow, W, H);
         gctx.clearRect(0, 0, W, H);
-        g.lights.forEach(l => tint(gctx, l.x - l.r, l.y - l.r, l.r * 2 + 1, l.r * 2 + 1, l.c, l.a,
+        (g.lights || []).forEach(l => tint(gctx, l.x - l.r, l.y - l.r, l.r * 2 + 1, l.r * 2 + 1, l.c, l.a,
           (x, y) => { const d = Math.hypot(x + 0.5 - l.x, y + 0.5 - l.y) / l.r; return d > 1 ? 0 : band(d, x, y); }));
         sizeCanvas(anim, W, H);
+        const first = !geo;
         geo = Object.assign(g, { W, H });
-        paintAnim(anim.getContext('2d'), imgs, W, H, geo, frameNo);
+        if (first) placeMotes(motes, geo);
+        if (T.anim) T.anim(anim.getContext('2d'), imgs, W, H, geo, frameNo);
         drawRune();
-        if (!timer) timer = setInterval(tick, 100);
+        if (!timer && T.anim) timer = setInterval(tick, 100);
       }
 
       const ro = window.ResizeObserver ? new ResizeObserver(() => paint()) : null;
@@ -354,6 +439,7 @@
       loadAll().then(r => { imgs = r; paint(); }, () => { /* kép nélkül a sötét háttér marad */ });
 
       const api = {
+        theme: id,
         layout: paint,
         setColor(color, alpha) {
           runeColor = color || runeColor;

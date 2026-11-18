@@ -15,6 +15,7 @@
 | **Tiny RPG Character Asset Pack 01 – Free (Soldier & Orc)**, Zerie | `tiny-rpg-01/` | 2 animált karakter 100×100-as kockákban: katona (kard + íj) és ork (fejsze); idle, walk, támadások, hurt, death; nyílvessző lövedék | **Harc-animációk**: a Pixel Crawlerben nincs támadás- és sebződés-animáció a szörnyeknek, itt van. Más stílusú (nagyobb fej, chibi), egymás mellett nem keverendő | A csomagban nincs licencfájl; a letöltési oldalon (itch.io) kell ellenőrizni. Credit: *Tiny RPG Character Asset Pack by Zerie* |
 | **Tiny RPG Character Asset Pack 02 – Free (Demon_A & Blood Monster_A)**, Zerie | `tiny-rpg-02/` | 2 animált szörny 100×100-as kockákban: démon (nagy pengével) és vérszörny; idle, walk, 2 támadás, hurt, death | Boss- vagy szörny-jelöltek harc-animációval | Mint fent |
 | **Saját rajzok** (Das Deutsch-Abenteuer) | `custom/` | A játékhoz készült pixel art: ládák, a láda-ablak hátterének rom-propjai (szobor, oszlopok). Kódból generálva (`tools/art/*.py`), módosítás ott, utána újragenerálás | A láda-ablak és a dungeon ládái | Saját, szabadon használható |
+| **Láda-ablak hátterek** (letöltött képekből) | `backgrounds/` | Két álló kép: éjszakai erdő tábortűzzel és pihenő lovaggal; szurdok nagy vízeséssel. Az eredeti (`backgrounds/original/`) valódi pixel arttá alakítva: `tools/art/backgrounds.py` | A láda-ablak háttere (`src/ui/chestScene.js`) | A felhasználó ingyenes oldalról töltötte le; a pontos forrás és szerző még pótolandó |
 
 A játékban használt kivágások nevei és koordinátái: `src/config/assets.js` (`frames`, `strips`).
 A credit a játékban: Menü → „Mitwirkende” (`src/config/config.js` → `credits`).
@@ -49,6 +50,7 @@ A credit a játékban: Menü → „Mitwirkende” (`src/config/config.js` → `
 | Tiny RPG Character Asset Pack 01 – Free: Soldier & Orc (Zerie) | 34 | 34 |
 | Tiny RPG Character Asset Pack 02 – Free: Demon_A & Blood Monster_A (Zerie) | 28 | 28 |
 | Saját rajzok (Das Deutsch-Abenteuer) | 2 | 2 |
+| Láda-ablak hátterek (letöltött képekből) | 2 | 2 |
 
 ## Tartalom
 
@@ -87,7 +89,9 @@ A credit a játékban: Menü → „Mitwirkende” (`src/config/config.js` → `
   - [Egyben lévő karakterlapok (soronként egy animáció)](#t2-lap) (2)
 - **Saját rajzok (Das Deutsch-Abenteuer)**
   - [Ládák (saját pixel art)](#cu-lada) (1)
-  - [Egyéb](#cu-egyeb) (1)
+  - [Erdei rom propjai (saját pixel art)](#cu-rom) (1)
+- **Láda-ablak hátterek (letöltött képekből)**
+  - [Láda-ablak hátterek (pixel art)](#bg-lada-hatter) (2)
 
 ---
 
@@ -782,10 +786,26 @@ Előnézet: [`previews/cu-lada.png`](previews/cu-lada.png)
 | --- | --- | --- | --- | --- | --- |
 | `cu:chest-royal` | `custom/chest_royal.png` | 48×22 | 2 kocka, 24×22 | Királyi láda, 2 kocka (24×22): csukott (domború fedél, vas pántok, aranyzár rubinnal) és nyitott (arany a belsejében). Rajz: tools/art/chest_royal.py | láda, kincs, loot, saját |
 
-<a id="cu-egyeb"></a>
-### Egyéb
+<a id="cu-rom"></a>
+### Erdei rom propjai (saját pixel art)
+
+Előnézet: [`previews/cu-rom.png`](previews/cu-rom.png)
 
 | Azonosító | Fájl | Méret | Képkockák | Leírás | Címkék |
 | --- | --- | --- | --- | --- | --- |
 | `cu:ruins-props` | `custom/ruins_props.png` | 53×50 | – | Erdei rom propjai egy lapon: mohos lovagszobor talapzaton (25×50), ép oszlop (13×44), törött oszlop (13×28) — a láda-ablak hátteréhez. Rajz: tools/art/ruins_props.py | rom, szobor, oszlop, saját |
+
+---
+
+## Láda-ablak hátterek (letöltött képekből)
+
+<a id="bg-lada-hatter"></a>
+### Láda-ablak hátterek (pixel art)
+
+Előnézet: [`previews/bg-lada-hatter.png`](previews/bg-lada-hatter.png)
+
+| Azonosító | Fájl | Méret | Képkockák | Leírás | Címkék |
+| --- | --- | --- | --- | --- | --- |
+| `bg:chest-campfire` | `backgrounds/chest_campfire.png` | 147×261 | – | Láda-ablak háttér, 147×261: éjszakai erdő, óriásfa, tábortűz, rönkön ülő lovag. Az original/campfire.jpg-ből (tools/art/backgrounds.py) | háttér, erdő, tűz, éjszaka |
+| `bg:chest-waterfall` | `backgrounds/chest_waterfall.png` | 147×262 | – | Láda-ablak háttér, 147×262: szurdok, nagy vízesés, mohás sziklák, tó. Az original/waterfall.jpg-ből (tools/art/backgrounds.py) | háttér, víz, vízesés, szikla |
 

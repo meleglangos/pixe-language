@@ -199,7 +199,6 @@ html, body {
 }
 .chest-window > .modal-body { flex: 1 0 auto; display: flex; flex-direction: column; }
 .chest-window > .modal-buttons { margin: 12px 0 14px; }
-.chest-window .loot-list { margin: 10px 12px 0; width: auto; }
 .cw-scene {
   position: relative; overflow: hidden; flex: 1 0 auto; display: flex; flex-direction: column;
   background: #0a1416; padding-bottom: 8px;
@@ -218,16 +217,20 @@ html, body {
 @keyframes cs-runepulse { 50% { filter: brightness(1.35); } }
 .cw-scene > .cw-fx { z-index: 1; }
 .cw-scene > .cw-stage, .cw-scene > .cw-stars, .cw-scene > .cw-collected { position: relative; z-index: 2; }
-.cs-flies { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
-.cs-fly {
+.cs-motes { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.cs-mote {
   position: absolute; width: 3px; height: 3px; background: #d8ff7a; box-shadow: 0 0 4px #b8ff4a; opacity: 0;
   animation: cs-fly var(--dur) steps(30) var(--delay) infinite;
 }
+.cs-embers .cs-mote { background: #ffb347; box-shadow: 0 0 4px #ff7a1a; animation-timing-function: steps(16); }
+.cs-mist .cs-mote { width: 6px; height: 3px; background: #dff3ff; box-shadow: none; }
 @keyframes cs-fly {
-  0% { transform: translate(0, 0); opacity: 0; } 20% { opacity: .9; } 45% { opacity: .2; } 65% { opacity: .8; }
+  0% { transform: translate(0, 0); opacity: 0; } 20% { opacity: .9; } 45% { opacity: .3; } 65% { opacity: .8; }
   100% { transform: translate(var(--dx), var(--dy)); opacity: 0; }
 }
-@media (prefers-reduced-motion: reduce) { .cs-fly, .cw-scene > .cs-glow, .cw-scene > .cs-rune { animation: none; } .cs-fly { display: none; } }
+.cw-scene > .loot-list { position: relative; z-index: 2; margin: 4px 12px 0; }
+.cw-scene > .modal-buttons { position: relative; z-index: 2; margin: 14px 0 6px; }
+@media (prefers-reduced-motion: reduce) { .cs-mote, .cw-scene > .cs-glow, .cw-scene > .cs-rune { animation: none; } .cs-mote { display: none; } }
 .chest-window.cw-dim .cs-bg, .chest-window.cw-dim .cs-anim { filter: brightness(.45); }
 /* a jelenetben a szövegek világosak, sötét körvonallal */
 .cw-scene .cw-name, .cw-scene .cw-qty { color: #fff4dc; text-shadow: 0 2px 0 #1a1210, 2px 0 0 #1a1210, -2px 0 0 #1a1210, 0 -2px 0 #1a1210; }

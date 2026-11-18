@@ -6,7 +6,8 @@
 // Sietni lehet: koppintásra az épp futó animáció azonnal a végére ugrik (nincs "mindet mutat" gomb).
 // Spec: docs/features/chest_stars.md (2. kiegészítés).
 //
-//   Game.chestWindow.open({ style: chest_styles.json bejegyzés, table: loot tábla id, onDone(loot, stars), stars? })
+//   Game.chestWindow.open({ style: chest_styles.json bejegyzés, table: loot tábla id, onDone(loot, stars), stars?, scene? })
+//   scene: a háttér (Game.chestScene.THEMES egyike); nélküle véletlen (src/ui/chestScene.js)
 //
 // A láda képe canvasra rajzolódik a láda-stílus képkockáiból (kivágás vagy animációs csík), 5× nagyítva, éles
 // pixel arttal -- így bármelyik láda-stílus működik vele. A loot most csak látvány (nem tárolódik).
@@ -253,7 +254,7 @@
       const panel = ui.modal({ title: 'chest.name', closable: false, body: [sceneEl], buttons: [] });
       panel.classList.add('chest-window');
       sceneEl.prepend(panel.querySelector('h2')); // a cím is a jelenetben áll
-      const scene = Game.chestScene.create(sceneEl, stage);
+      const scene = Game.chestScene.create(sceneEl, stage, opts.scene);
       screenFx.open();
       panel.append(flash);
       panel.dataset.stars = stars;
@@ -563,11 +564,13 @@
         // az utolsó kiemelt tárgy is a sorba kerül
         setTimeout(() => {
           stash();
-          sceneEl.style.minHeight = sceneEl.offsetHeight + 'px'; // a lista alá kerül, a jelenet nem zsugorodik
-          panel.querySelector('.modal-body').append(Game.lootUI.list(loot));
+          // a lista és a gomb is a jelenetbe kerül (a háttér alattuk is folytatódik); a láda-terület nem zsugorodik
+          stage.style.flex = '0 0 ' + stage.offsetHeight + 'px';
+          sceneEl.append(Game.lootUI.list(loot));
           const done = () => { screenFx.close(); scene.destroy(); ui.closeModal(); if (opts.onDone) opts.onDone(loot, stars); };
           const btns = panel.querySelector('.modal-buttons');
           btns.replaceChildren(ui.btn('loot.ok', done, 'primary'));
+          sceneEl.append(btns);
           const b = btns.querySelector('button');
           setTimeout(() => { if (b.isConnected) { b.focus({ preventScroll: true }); b.scrollIntoView({ block: 'nearest' }); } }, 0);
         }, 120);

@@ -135,6 +135,16 @@ A rezgés csak Androidon működik (iOS-en a böngésző nem engedi); „csökke
 - Rétegek hátulról előre: háttér → vízesés / tó / tűz → tűz- és gombafény → rúnakör → a láda fényei → szentjánosbogarak
   → láda, tárgy, csillagok.
 
+## 7. kiegészítés: több háttér, kép-hátterek (2026-11-18, a felhasználó kérésére)
+- Minden nyitáskor **véletlenül** jön egy háttér: `campfire` (éjszakai erdő tábortűzzel, pihenő lovaggal),
+  `waterfall` (szurdok nagy vízeséssel), `ruins` (a kódból rakott erdei rom). A **láda-laborban** választható
+  („Háttér”: Véletlen / Tábortűz / Vízesés / Erdei rom); `Game.chestWindow.open({ …, scene })`.
+- A két új háttér a felhasználó által (ingyenes oldalról) letöltött kép, valódi pixel arttá alakítva: 5×5-ös
+  blokkátlag + 48 szín (`tools/art/backgrounds.py`, eredeti: `assets/backgrounds/original/`), 3× nagyítással.
+  A kép talaja a láda alá kerül; ahol a kép nem ér el, tükrözve folytatódik, sötétedve. Élővé teszi: lobogó
+  tűzfény és szikrák, a vízesésen lefelé futó csíkok, hab és permet.
+- A végén a „Beute” lista és a „Super!” gomb is a jelenetben van: a háttér alattuk is folytatódik.
+
 ## 11. Lépések
 1. Csillagok a loot-sorsolásban (`rollStars`, `roll(…, { stars })`, `rarityFactor`, `chances`) + validátor + tesztek.
 2. Láda-ablak: nagy láda, csillag-animáció, koppintásra nyitás, kieső loot, lista.

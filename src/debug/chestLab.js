@@ -3,6 +3,7 @@
 // (a fordítási fájl "hu" változata), mert a fejlesztő nem tud németül.
 //
 //   - loot tábla és csillagszám választása (Zufall = a valódi sorsolás, vagy fix 1–5)
+//   - a láda-ablak háttere (Zufall, vagy egy kiválasztott: src/ui/chestScene.js)
 //   - egy húzás esélyei a választott csillagnál (Game.loot.chances)
 //   - "Öffnen": a valódi láda-ablak a választott beállítással
 //   - "1000× szimulálás": csillag-eloszlás, átlagos tételszám, tárgyanként hány ládában volt és átlag mennyi
@@ -10,7 +11,7 @@
   const ui = Game.ui;
   const hu = (key, vars) => Game.i18n.hu(key, vars);
   const pct = x => (x * 100).toFixed(x < 0.01 ? 2 : 1) + '%';
-  const state = { table: null, stars: 0 }; // stars 0 = Zufall
+  const state = { table: null, stars: 0, scene: '' }; // stars 0 / scene '' = Zufall
 
   const name = e => (e.gold !== undefined ? hu('loot.gold') : Game.i18n.de(Game.data.items[e.item].name) + ' – ' + hu(Game.data.items[e.item].name));
   const rarityOf = e => (e.gold !== undefined ? 'gold' : Game.data.items[e.item].rarity);
@@ -61,6 +62,13 @@
       return b;
     }));
 
+    const sceneBtns = ui.el('div', 'lab-stars', [''].concat(Game.chestScene.THEMES).map(id => {
+      const b = el('button', 'btn lab-star' + (state.scene === id ? ' primary' : ''), id ? hu('debug.scene.' + id) : hu('debug.random'));
+      b.type = 'button';
+      b.addEventListener('click', () => { state.scene = id; render(panelBody); });
+      return b;
+    }));
+
     const show = state.stars || 1;
     const ch = Game.loot.chances(state.table, show);
     const rolls = Game.data.config.loot.stars.rolls[show - 1];
@@ -91,6 +99,7 @@
         style: Game.data.chestStyles[Game.data.config.loot.chestStyle],
         table: state.table,
         stars: state.stars || undefined,
+        scene: state.scene || undefined,
         onDone: () => { if (scene && scene.scene.isActive()) Game.chestLab.panel(); },
       });
     }, 'primary');
@@ -99,6 +108,7 @@
     panelBody.replaceChildren(
       ui.el('label', 'lab-row', [el('span', '', hu('debug.table')), sel]),
       ui.el('div', 'lab-row', [el('span', '', hu('debug.stars')), starBtns]),
+      ui.el('div', 'lab-row', [el('span', '', hu('debug.scene')), sceneBtns]),
       ui.el('div', 'lab-actions', [openBtn, simBtn]),
       result,
       chances,

@@ -17,6 +17,7 @@ PACKS = {
     't1': 'Tiny RPG Character Asset Pack 01 – Free: Soldier & Orc (Zerie)',
     't2': 'Tiny RPG Character Asset Pack 02 – Free: Demon_A & Blood Monster_A (Zerie)',
     'cu': 'Saját rajzok (Das Deutsch-Abenteuer)',
+    'bg': 'Láda-ablak hátterek (letöltött képekből)',
 }
 
 # (csomag, kategória-azonosító, kategória neve, minta a csomagon belüli útvonalra, megjelenítés)
@@ -50,6 +51,8 @@ CATEGORIES = [
     ('t1', 'lap', 'Egyben lévő karakterlapok (soronként egy animáció)', r'^Characters\(100x100 split\)/[^/]+/[^/]+/[^/_]+\.png$', 'list'),
     ('t2', 'karakter', 'Karakterek animációi (Demon_A, Blood Monster_A)', r'^Characters\(100x100 split\)/[^/]+/[^/]+/[^/]+_(Attack|Death|Hurt|Idle|Walk)\d*\.png$', 'grid'),
     ('cu', 'lada', 'Ládák (saját pixel art)', r'^chest', 'grid'),
+    ('cu', 'rom', 'Erdei rom propjai (saját pixel art)', r'^ruins', 'grid'),
+    ('bg', 'lada-hatter', 'Láda-ablak hátterek (pixel art)', r'^chest_', 'grid'),
     ('t2', 'lap', 'Egyben lévő karakterlapok (soronként egy animáció)', r'^Characters\(100x100 split\)/[^/]+/[^/]+/[^/]+\.png$', 'list'),
 ]
 
@@ -69,7 +72,7 @@ FRAME_HINTS = [
 
 T1 = 'tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/'
 T2 = 'tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/'
-PREFIX = {'pc': PC, 'wp': WP, 'mi': MI, 'it': 'items/', 't1': T1, 't2': T2, 'cu': 'custom/'}
+PREFIX = {'pc': PC, 'wp': WP, 'mi': MI, 'it': 'items/', 't1': T1, 't2': T2, 'cu': 'custom/', 'bg': 'backgrounds/'}
 
 
 def make_id(pack, inner):
