@@ -16,8 +16,8 @@ SUMMARY = r'''
 | **Modern Interiors – Free v2.2**, LimeZu | `modern-interiors/` | Modern belső tér (bútor, konyha, fürdő, iroda), szobaépítő (falak, padlók), 4 modern karakter | A későbbi **ház rendszerhez**. Fantasy dungeonbe nem illik | **Csak nem kereskedelmi célra.** Credit: *Modern Interiors by LimeZu*, https://limezu.itch.io/moderninteriors |
 | **Tiny RPG Character Asset Pack 01 – Free (Soldier & Orc)**, Zerie | `tiny-rpg-01/` | 2 animált karakter 100×100-as kockákban: katona (kard + íj) és ork (fejsze); idle, walk, támadások, hurt, death; nyílvessző lövedék | **Harc-animációk**: a Pixel Crawlerben nincs támadás- és sebződés-animáció a szörnyeknek, itt van. Más stílusú (nagyobb fej, chibi), egymás mellett nem keverendő | A csomagban nincs licencfájl; a letöltési oldalon (itch.io) kell ellenőrizni. Credit: *Tiny RPG Character Asset Pack by Zerie* |
 | **Tiny RPG Character Asset Pack 02 – Free (Demon_A & Blood Monster_A)**, Zerie | `tiny-rpg-02/` | 2 animált szörny 100×100-as kockákban: démon (nagy pengével) és vérszörny; idle, walk, 2 támadás, hurt, death | Boss- vagy szörny-jelöltek harc-animációval | Mint fent |
-| **Saját rajzok** (Das Deutsch-Abenteuer) | `custom/` | A játékhoz készült pixel art: ládák, a láda-ablak hátterének rom-propjai (szobor, oszlopok). Kódból generálva (`tools/art/*.py`), módosítás ott, utána újragenerálás | A láda-ablak és a dungeon ládái | Saját, szabadon használható |
-| **Láda-ablak hátterek** (letöltött képekből) | `backgrounds/` | Két álló kép: éjszakai erdő tábortűzzel és pihenő lovaggal; szurdok nagy vízeséssel. Az eredeti (`backgrounds/original/`) valódi pixel arttá alakítva: `tools/art/backgrounds.py` | A láda-ablak háttere (`src/ui/chestScene.js`) | A felhasználó ingyenes oldalról töltötte le; a pontos forrás és szerző még pótolandó |
+| **Saját rajzok** (Das Deutsch-Abenteuer) | `custom/` | A játékhoz készült pixel art: ládák. Kódból generálva (`tools/art/*.py`), módosítás ott, utána újragenerálás | A láda-ablak és a dungeon ládái | Saját, szabadon használható |
+| **Láda-ablak hátterek** (letöltött képekből) | `backgrounds/` | Álló képek: éjszakai erdő tábortűzzel, szurdok vízeséssel, pagoda cseresznyefákkal, völgy hegycsúccsal, tó sziklák között, fénysávban fekvő lovag az erdőben. Az eredeti (`backgrounds/original/`) valódi pixel arttá alakítva: `tools/art/backgrounds.py` | A láda-ablak háttere (`src/ui/chestScene.js`) | A felhasználó ingyenes oldalakról töltötte le; feltüntetést nem kérnek (a felhasználó utánanézett) |
 
 A játékban használt kivágások nevei és koordinátái: `src/config/assets.js` (`frames`, `strips`).
 A credit a játékban: Menü → „Mitwirkende” (`src/config/config.js` → `credits`).
@@ -223,9 +223,12 @@ Modern ruhás karakterek, 16×32-es kockák. Irány-sorrend a csíkokon: jobb, f
 
 FILES = [
     # ======================= Saját rajzok =======================
+    (r'^backgrounds/chest_pagoda\.png$', 'Láda-ablak háttér, 147×318: piros pagoda, cseresznyefák, hófödte hegy, füves udvar ösvénnyel', ['háttér', 'pagoda', 'cseresznye', 'hegy']),
+    (r'^backgrounds/chest_valley\.png$', 'Láda-ablak háttér, 184×276: völgy hegycsúccsal, sziklaoszlopok, rózsaszín virágmező, kőösvény', ['háttér', 'völgy', 'hegy', 'virág']),
+    (r'^backgrounds/chest_lake\.png$', 'Láda-ablak háttér, 147×261: tó magas sziklák között, kis vízesések, cseresznyefák, felhős ég', ['háttér', 'tó', 'szikla', 'cseresznye']),
+    (r'^backgrounds/chest_knight\.png$', 'Láda-ablak háttér, 168×300: erdő felülről, fénysávban a fűben fekvő páncélos lovag', ['háttér', 'erdő', 'lovag', 'fény']),
     (r'^backgrounds/chest_campfire\.png$', 'Láda-ablak háttér, 147×261: éjszakai erdő, óriásfa, tábortűz, rönkön ülő lovag. Az original/campfire.jpg-ből (tools/art/backgrounds.py)', ['háttér', 'erdő', 'tűz', 'éjszaka']),
     (r'^backgrounds/chest_waterfall\.png$', 'Láda-ablak háttér, 147×262: szurdok, nagy vízesés, mohás sziklák, tó. Az original/waterfall.jpg-ből (tools/art/backgrounds.py)', ['háttér', 'víz', 'vízesés', 'szikla']),
-    (r'^custom/ruins_props\.png$', 'Erdei rom propjai egy lapon: mohos lovagszobor talapzaton (25×50), ép oszlop (13×44), törött oszlop (13×28) — a láda-ablak hátteréhez. Rajz: tools/art/ruins_props.py', ['rom', 'szobor', 'oszlop', 'saját']),
     (r'^custom/chest_royal\.png$', 'Királyi láda, 2 kocka (24×22): csukott (domború fedél, vas pántok, aranyzár rubinnal) és nyitott (arany a belsejében). Rajz: tools/art/chest_royal.py', ['láda', 'kincs', 'loot', 'saját']),
     # ======================= Tiny RPG 01 / 02 =======================
     (r'Arrow01\(100x100\)', 'Nyílvessző lövedék 100×100-as keretben (a katona íjlövéséhez)', ['lövedék', 'nyíl', 'harc']),

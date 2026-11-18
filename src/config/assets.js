@@ -57,31 +57,6 @@
     bones_a: ['pc_skel_death', 7 * 96 + 37, 50, 17, 14],
     bones_b: ['pc_skel_death', 6 * 96 + 37, 53, 17, 11],
   };
-  // ---------- láda-ablak háttere: erdei rom (src/ui/chestScene.js) ----------
-  Object.assign(frames, {
-    grass_0: t('pc_floors', 1, 10), grass_1: t('pc_floors', 2, 10), grass_2: t('pc_floors', 3, 10),
-    grass_3: t('pc_floors', 3, 11),
-    ruin_brick_0: t('pc_floors', 16, 1), ruin_brick_1: t('pc_floors', 17, 2), ruin_brick_2: t('pc_floors', 18, 3),
-    cliff_top: t('pc_walls', 7, 0, 4, 2),       // szürke szikla teteje (lekerekített perem)
-    cliff_face: t('pc_walls', 7, 5, 4, 3),      // sziklafal
-    cliff_foot: t('pc_walls', 7, 8, 4, 1),      // sziklafal alja fűvel
-    pine_a: ['pc_pines', 1, 3, 92, 157], pine_b: ['pc_pines', 97, 3, 92, 157],
-    pine_c: ['pc_pines', 1, 163, 92, 157], pine_d: ['pc_pines', 97, 163, 92, 157],
-    ruin_statue: ['ruins_props', 0, 0, 25, 50],
-    ruin_pillar: ['ruins_props', 26, 6, 13, 44],
-    ruin_pillar_broken: ['ruins_props', 40, 22, 13, 28],
-    bush_round: ['pc_veg', 2, 5, 29, 27],
-    bush_small: ['pc_veg', 194, 51, 28, 26],
-    fern_a: ['pc_veg', 97, 177, 14, 15],
-    fern_b: ['pc_veg', 112, 176, 16, 16],
-    mushroom_orange: ['pc_veg', 3, 353, 11, 14],
-    mushroom_blue: ['pc_veg', 19, 353, 11, 14],
-    mushroom_big: ['pc_veg', 49, 338, 14, 14],
-    flower_red: ['pc_veg', 69, 373, 6, 6],
-    flower_white: ['pc_veg', 86, 389, 5, 5],
-    flower_blue: ['pc_veg', 100, 405, 8, 7],
-    flower_yellow: ['pc_veg', 69, 421, 6, 6],
-  });
   // ---------- bánya ----------
   Object.assign(frames, {
     // Wall_Tiles.png, szürke sziklakészlet: perem (a "gödör" 6x6-os mintájából) + rétegzett sziklafal
@@ -155,13 +130,13 @@
       pc_rocks: PC + 'Environment/Props/Static/Rocks.png',
       pc_resources: PC + 'Environment/Props/Static/Resources.png',
       pc_tools: PC + 'Environment/Props/Static/Tools.png',
-      pc_veg: PC + 'Environment/Props/Static/Vegetation.png',
-      pc_pines: PC + 'Environment/Props/Static/Trees/Model_02/Size_05.png',
-      // saját rajz (tools/art/ruins_props.py): lovagszobor, oszlopok a láda-ablak hátteréhez
-      ruins_props: 'assets/custom/ruins_props.png',
       // a láda-ablak kép-hátterei (tools/art/backgrounds.py)
       bg_campfire: 'assets/backgrounds/chest_campfire.png',
       bg_waterfall: 'assets/backgrounds/chest_waterfall.png',
+      bg_pagoda: 'assets/backgrounds/chest_pagoda.png',
+      bg_valley: 'assets/backgrounds/chest_valley.png',
+      bg_lake: 'assets/backgrounds/chest_lake.png',
+      bg_knight: 'assets/backgrounds/chest_knight.png',
     },
     frames,
 

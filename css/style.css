@@ -224,6 +224,8 @@ html, body {
 }
 .cs-embers .cs-mote { background: #ffb347; box-shadow: 0 0 4px #ff7a1a; animation-timing-function: steps(16); }
 .cs-mist .cs-mote { width: 6px; height: 3px; background: #dff3ff; box-shadow: none; }
+.cs-dust .cs-mote { background: #fff1a0; box-shadow: 0 0 4px #ffd75a; }
+.cs-petals .cs-mote { width: 6px; height: 3px; background: #ffb3cf; box-shadow: 1px 1px 0 #e0779e; }
 @keyframes cs-fly {
   0% { transform: translate(0, 0); opacity: 0; } 20% { opacity: .9; } 45% { opacity: .3; } 65% { opacity: .8; }
   100% { transform: translate(var(--dx), var(--dy)); opacity: 0; }

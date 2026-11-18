@@ -51,7 +51,6 @@ CATEGORIES = [
     ('t1', 'lap', 'Egyben lévő karakterlapok (soronként egy animáció)', r'^Characters\(100x100 split\)/[^/]+/[^/]+/[^/_]+\.png$', 'list'),
     ('t2', 'karakter', 'Karakterek animációi (Demon_A, Blood Monster_A)', r'^Characters\(100x100 split\)/[^/]+/[^/]+/[^/]+_(Attack|Death|Hurt|Idle|Walk)\d*\.png$', 'grid'),
     ('cu', 'lada', 'Ládák (saját pixel art)', r'^chest', 'grid'),
-    ('cu', 'rom', 'Erdei rom propjai (saját pixel art)', r'^ruins', 'grid'),
     ('bg', 'lada-hatter', 'Láda-ablak hátterek (pixel art)', r'^chest_', 'grid'),
     ('t2', 'lap', 'Egyben lévő karakterlapok (soronként egy animáció)', r'^Characters\(100x100 split\)/[^/]+/[^/]+/[^/]+\.png$', 'list'),
 ]

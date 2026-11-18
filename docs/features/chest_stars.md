@@ -145,6 +145,13 @@ A rezgés csak Androidon működik (iOS-en a böngésző nem engedi); „csökke
   tűzfény és szikrák, a vízesésen lefelé futó csíkok, hab és permet.
 - A végén a „Beute” lista és a „Super!” gomb is a jelenetben van: a háttér alattuk is folytatódik.
 
+## 8. kiegészítés: hat kép-háttér, a rom kivéve (2026-11-18, a felhasználó kérésére)
+- Hátterek: `campfire`, `waterfall`, `pagoda`, `valley`, `lake`, `knight`; mind letöltött kép (ingyenes oldalakról,
+  feltüntetést nem kérnek), valódi pixel arttá alakítva (`tools/art/backgrounds.py`: egész számú kicsinyítés kb.
+  147×255-re, 48 szín). A kódból rakott erdei rom (`ruins`) kikerült, a hozzá tartozó saját rajzzal együtt.
+- Mozgás: tűzfény és szikrák (tábortűz), zuhogó víz és permet (vízesés), hulló cseresznyeszirmok (pagoda, völgy,
+  tó), por a fénysávban (lovag). Új háttér felvétele: a `src/ui/chestScene.js` fejléce írja le.
+
 ## 11. Lépések
 1. Csillagok a loot-sorsolásban (`rollStars`, `roll(…, { stars })`, `rarityFactor`, `chances`) + validátor + tesztek.
 2. Láda-ablak: nagy láda, csillag-animáció, koppintásra nyitás, kieső loot, lista.
