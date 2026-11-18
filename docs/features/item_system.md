@@ -42,7 +42,13 @@ tanulja a tárgyak német nevét névelővel (das Schwert, der Ring, die Krone).
 ```
 - `value`: ár aranyban (a boltnak, eladásnak); alapértéke ritkaságonként a `config.js`-ben, tárgyanként felülírható.
 - `stack`: összeadódik-e a mennyiség (alapból: ital, drágakő, anyag, kulcs igen; fegyver, páncél, ékszer nem).
-- A felszerelés hatása (`stats`) most **nem** kerül be: az a felszerelés feature dolga (3. szakasz), lásd 9.
+- `tier`: 1–5, milyen nehézségű helyen eshet (1 = első dungeonök); a loot tábla szint szerint húz.
+- `exclusive`: true = csak az a loot tábla adja, amelyik név szerint felsorolja (boss, egy adott hely).
+- `stats`: passzívok rögzített listából, pl. `{"maxHp": 10, "shield": 2}`. Javasolt lista: `maxHp` (+max. élet),
+  `shield` (kevesebb sebzés rossz válasznál), `heal` (ital: ennyi életet ad), `goldBonus` (+% arany),
+  `luck` (jobb láda-csillag esély), `hint` (% eséllyel kiesik egy rossz válasz). A tárgyon most kiírva látszik;
+  a hatásuk a felszerelés feature-rel (3. szakasz) kezd működni.
+- `desc`: opcionális (most egyik tárgy sem kap; később a küldetés-tárgyak).
 - **Fegyverek anyag szerint:** a fegyver-ikoncsomag 4 anyaga a ritkasághoz igazodik: bronz = közönséges, vas =
   ritka, acél = epikus, arany = legendás (a csoporton belüli I / II / III a változattól függ).
 
@@ -71,7 +77,7 @@ egy véletlen tárgyat, így egy új tárgy magától bekerül a ládákba.
 - Új kulcsok: `kind.<kind>` (8 db), `type.<type>` (ha a felületen megjelenik), `item.<id>.name/desc` az új
   tárgyakhoz, `debug.items*` a katalógushoz.
 - Német tartalom: tárgynév névelővel (B1 szókincs, a ritkábbaknál lehet B2: „der Streitkolben”, „die Armschiene”).
-  Leírás: egy rövid, egyszerű mondat (B1), vagy semmi, lásd 9. Amiben nem vagyok biztos: `review` jelölés.
+  Leírás most nincs; a passzívok nevei: `stat.<id>` (pl. „Leben”, „Schild”). Amiben nem vagyok biztos: `review` jelölés.
 
 ## 8. Assetek
 - Fegyverek: `weapons/` (Weapon RPG Icons, 4 anyag × 24 típus × 10 változat) — megvan, bőven elég.
@@ -79,19 +85,21 @@ egy véletlen tárgyat, így egy új tárgy magától bekerül a ládákba.
   (`assets/previews/it-ikon-*.png`). Új asset nem kell.
 
 ## 9. Eldöntendő kérdések
-- [ ] **Ritkaság:** maradjon a mostani 9 fokozat (Gewöhnlich I–III, Selten I–III, Episch I–II, Legendär), vagy
-      legyen egyszerűbb, 5 fokozat (Gewöhnlich, Ungewöhnlich, Selten, Episch, Legendär)?
-- [ ] **Hány tárgy legyen most?** Javaslat: kb. 40 (fegyver 12, páncél 8, ékszer 4, ital 3, drágakő 4, anyag 5,
-      kulcs 1, kincs 3). Később bármikor bővíthető.
-- [ ] **Leírás:** minden tárgyhoz egy rövid német mondat (több olvasnivaló, de több hibalehetőség), vagy csak a
-      ritkábbakhoz / egyikhez sem?
-- [ ] **Loot táblák:** maradjon tárgyanként (pontosan beállítható), vagy „csomagok” kategória / ritkaság szerint
-      (javaslat: vegyesen — a csomagok adják az alapot, egy-egy különleges tárgy külön is szerepelhet)?
-- [ ] **A mostani tárgyak:** megtartjuk és besoroljuk őket (pl. a koponya marad anyag), vagy szabad kézzel
-      újrakezdhetem a listát?
-- [ ] **Felszerelés hatása (később, csak irány):** mit adjon egy jobb tárgy? Pl. több max. HP (páncél), kisebb
-      sebzés rossz válasznál (pajzs), segítség a kérdésnél (ékszer: kiesik egy rossz válasz), több arany (amulett).
-      Most nem kódoljuk, de a tárgyak kiválasztásához jó tudni.
+Döntések (2026-11-18):
+- [x] **Ritkaság:** 7 fokozat (a 9 helyett): common · uncommon · rare · super rare · epic · legendary · unreal.
+      Nyitott: a sorrend alja (a felhasználó „uncommon – common”-t írt) és a német nevek, lásd lent.
+- [x] **Leírás:** a tárgyaknak most nincs leírás; helyette a **passzívok** (statok) látszanak („+10 Leben”).
+      Leírást később a küldetés-tárgyak kapnak (a `desc` mező opcionális lesz).
+- [x] **A mostani 11 tárgy:** mind újra lesz sorolva (az ID-k még szabadon változhatnak).
+- [x] **Passzívok:** sokfélék lehetnek → rögzített passzív-lista (`stats`), lásd 4.; a hatásuk a felszerelés
+      feature-rel működik, de az adat és a kijelzés most készül.
+- [x] **Loot, hosszú távra** (a felhasználó: sok tárgy, sok láda, helyhez kötött tárgyak, nehezebb dungeon =
+      jobb loot): kevés kategória, sok tárgy; minden tárgynak **szintje** (`tier` 1–5: milyen nehéz helyen eshet);
+      a loot táblák csomagokból húznak (`pick`: kategória / ritkaság / szint); a **különleges tárgyak**
+      (`exclusive`) csak abból a táblából jönnek, amelyik név szerint felsorolja őket (boss, egy adott dungeon).
+- [ ] **Hány tárgy most:** javaslat kb. 60, főleg 1–2. szintű (az első két dungeonhoz), mindegyik kategóriából.
+- [ ] **Ritkaság sorrendje és német nevei:** javaslat: Gewöhnlich (common) · Ungewöhnlich (uncommon) · Selten (rare)
+      · Sehr selten (super rare) · Episch (epic) · Legendär (legendary) · Mythisch (unreal).
 
 ## 10. Kész, ha
 - [ ] minden tárgynak van kategóriája, típusa, ritkasága, ára; a kategóriák és típusok rögzített listából jönnek
