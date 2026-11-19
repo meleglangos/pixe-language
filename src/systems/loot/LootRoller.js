@@ -2,7 +2,7 @@
 // DOM és Phaser nélkül, tesztelhető. Leírás: README.md (ebben a mappában).
 //
 // Láda-csillagok (1–5, config.js -> loot.stars, a tábla "stars" mezője felülírhatja): a csillagszám dönti el,
-// hány tételt húz (rolls), mennyi arany jön (gold szorzó), és a ritkaság-csoportok szorzóit (rarityFactor):
+// hány tételt húz (rolls), mennyi arany jön (gold szorzó), és a ritkaságok szorzóit (rarityFactor):
 // egy tétel esélye = súly × szorzó. Bármi bármelyik ládából jöhet, csak az esélyek mások.
 (function () {
   // [min, max] vagy szám -> egész a tartományban (a határokat is beleértve)
@@ -25,11 +25,11 @@
     return Object.assign({}, base, own, { rarityFactor: Object.assign({}, base.rarityFactor, own.rarityFactor) });
   }
 
-  // ritkaság-csoport: common1 -> common, rare2 -> rare; arany -> gold
+  // a tétel ritkasága (a rarityFactor kulcsa): a tárgy ritkasága; arany -> 'gold'
   function group(e) {
     if (e.gold !== undefined) return 'gold';
     const it = Game.data.items[e.item];
-    return it ? String(it.rarity).replace(/\d+$/, '') : 'common';
+    return it ? it.rarity : 'common';
   }
 
   // egy húzás súlyai: csillag nélkül a tábla súlyai, csillaggal × a ritkaság szorzója

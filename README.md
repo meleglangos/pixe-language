@@ -9,7 +9,7 @@ Böngészős pixel-art RPG német nyelvtanuláshoz. Nincs build lépés: az `ind
 Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén frissíti (pipák + „Most folyamatban”).
 Új szakaszt vagy tételt csak a felhasználó kérésére vesz fel; az ötletek a `docs/IDEAS.md`-be kerülnek.
 
-**Most folyamatban:** semmi. Következő: a tárgyrendszer
+**Most folyamatban:** tárgyrendszer (`docs/features/item_system.md`), 2. lépés. Utána: az inventory (a loot tárolása + „Tasche” ablak).
 (ritkaság, tárgycsoportok), majd az inventory (a loot tárolása + „Tasche” ablak).
 
 - [x] 1. szakasz: térkép, kattintásos + billentyűs mozgás, kutya, mentés + export/import
@@ -34,6 +34,12 @@ Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén fris
     - [x] többkoppintásos nyitás: 3 koppintás, tárgyankénti kiemelés ritkaság-előjellel, legendary show; első epic / legendary tárgyak
     - [x] láda-ablak háttér: egész ablakos erdei rom (szobor, vízesés, tó, tábortűz, gombák), rúnakör a ritkaság színében
     - [x] hat kép-háttér véletlenszerűen (tábortűz, vízesés, pagoda, völgy, tó, lovag), választható a láda-laborban; a lista mögött is háttér
+  - [ ] tárgyrendszer: kategóriák, 7 ritkaság, ár, passzívok (`docs/features/item_system.md`)
+    - [x] 1. adatformátum: kind / type / value / stack / stats / exclusive, 7 ritkaság, validátor, tesztek; a mostani tárgyak újrasorolva
+    - [ ] 2. `Game.items` segéd + „csomag” tétel (`pick`) a loot táblákban, dungeon-szintű ritkaság-szorzó
+    - [ ] 3. kb. 56 tárgy minden ritkaságból, a loot táblák átírása
+    - [ ] 4. felület: kategória és passzívok a láda-ablakban és a listán, tárgy-katalógus a láda-laborban
+    - [ ] 5. dokumentáció, lezárás
   - [ ] HP
   - [ ] debug mód
 - [ ] 3. szakasz: inventory, gear a karakteren, shop, gold, HP-ital

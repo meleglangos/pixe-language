@@ -8,7 +8,7 @@ const { createGame, readData, plain, ROOT } = require('./helpers/env');
 const seq = (...xs) => { let i = 0; return () => xs[i++ % xs.length]; };
 
 // egy legendary teszt-tárgy (a valódi tárgyak között még nincs ilyen)
-const LEG = { id: 'leg_test', kind: 'treasure', rarity: 'legendary', icon: 'it:1', name: 'loot.gold', desc: 'loot.gold' };
+const LEG = { id: 'leg_test', kind: 'treasure', type: 'treasure', rarity: 'legendary', icon: 'it:1', name: 'loot.gold' };
 function withTable(table) {
   return createGame({ content: raw => { raw.lootTables = raw.lootTables.concat(table); raw.items = raw.items.concat(LEG); } });
 }
@@ -92,7 +92,11 @@ test('ikonok: az items.json minden ikonja és az arany ikonja létező fájlra m
 test('a validátor kiszúrja a hibás tárgyakat és loot táblákat', () => {
   const { Game } = createGame();
   const raw = readData();
-  raw.items = raw.items.concat({ id: 'item_bad', name: 'nincs.kulcs', rarity: 'mythic', kind: 'food', icon: 'it:abc' });
+  raw.items = raw.items.concat(
+    { id: 'item_bad', name: 'nincs.kulcs', desc: 'nincs.leiras', rarity: 'mythic', kind: 'food', icon: 'it:abc' },
+    { id: 'item_bad2', name: 'loot.gold', rarity: 'rare', kind: 'weapon', type: 'ring', icon: 'it:1', value: -5, stack: 'igen', exclusive: 1, stats: { power: 3, maxHp: -2 } },
+    { id: 'item_bad3', name: 'loot.gold', rarity: 'rare', kind: 'gem', type: 'gem', icon: 'it:1', stats: [1] },
+  );
   raw.lootTables = raw.lootTables.concat(
     { id: 'loot_bad', rolls: [3, 1], always: [{ gold: 'sok' }], entries: [{ item: 'ghost', weight: 1 }, { item: 'bone', gold: 3, weight: 1 }, { item: 'bone', weight: 0 }, { item: 'bone', qty: 0, weight: 1 }] },
     { id: 'loot_empty' },
@@ -101,6 +105,8 @@ test('a validátor kiszúrja a hibás tárgyakat és loot táblákat', () => {
   const issues = Game.contentValidator.validate(raw).join('\n');
   for (const re of [
     /items\.item_bad\.name: ismeretlen szöveg-kulcs/, /items\.item_bad\.desc/, /item_bad: ismeretlen rarity: mythic/, /item_bad\.kind/, /item_bad\.icon: hibás ikon/,
+    /item_bad2\.type: a\(z\) weapon típusai/, /item_bad2\.value/, /item_bad2\.stack/, /item_bad2\.exclusive/,
+    /item_bad2\.stats\.power: ismeretlen passzív/, /item_bad2\.stats\.maxHp: pozitív szám/, /item_bad3\.stats: objektum/,
     /loot_bad\.rolls/, /loot_bad\.always\[0\]\.gold/, /loot_bad\.entries\[0\]: ismeretlen items id: ghost/,
     /loot_bad\.entries\[1\]: vagy "item", vagy "gold"/, /loot_bad\.entries\[2\]\.weight/, /loot_bad\.entries\[3\]\.qty/, /loot_empty: üres tábla/,
     /loot_stars\.stars\.weights/, /loot_stars\.stars\.gold/, /loot_stars\.stars\.rarityFactor\.rare/,
@@ -127,4 +133,20 @@ test('láda-stílusok: a valódiak hibátlanok; a validátor kiszúrja az ismere
   assert.match(issues, /chestStyles\.cs_strip\.openFrames/);
   assert.match(issues, /chestStyle: ismeretlen chestStyles id: cs_nincs/);
   assert.doesNotMatch(issues, /pc_wood/);
+});
+
+test('ritkaságok és tárgy-kategóriák: 7 fokozat alapárral és show-erővel; minden tárgy kategóriája és típusa a listából', () => {
+  const { Game } = createGame();
+  const r = Game.data.config.rarities;
+  assert.deepEqual(plain(r.map(x => x.id)), ['common', 'uncommon', 'rare', 'super_rare', 'epic', 'legendary', 'unreal']);
+  for (let i = 1; i < r.length; i++) assert.ok(r[i].value > r[i - 1].value && r[i].show >= r[i - 1].show, r[i].id);
+  const f = Game.data.config.loot.stars.rarityFactor;
+  for (const x of r) assert.equal(f[x.id].length, 5, 'rarityFactor.' + x.id);
+  const kinds = Game.data.config.items.kinds;
+  for (const it of Object.values(Game.data.items)) {
+    assert.ok(kinds[it.kind], it.id + '.kind');
+    assert.ok(kinds[it.kind].types.includes(it.type), it.id + '.type');
+  }
+  assert.equal(Game.loot.group({ item: 'sword_gold_01' }), 'legendary');
+  assert.equal(Game.loot.group({ gold: 5 }), 'gold');
 });

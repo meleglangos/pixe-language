@@ -18,13 +18,18 @@ Világtérkép → helyszín (dungeon) → német feladatok → jutalom (loot, a
 - A dungeonök közös rendszerrel futnak (`DungeonScene`), a kinézetüket a téma adja (`src/world/dungeonThemes.js`).
 - A dungeonök haladva nehezednek: a nyelvi szint és a jutalom is nő (a szintekről: `docs/GERMAN.md`).
 
-## 2. Rarity létra
+## 2. Rarity létra és tárgyak
 
-Kilenc fokozat alulról felfelé: `common1–3`, `rare1–3`, `epic1–2`, `legendary`
-(ID-k és színek: `config.js` → `rarities`; nevek: `rarity.<id>` a fordítási fájlban).
+Hét fokozat alulról felfelé: `common` (Gewöhnlich), `uncommon` (Ungewöhnlich), `rare` (Selten), `super_rare`
+(Sehr selten), `epic` (Episch), `legendary` (Legendär), `unreal` (Mythisch). ID-k, színek, alapár: `config.js` →
+`rarities`; nevek: `rarity.<id>` a fordítási fájlban.
 
-- Alapelv: a nehezebb kihívás és a későbbi dungeon jobb ritkaságot ér.
-- **Eldöntendő:** pontosan mi határozza meg egy tárgy ritkaságát, és mennyivel erősebb egy fokozat a másiknál.
+- **A ritkaság adja az erőt**: nincs külön tárgyszint; a ritkább tárgy passzívjai (`stats`) nagyobbak.
+- A nehezebb dungeon **csak nagyobb esélyt** ad a ritkább tárgyra, a közönséges ott is gyakori marad (nem lehet
+  túl erős a loot). A különleges (`exclusive`) tárgyak csak a saját helyükről jönnek.
+- Tárgy-kategóriák: fegyver, páncél, ékszer, ital, drágakő, anyag, kulcs, kincs (`config.js` → `items.kinds`).
+  Leírás helyett passzívok (Angriff, Leben, Schild, Heilung, Gold, Glück, Hilfe); leírást a küldetés-tárgyak kapnak.
+- Spec: `docs/features/item_system.md`.
 
 ## 3. Jutalmak és loot
 

@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const { createGame, tick, plain } = require('./helpers/env');
 
-const SWORD = { id: 'sword_bronze_01', name: 'game.title', rarity: 'common1' };
+const SWORD = { id: 'sword_bronze_01', name: 'game.title', rarity: 'common' };
 
 test('új játék, ha nincs mentés', () => {
   const { Game } = createGame();

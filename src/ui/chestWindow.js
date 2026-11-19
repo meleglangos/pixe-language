@@ -196,12 +196,15 @@
   };
 
   // a ritkaság-csoport és színe egy loot-tételhez
+  // a tétel ritkasága a kiemeléshez: group = a show ereje szerinti csoport (config.js -> rarities.show)
+  const SHOW_GROUPS = ['common', 'rare', 'epic', 'legendary'];
   function rarityInfo(e) {
     if (e.gold !== undefined) return { group: 'gold', color: GOLD_COLOR, id: null };
     const it = Game.data.items[e.item];
     const r = Game.data.config.rarities.find(x => x.id === it.rarity);
-    return { group: String(it.rarity).replace(/\d+$/, ''), color: r ? r.color : '#ffffff', id: it.rarity };
+    return { group: SHOW_GROUPS[r ? r.show : 0] || 'common', color: r ? r.color : '#ffffff', id: it.rarity };
   }
+
 
   Game.chestWindow = {
     open(opts) {

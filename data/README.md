@@ -185,13 +185,22 @@ Ha egy német szövegben nem vagy 100%-ig biztos: `{"de": "…", "hu": "…", "r
 ## items.json – tárgyak
 
 ```jsonc
-{"id": "sword_bronze_01", "kind": "weapon", "rarity": "common2", "icon": "wp:bronze c3 r0",
- "name": "item.sword_bronze_01.name", "desc": "item.sword_bronze_01.desc"}
+{"id": "sword_bronze_01", "kind": "weapon", "type": "sword", "rarity": "uncommon", "icon": "wp:bronze c3 r0",
+ "name": "item.sword_bronze_01.name", "stats": {"attack": 2}}
 ```
-- `kind`: `potion` | `gem` | `material` | `key` | `weapon` | `armor` | `treasure`; `rarity`: `config.js` → `rarities`.
+- `kind` (kategória) és `type` (típus): a `config.js` → `items.kinds` listájából (weapon, armor, jewelry, potion, gem,
+  material, key, treasure; mindegyiknek saját típusai). Név: `kind.<kind>` a fordítási fájlban.
+- `rarity`: `config.js` → `rarities` (common, uncommon, rare, super_rare, epic, legendary, unreal). A ritkaság adja az erőt.
+- `stats` (opcionális): passzívok a `config.js` → `items.stats` listájából, pozitív számmal (pl. `{"maxHp": 10}`);
+  név: `stat.<id>`. A hatásuk a felszerelés feature-rel kezd működni, addig csak kiírva látszanak.
+- `value` (opcionális): ár aranyban; alapból a ritkaság ára (`rarities[].value`).
+- `stack` (opcionális): összeadódik-e a mennyiség; alapból a kategóriáé (`items.kinds[].stack`).
+- `exclusive` (opcionális): `true` = csak az a loot tábla adja, amelyik név szerint felsorolja (boss, egy adott hely).
+- `desc` (opcionális): leírás kulcsa; most egyik tárgynak sincs (később a küldetés-tárgyaké).
 - `icon`: `"it:<szám>"` = Items16 (`assets/items/item<szám>.png`), `"wp:<anyag> c<oszlop> r<sor>"` = Weapon Icons
   (anyag: bronze / iron / steel / gold); a választáshoz: `assets/ASSETS.md` és `assets/previews/`.
-- A név névelővel: „der Bronzedolch”. A tárgy ID-ja majd a mentésbe kerül (inventory): kiadott ID-t ne nevezz át.
+- A név névelővel: „der Bronzedolch”. A tárgy ID-ja a mentésbe kerül (inventory): kiadott ID-t ne nevezz át.
+- Spec: `docs/features/item_system.md`.
 
 ## loot_tables.json – loot táblák
 

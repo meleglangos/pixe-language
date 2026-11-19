@@ -39,11 +39,13 @@ test('a kódban használt összes szöveg-kulcs létezik a fordítási fájlban'
   assert.deepEqual(missing, []);
 });
 
-test('a tartalomból hivatkozott szövegek (helyszínek, típusok, rarity) léteznek', () => {
+test('a tartalomból hivatkozott szövegek (helyszínek, típusok, rarity, tárgy-kategóriák, passzívok) léteznek', () => {
   const { Game } = createGame();
   const keys = [];
   Game.data.map.pois.forEach(p => keys.push('poi.' + p.id + '.name', 'poi.' + p.id + '.desc', 'poi.type.' + p.type));
   Game.data.config.rarities.forEach(r => keys.push('rarity.' + r.id));
+  Object.keys(Game.data.config.items.kinds).forEach(k => keys.push('kind.' + k));
+  Object.keys(Game.data.config.items.stats).forEach(k => keys.push('stat.' + k));
   assert.deepEqual(keys.filter(k => !translations[k]), []);
 });
 

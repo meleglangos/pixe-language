@@ -130,13 +130,27 @@
     });
     if (Game.data.config && Game.data.config.loot && !byId.chestStyles[Game.data.config.loot.chestStyle]) bad('config.loot.chestStyle: ismeretlen láda-stílus: ' + Game.data.config.loot.chestStyle);
 
+    // tárgyak: kategória (kind) és típus (type) a config.js -> items.kinds listából, ritkaság, ár, passzívok
     const rarities = Game.data.config && Game.data.config.rarities;
+    const itemCfg = (Game.data.config && Game.data.config.items) || { kinds: {}, stats: {} };
     Object.values(byId.items).forEach(it => {
       const w = 'items.' + it.id;
       str(w + '.name', it.name);
-      str(w + '.desc', it.desc);
+      if (it.desc !== undefined) str(w + '.desc', it.desc);
       if (!rarities || !rarities.some(r => r.id === it.rarity)) bad(w + ': ismeretlen rarity: ' + it.rarity);
-      if (ITEM_KINDS.indexOf(it.kind) < 0) bad(w + '.kind: ' + ITEM_KINDS.join(' | '));
+      const kind = itemCfg.kinds[it.kind];
+      if (!kind) bad(w + '.kind: ' + Object.keys(itemCfg.kinds).join(' | '));
+      else if (kind.types.indexOf(it.type) < 0) bad(w + '.type: a(z) ' + it.kind + ' típusai: ' + kind.types.join(' | '));
+      if (it.value !== undefined && !(Number.isInteger(it.value) && it.value >= 0)) bad(w + '.value: nemnegatív egész (ár aranyban)');
+      if (it.stack !== undefined && typeof it.stack !== 'boolean') bad(w + '.stack: true / false');
+      if (it.exclusive !== undefined && typeof it.exclusive !== 'boolean') bad(w + '.exclusive: true / false');
+      if (it.stats !== undefined) {
+        if (!it.stats || typeof it.stats !== 'object' || Array.isArray(it.stats)) bad(w + '.stats: objektum, pl. {"maxHp": 10}');
+        else Object.keys(it.stats).forEach(k => {
+          if (!itemCfg.stats[k]) bad(w + '.stats.' + k + ': ismeretlen passzív (' + Object.keys(itemCfg.stats).join(' | ') + ')');
+          else if (!(typeof it.stats[k] === 'number' && it.stats[k] > 0)) bad(w + '.stats.' + k + ': pozitív szám');
+        });
+      }
       if (Game.itemIcons && !Game.itemIcons.parse(it.icon)) bad(w + '.icon: hibás ikon: ' + JSON.stringify(it.icon) + ' ("it:<szám>" vagy "wp:<anyag> c<oszlop> r<sor>")');
     });
     const rangeOk = v => (Number.isInteger(v) && v >= 0) || (Array.isArray(v) && v.length === 2 && v.every(x => Number.isInteger(x) && x >= 0) && v[0] <= v[1]);
@@ -223,7 +237,6 @@
   // Egy mondat szókártyái: a kérdés-motoré (src/systems/questions), hogy a kettő ugyanúgy vágjon.
   const tileWords = s => Game.questions.tileWords(s);
 
-  const ITEM_KINDS = ['potion', 'gem', 'material', 'key', 'weapon', 'armor', 'treasure'];
   const needOk = v => v === undefined || (Number.isInteger(v) && v >= 1);
   const damageOk = v => v === undefined || (Number.isInteger(v) && v >= 0);
   const TAG_KINDS = ['context', 'grammar'];

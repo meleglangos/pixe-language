@@ -1,90 +1,13 @@
 [
-  {
-    "id": "potion_small",
-    "kind": "potion",
-    "rarity": "common1",
-    "icon": "it:903",
-    "name": "item.potion_small.name",
-    "desc": "item.potion_small.desc"
-  },
-  {
-    "id": "gem_blue",
-    "kind": "gem",
-    "rarity": "common2",
-    "icon": "it:543",
-    "name": "item.gem_blue.name",
-    "desc": "item.gem_blue.desc"
-  },
-  {
-    "id": "gem_red",
-    "kind": "gem",
-    "rarity": "rare1",
-    "icon": "it:536",
-    "name": "item.gem_red.name",
-    "desc": "item.gem_red.desc"
-  },
-  {
-    "id": "bone",
-    "kind": "material",
-    "rarity": "common1",
-    "icon": "it:1164",
-    "name": "item.bone.name",
-    "desc": "item.bone.desc"
-  },
-  {
-    "id": "skull",
-    "kind": "material",
-    "rarity": "common2",
-    "icon": "it:1167",
-    "name": "item.skull.name",
-    "desc": "item.skull.desc"
-  },
-  {
-    "id": "key_old",
-    "kind": "key",
-    "rarity": "common3",
-    "icon": "it:691",
-    "name": "item.key_old.name",
-    "desc": "item.key_old.desc"
-  },
-  {
-    "id": "sword_bronze_01",
-    "kind": "weapon",
-    "rarity": "common2",
-    "icon": "wp:bronze c3 r0",
-    "name": "item.sword_bronze_01.name",
-    "desc": "item.sword_bronze_01.desc"
-  },
-  {
-    "id": "dagger_bronze_01",
-    "kind": "weapon",
-    "rarity": "common1",
-    "icon": "wp:bronze c6 r10",
-    "name": "item.dagger_bronze_01.name",
-    "desc": "item.dagger_bronze_01.desc"
-  },
-  {
-    "id": "amulet_01",
-    "kind": "treasure",
-    "rarity": "epic1",
-    "icon": "it:867",
-    "name": "item.amulet_01.name",
-    "desc": "item.amulet_01.desc"
-  },
-  {
-    "id": "sword_gold_01",
-    "kind": "weapon",
-    "rarity": "epic2",
-    "icon": "wp:gold c5 r0",
-    "name": "item.sword_gold_01.name",
-    "desc": "item.sword_gold_01.desc"
-  },
-  {
-    "id": "crown_gold",
-    "kind": "treasure",
-    "rarity": "legendary",
-    "icon": "it:874",
-    "name": "item.crown_gold.name",
-    "desc": "item.crown_gold.desc"
-  }
+  {"id": "potion_small", "kind": "potion", "type": "heal", "rarity": "common", "icon": "it:903", "name": "item.potion_small.name", "stats": {"heal": 5}},
+  {"id": "gem_blue", "kind": "gem", "type": "gem", "rarity": "common", "icon": "it:543", "name": "item.gem_blue.name"},
+  {"id": "gem_red", "kind": "gem", "type": "gem", "rarity": "rare", "icon": "it:536", "name": "item.gem_red.name"},
+  {"id": "bone", "kind": "material", "type": "bone", "rarity": "common", "icon": "it:1164", "name": "item.bone.name"},
+  {"id": "skull", "kind": "material", "type": "monster", "rarity": "uncommon", "icon": "it:1167", "name": "item.skull.name"},
+  {"id": "key_old", "kind": "key", "type": "key", "rarity": "common", "icon": "it:691", "name": "item.key_old.name"},
+  {"id": "sword_bronze_01", "kind": "weapon", "type": "sword", "rarity": "uncommon", "icon": "wp:bronze c3 r0", "name": "item.sword_bronze_01.name", "stats": {"attack": 2}},
+  {"id": "dagger_bronze_01", "kind": "weapon", "type": "dagger", "rarity": "common", "icon": "wp:bronze c6 r10", "name": "item.dagger_bronze_01.name", "stats": {"attack": 1}},
+  {"id": "amulet_01", "kind": "jewelry", "type": "amulet", "rarity": "epic", "icon": "it:867", "name": "item.amulet_01.name", "stats": {"maxHp": 15, "goldBonus": 10}},
+  {"id": "sword_gold_01", "kind": "weapon", "type": "sword", "rarity": "legendary", "icon": "wp:gold c5 r0", "name": "item.sword_gold_01.name", "stats": {"attack": 8}},
+  {"id": "crown_gold", "kind": "treasure", "type": "treasure", "rarity": "legendary", "icon": "it:874", "name": "item.crown_gold.name"}
 ]

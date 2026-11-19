@@ -28,7 +28,7 @@
     const it = Game.data.items[e.item];
     const rarity = Game.data.config.rarities.find(r => r.id === it.rarity);
     const name = ui.el('span', 'loot-name', [ui.tx(it.name)]);
-    const kids = [iconEl(it.icon), ui.el('span', 'loot-text', [name, ui.el('span', 'loot-desc small', [ui.tx(it.desc)])])];
+    const kids = [iconEl(it.icon), ui.el('span', 'loot-text', [name].concat(it.desc ? [ui.el('span', 'loot-desc small', [ui.tx(it.desc)])] : []))];
     kids.push(ui.el('span', 'loot-qty', [e.qty > 1 ? '×' + e.qty : '']));
     const li = ui.el('li', 'loot-row', kids);
     if (rarity) li.style.setProperty('--rarity', rarity.color); // a sor bal széle a ritkaság színe

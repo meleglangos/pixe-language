@@ -1,6 +1,6 @@
 # Tárgyrendszer: kategóriák, ritkaság, érték
 
-**Állapot:** tervezet
+**Állapot:** folyamatban (jóváhagyva 2026-11-19)
 **Ötlet:** `docs/IDEAS.md` → „Tárgyrendszer: tárgycsoportok, ritkaság csoportonként, érték / erő; a loot táblák ehhez igazodnak”
 
 ## 1. Cél
