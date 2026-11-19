@@ -9,7 +9,7 @@ import os
 import re
 
 import notes
-from rules import PACKS
+from rules import PACKS, HIDDEN_CATEGORIES, HIDDEN_ITEM16
 
 MATERIALS = {'bronze': 'bronz', 'iron': 'vas', 'steel': 'acél', 'gold': 'arany'}
 
@@ -75,8 +75,11 @@ def build(items, note_for, assets_dir):
                 if lo <= n <= hi:
                     name, tags = desc, t
                     break
-            entries.append({'id': 'it:%d' % n, 'pack': pack, 'cat': tags[0] if tags else 'egyéb', 'name': name,
-                            'tags': tags, 'src': 'assets/' + it['path'], 'w': 16, 'h': 16})
+            e = {'id': 'it:%d' % n, 'pack': pack, 'cat': tags[0] if tags else 'egyéb', 'name': name,
+                 'tags': tags, 'src': 'assets/' + it['path'], 'w': 16, 'h': 16}
+            if any(lo <= n <= hi for lo, hi in HIDDEN_ITEM16):
+                e['hidden'] = True
+            entries.append(e)
             continue
         if pack == 'wp' and it['cat'] == 'fegyver-ikon':
             mat = os.path.basename(it['path']).split('-')[0]
@@ -94,6 +97,8 @@ def build(items, note_for, assets_dir):
              'tags': tags or [], 'src': 'assets/' + it['path'], 'w': it['w'], 'h': it['h'], 'file': True}
         if it.get('frames'):
             e['frame'] = list(it['frames'][:2])
+        if (pack, it['cat']) in HIDDEN_CATEGORIES:
+            e['hidden'] = True
         entries.append(e)
     data = {'packs': PACKS, 'entries': entries}
     path = os.path.join(assets_dir, 'catalog_data.js')

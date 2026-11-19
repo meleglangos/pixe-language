@@ -113,9 +113,11 @@
   const used = {};
   (B.items || []).forEach(it => { (used[it.icon] = used[it.icon] || []).push(it); });
   const usedCount = Object.keys(used).length;
-  document.getElementById('total').textContent = C.entries.length + ' kép · ' + (B.items || []).length + ' tárgy a játékban';
+  document.getElementById('total').textContent = (C.entries.length - C.entries.filter(e => e.hidden).length) + ' kép · ' + (B.items || []).length + ' tárgy a játékban';
 
-  const state = { q: '', pack: '', cat: '', usage: '' };
+  const state = { q: '', pack: '', cat: '', usage: '', hidden: false };
+  const visible = () => C.entries.filter(e => state.hidden || !e.hidden);
+  const hiddenCount = C.entries.filter(e => e.hidden).length;
   let shown = 0, list = [];
   const PAGE = 150;
   const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; };
@@ -150,6 +152,7 @@
   }
 
   function matches(e) {
+    if (e.hidden && !state.hidden) return false;
     if (state.pack && e.pack !== state.pack) return false;
     if (state.cat && e.cat !== state.cat) return false;
     const u = used[e.id];
@@ -198,18 +201,22 @@
   const SHORT = { pc: 'Pixel Crawler', wp: 'Fegyver ikonok', it: 'Items16 ikonok', mi: 'Modern Interiors', t1: 'Tiny RPG 01', t2: 'Tiny RPG 02', cu: 'Saját rajzok', bg: 'Láda-hátterek' };
   function fillPacks() {
     const sel = document.getElementById('pack');
-    const n = p => C.entries.filter(e => e.pack === p).length;
+    const n = p => visible().filter(e => e.pack === p).length;
     sel.replaceChildren(el('option', '', 'Minden csomag'), ...Object.keys(C.packs).filter(n).map(p => { const o = el('option', '', (SHORT[p] || C.packs[p]) + ' (' + n(p) + ')'); o.value = p; return o; }));
     sel.options[0].value = '';
     sel.value = state.pack;
   }
   function drawChips() {
     chips(document.getElementById('usage'), [['', 'Mind'], ['used', 'Játékban ' + usedCount], ['free', 'Még nincs a játékban']], 'usage');
+    const h = el('button', 'chip' + (state.hidden ? ' on' : ''), 'Elrejtettek is ' + hiddenCount);
+    h.type = 'button';
+    h.addEventListener('click', () => { state.hidden = !state.hidden; drawChips(); fillPacks(); fillCats(); render(true); });
+    document.getElementById('usage').append(h);
   }
   function fillCats() {
     const sel = document.getElementById('cat');
     const cats = {};
-    C.entries.forEach(e => { if (!state.pack || e.pack === state.pack) cats[e.cat] = (cats[e.cat] || 0) + 1; });
+    visible().forEach(e => { if (!state.pack || e.pack === state.pack) cats[e.cat] = (cats[e.cat] || 0) + 1; });
     sel.replaceChildren(el('option', '', 'Minden kategória'), ...Object.keys(cats).sort((a, b) => a.localeCompare(b, 'hu')).map(c => { const o = el('option', '', c + ' (' + cats[c] + ')'); o.value = c; return o; }));
     sel.options[0].value = '';
     sel.value = state.cat;
@@ -220,6 +227,7 @@
     const big = el('div', 'big'); big.append(thumb(e, e.file ? 384 : 128));
     const kids = [big, el('h2', '', e.name)];
     const idp = el('p'); idp.append('Kód: ', el('code', '', e.id)); kids.push(idp);
+    if (e.hidden) kids.push(el('p', 'tags', 'Elrejtve: nem kell a játékhoz (tools/asset_catalog/rules.py)'));
     kids.push(el('p', 'tags', (SHORT[e.pack] || C.packs[e.pack] || e.pack) + ' · ' + e.cat + (e.tags && e.tags.length ? ' · ' + e.tags.join(', ') : '')));
     if (e.file) kids.push(el('p', 'tags', e.src + ' · ' + e.w + '×' + e.h + ' px' + (e.frame ? ' · képkocka ' + e.frame[0] + '×' + e.frame[1] : '')));
     (used[e.id] || []).forEach(it => {

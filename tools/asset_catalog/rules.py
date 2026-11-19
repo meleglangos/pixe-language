@@ -69,6 +69,12 @@ FRAME_HINTS = [
     (r'Characters_free/[A-Z][a-z]+_16x16\.png', (16, 32, 168), 'teljes karakterlap: 24 oszlop × 7 sor'),
 ]
 
+# Elrejtett (a felhasználó szerint soha nem kellő) assetek: nem töröljük őket, de a kereshető katalógus oldal alapból
+# nem mutatja (kapcsolóval előhozhatók), és a címkézésnél kimaradnak. (csomag, kategória) párok, és Items16 tartományok.
+HIDDEN_CATEGORIES = {('pc', 'mockup'), ('wp', 'attekintes'), ('mi', 'rpgmaker'), ('mi', 'belso-nagy'), ('mi', 'attekintes'),
+                     ('mi', 'regi'), ('t1', 'arnyekkal'), ('t2', 'arnyekkal'), ('t1', 'lap'), ('t2', 'lap')}
+HIDDEN_ITEM16 = [(929, 960), (961, 987)]  # csavarok, fogaskerekek, alkatrészek; elektronika (modern)
+
 T1 = 'tiny-rpg-01/Tiny RPG Character Asset Pack 01 v2.0 -Free Soldier&Orc/'
 T2 = 'tiny-rpg-02/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/'
 PREFIX = {'pc': PC, 'wp': WP, 'mi': MI, 'it': 'items/', 't1': T1, 't2': T2, 'cu': 'custom/', 'bg': 'backgrounds/'}

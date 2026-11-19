@@ -50,6 +50,7 @@ kéri, vagy ha új feature-t kell választani.
 - [ ] Achievementek és címek, hozzá rangrendszer — achievement rendszer + mentés
 - [ ] Saját szoba / ház, berendezhető a megszerzett bútorokkal — ház rendszer + Modern Interiors assetek
 - [ ] Kozmetikai tárgyak a karakterre / petre — kérdéses: assettől függ (`assets/ASSETS.md`)
+- [ ] Öltöztethető, választható karakter: a felvett fegyver / páncél látszik a figurán (rétegek a Pixel Crawler alaptestre, Body_A), több választható karakter, pl. egy aranyos, saját tervezésű cica-lány (nem Hello Kitty: az védett figura) — karakter-rendszer + assetek (ruha/páncél rétegek animációnként) + felszerelés
 - [ ] Fast travel / teleport napi kérdésért cserébe — kérdés-motor (napi kihívás) + feloldás
 - [ ] „Neuigkeiten” ablak: frissítés után egyszer felugrik, mi az újdonság (németül, magyar segítséggel) — UI + fordítási fájl + mentés (utoljára látott verzió)
 
