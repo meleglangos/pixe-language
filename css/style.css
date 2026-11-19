@@ -1,3 +1,12 @@
+/* A számjegyek (0–9) a Press Start 2P betűtípusból (jobban olvashatók), kicsinyítve, hogy illeszkedjenek a
+   Pixelify Sans betűihez; minden más karakter a Pixelify Sans-ból jön (unicode-range). Licenc: SIL OFL. */
+@font-face {
+  font-family: 'DA Ziffern';
+  src: url(https://fonts.gstatic.com/s/pressstart2p/v16/e3t4euO8T-267oIAQAu6jDQyK3nVivM.woff2) format('woff2');
+  unicode-range: U+0030-0039;
+  size-adjust: 72%;
+  font-display: swap;
+}
 :root {
   --ink: #3a2618;
   --ink-soft: #6b5240;
@@ -9,7 +18,7 @@
   --danger: #c2504a;
   --danger-dark: #96352f;
   --sea: #3f8fd0;
-  --font: 'Pixelify Sans', 'Trebuchet MS', 'Segoe UI', system-ui, sans-serif;
+  --font: 'DA Ziffern', 'Pixelify Sans', 'Trebuchet MS', 'Segoe UI', system-ui, sans-serif; /* számjegyek: Press Start 2P, minden más: Pixelify Sans */
 }
 
 * { box-sizing: border-box; }

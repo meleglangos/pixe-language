@@ -50,6 +50,8 @@ Game.data.config = {
       { name: 'Items16', by: 'Glionox' },
       { name: 'Modern Interiors', by: 'LimeZu', url: 'https://limezu.itch.io/moderninteriors' },
       { name: 'Tiny RPG Character Asset Pack 01 & 02', by: 'Zerie' },
+      { name: 'Pixelify Sans (Schrift)', by: 'Stefie Justprince' },
+      { name: 'Press Start 2P (Ziffern)', by: 'CodeMan38' },
     ],
     code: [
       { name: 'Phaser 3', by: 'Phaser Studio', url: 'https://phaser.io' },
