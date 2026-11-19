@@ -9,7 +9,7 @@ Böngészős pixel-art RPG német nyelvtanuláshoz. Nincs build lépés: az `ind
 Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén frissíti (pipák + „Most folyamatban”).
 Új szakaszt vagy tételt csak a felhasználó kérésére vesz fel; az ötletek a `docs/IDEAS.md`-be kerülnek.
 
-**Most folyamatban:** tárgyrendszer (`docs/features/item_system.md`), 3. lépés. Utána: az inventory (a loot tárolása + „Tasche” ablak).
+**Most folyamatban:** tárgyrendszer (`docs/features/item_system.md`), 4. lépés. Utána: az inventory (a loot tárolása + „Tasche” ablak).
 (ritkaság, tárgycsoportok), majd az inventory (a loot tárolása + „Tasche” ablak).
 
 - [x] 1. szakasz: térkép, kattintásos + billentyűs mozgás, kutya, mentés + export/import
@@ -37,7 +37,7 @@ Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén fris
   - [ ] tárgyrendszer: kategóriák, 7 ritkaság, ár, passzívok (`docs/features/item_system.md`)
     - [x] 1. adatformátum: kind / type / value / stack / stats / exclusive, 7 ritkaság, validátor, tesztek; a mostani tárgyak újrasorolva
     - [x] 2. `Game.items` segéd + „csomag” tétel (`pick`) a loot táblákban, dungeon-szintű ritkaság-szorzó (`rarityBoost`)
-    - [ ] 3. kb. 56 tárgy minden ritkaságból, a loot táblák átírása
+    - [x] 3. 55 tárgy minden ritkaságból (fegyver 14, páncél 14, ékszer 7, ital 4, drágakő 6, anyag 5, kulcs 2, kincs 3), a loot táblák csomagokkal
     - [ ] 4. felület: kategória és passzívok a láda-ablakban és a listán, tárgy-katalógus a láda-laborban
     - [ ] 5. dokumentáció, lezárás
   - [ ] HP

@@ -161,8 +161,9 @@ test('Game.items: ár, összeadódás, passzívok, rendezés, csomag-szűrő (a 
   assert.deepEqual(plain(Game.items.stats('amulet_01')), [{ id: 'maxHp', value: 15, unit: '' }, { id: 'goldBonus', value: 10, unit: '%' }]);
   const list = Game.items.list();
   for (let i = 1; i < list.length; i++) assert.ok(Game.items.rarityIndex(list[i - 1].rarity) >= Game.items.rarityIndex(list[i].rarity));
-  const swords = plain(Game.items.match({ kind: 'weapon', type: 'sword' }).map(it => it.id).sort());
-  assert.deepEqual(swords, ['sword_bronze_01', 'sword_gold_01']);
+  const swords = Game.items.match({ kind: 'weapon', type: 'sword' });
+  assert.ok(swords.length >= 2 && swords.every(it => it.kind === 'weapon' && it.type === 'sword'));
+  assert.ok(swords.some(it => it.id === 'sword_bronze_01'));
   assert.ok(!Game.items.match({ kind: 'weapon' }).some(it => it.id === 'ex_test'));
   assert.deepEqual(plain(Game.items.match({ rarity: ['legendary'], kind: 'treasure' }).map(it => it.id).sort()), ['crown_gold', 'leg_test']);
   assert.ok(Game.items.byKind().weapon.length >= 3);
@@ -179,15 +180,15 @@ test('loot: csomag tétel (pick) és ritkaság-szorzó (rarityBoost); a különl
     );
   } });
   const ch = id => Object.fromEntries(Game.loot.chances(id).map(c => [c.item, c.p]));
-  const a = ch('loot_pick');
-  assert.ok(Math.abs(a.bone - 0.5) < 1e-9 && Math.abs(a.sword_bronze_01 - 0.25) < 1e-9 && Math.abs(a.sword_gold_01 - 0.25) < 1e-9);
+  const a = ch('loot_pick'), n = Game.items.match({ kind: 'weapon', type: 'sword' }).length;
+  assert.ok(Math.abs(a.bone - 0.5) < 1e-9 && Math.abs(a.sword_bronze_01 - 0.5 / n) < 1e-9 && Math.abs(a.sword_gold_01 - 0.5 / n) < 1e-9);
   assert.equal(a.ex_test, undefined);
   const b = ch('loot_boost');
   assert.ok(b.sword_gold_01 > 5 * b.sword_bronze_01, 'a nehezebb hely nagyobb esélyt ad a ritkábbra');
   assert.ok(b.bone > 0.1, '... de a közönséges is jön');
   assert.deepEqual(plain(Game.loot.roll('loot_ex', { random: () => 0 })), [{ item: 'ex_test', qty: 1 }]);
   const r = plain(Game.loot.roll('loot_pick', { random: () => 0 }));
-  assert.equal(r.length, 1); assert.ok(['sword_bronze_01', 'sword_gold_01'].includes(r[0].item));
+  assert.equal(r.length, 1); assert.equal(Game.data.items[r[0].item].type, 'sword');
   // a validátor: ismeretlen szűrő-érték, üres csomag, hibás rarityBoost
   const raw = readData();
   raw.lootTables = raw.lootTables.concat({ id: 'loot_badpick', rarityBoost: { mythic: 2, rare: -1 }, entries: [
@@ -197,4 +198,24 @@ test('loot: csomag tétel (pick) és ritkaság-szorzó (rarityBoost); a különl
   for (const re of [/loot_badpick\.entries\[0\]\.pick\.kind: ismeretlen: food/, /loot_badpick\.entries\[1\]\.pick: egyetlen tárgy sem illik rá/,
     /loot_badpick\.entries\[2\]\.pick\.color/, /loot_badpick\.entries\[3\]: vagy "item", vagy "gold", vagy "pick"/,
     /loot_badpick\.rarityBoost\.mythic: ismeretlen ritkaság/, /loot_badpick\.rarityBoost\.rare: nemnegatív/]) assert.match(issues, re);
+});
+
+test('a valódi tárgyak: minden ritkaságból van; a könnyű láda főleg közönséges, a nehezebb csak nagyobb esélyt ad', () => {
+  const { Game } = createGame();
+  const rs = new Set(Object.values(Game.data.items).map(it => it.rarity));
+  for (const r of Game.data.config.rarities) assert.ok(rs.has(r.id), 'nincs ' + r.id + ' tárgy');
+  const share = (t, ids) => {
+    const w = Game.data.config.loot.stars.weights, tot = w.reduce((a, b) => a + b);
+    let out = 0;
+    for (let s = 1; s <= 5; s++) {
+      const items = Game.loot.chances(t, s).filter(c => c.item), sum = items.reduce((a, c) => a + c.p, 0);
+      out += items.filter(c => ids.includes(Game.data.items[c.item].rarity)).reduce((a, c) => a + c.p, 0) / sum * w[s - 1] / tot;
+    }
+    return out;
+  };
+  const low = ['common', 'uncommon'], top = ['epic', 'legendary', 'unreal'];
+  assert.ok(share('loot_crypt_chest', low) > 0.8, 'a kripta ládája főleg közönséges');
+  assert.ok(share('loot_crypt_chest', top) < 0.03);
+  assert.ok(share('loot_mine_chest', top) > share('loot_crypt_chest', top), 'a bánya nagyobb esélyt ad');
+  assert.ok(share('loot_mine_chest', low) > 0.65, '... de ott is a közönséges a gyakori');
 });
