@@ -121,7 +121,7 @@
   // melyik loot táblákból eshet: név szerint vagy csomagból
   function sources(it) {
     return Object.values(Game.data.lootTables).filter(t => [].concat(t.entries || [], t.always || []).some(e =>
-      e.item === it.id || (e.pick && Game.items.match(e.pick).some(m => m.id === it.id)))).map(t => t.id.replace(/^loot_|_chest$/g, ''));
+      e.item === it.id || (e.pick && Game.items.match(e.pick, t.places).some(m => m.id === it.id)))).map(t => t.id.replace(/^loot_|_chest$/g, ''));
   }
   let catKind = '';
   function catalog() {
@@ -150,6 +150,7 @@
               el('span', 'lab-item-meta', [short('rarity.' + it.rarity), it.type, hu('debug.colValue') + ': ' + Game.items.value(it)].join(' · ')
                 + (it.exclusive ? ' · ' + hu('debug.exclusive') : '')),
               st ? el('span', 'lab-item-stats', st) : '',
+              el('span', 'lab-item-meta', hu('debug.places') + ': ' + (it.places ? it.places.map(x => hu('place.' + x)).join(', ') : hu('debug.general'))),
               el('span', 'lab-item-meta', hu('debug.colSource') + ': ' + (sources(it).join(', ') || '–')),
             ]),
           ]);

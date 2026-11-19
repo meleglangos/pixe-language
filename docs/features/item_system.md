@@ -115,6 +115,14 @@ Döntések (2026-11-18):
 - [x] `node tools/build-data.js` és `npm test` zöld; egy régi mentés betöltése után is működik
 - [x] README „Állapot”, `docs/GAME_DESIGN.md` (rarity létra, tárgycsoportok), `data/README.md` frissítve
 
+## Kiegészítés: hely-jelölések (2026-11-19, a felhasználó kérésére)
+- A tárgy kaphat **hely-jelölést** (`places`, egy vagy több hely: `["crypt"]`, `["crypt", "mine"]`). Az ilyen tárgy csak
+  abból a ládából esik, amelyik loot táblája kéri valamelyik helyét (`places` a táblán, **egy tábla több helyet is
+  kérhet**). Jelölés nélkül a tárgy általános: bárhonnan eshet. A csomag `place` szűrője csak az adott hely tárgyait adja.
+- A helyek listája: `config.js` → `items.places`; név: `place.<id>` (a láda-labor mutatja).
+- Most: a csont és a koponya a kriptáé, a vas- és aranyérc a bányáé; a többi 51 tárgy általános.
+- Új dungeonnél: saját hely (vagy a meglévők közül több), hozzá 8–15 témába illő tárgy, és a ládája kéri a helyét.
+
 ## 11. Lépések
 1. Adatformátum: `kind` / `type` / `value` / `stack`, kategória-lista, validátor, tesztek; a mostani tárgyak besorolása.
 2. `Game.items` segéd (kategória, rendezés, keresés) + `pick` tétel a loot táblában, tesztekkel.

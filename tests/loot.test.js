@@ -219,3 +219,29 @@ test('a valódi tárgyak: minden ritkaságból van; a könnyű láda főleg köz
   assert.ok(share('loot_mine_chest', top) > share('loot_crypt_chest', top), 'a bánya nagyobb esélyt ad');
   assert.ok(share('loot_mine_chest', low) > 0.65, '... de ott is a közönséges a gyakori');
 });
+
+test('helyek: a hely-jelölt tárgy csak abból a táblából jön, amelyik kéri a helyét; az általános bárhonnan', () => {
+  const MULTI = { id: 'multi_test', kind: 'gem', type: 'gem', rarity: 'common', icon: 'it:1', name: 'loot.gold', places: ['crypt', 'mine'] };
+  const { Game } = createGame({ content: raw => {
+    raw.items = raw.items.concat(MULTI);
+    raw.lootTables = raw.lootTables.concat(
+      { id: 'loot_none', entries: [{ pick: { kind: 'material' }, weight: 1 }] },
+      { id: 'loot_both', places: ['crypt', 'mine'], entries: [{ pick: { kind: 'material' }, weight: 1 }] },
+      { id: 'loot_only', entries: [{ pick: { place: 'mine' }, weight: 1 }] },
+    );
+  } });
+  const ids = t => Game.loot.chances(t).map(c => c.item).sort();
+  const crypt = ids('loot_crypt_chest'), mine = ids('loot_mine_chest');
+  assert.ok(crypt.includes('bone') && !crypt.includes('ore_iron'), 'a kriptában csont van, érc nincs');
+  assert.ok(mine.includes('ore_iron') && !mine.includes('bone'), 'a bányában érc van, csont nincs');
+  assert.ok(crypt.includes('potion_small') && mine.includes('potion_small'), 'az általános tárgy mindkettőben');
+  assert.ok(crypt.includes('multi_test') && mine.includes('multi_test'), 'a több helyű tárgy mindkét helyen');
+  assert.deepEqual(plain(ids('loot_none')), ['herb']);                 // hely nélkül csak az általános anyag
+  assert.ok(ids('loot_both').includes('bone') && ids('loot_both').includes('ore_gold'), 'egy tábla több helyet is kérhet');
+  assert.ok(ids('loot_only').every(id => (Game.data.items[id].places || []).includes('mine')), 'a place szűrő csak a hely tárgyait adja');
+  const raw = readData();
+  raw.items = raw.items.concat({ id: 'bad_place', kind: 'gem', type: 'gem', rarity: 'common', icon: 'it:1', name: 'loot.gold', places: ['mars'] });
+  raw.lootTables = raw.lootTables.concat({ id: 'loot_badplace', places: 'crypt', entries: [{ pick: { place: 'venus' }, weight: 1 }] });
+  const issues = Game.contentValidator.validate(raw).join('\n');
+  for (const re of [/bad_place\.places: ismeretlen hely: mars/, /loot_badplace\.places: helyek tömbje/, /loot_badplace\.entries\[0\]\.pick\.place: ismeretlen hely: venus/]) assert.match(issues, re);
+});

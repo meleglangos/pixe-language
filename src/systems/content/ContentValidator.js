@@ -130,6 +130,12 @@
     });
     if (Game.data.config && Game.data.config.loot && !byId.chestStyles[Game.data.config.loot.chestStyle]) bad('config.loot.chestStyle: ismeretlen láda-stílus: ' + Game.data.config.loot.chestStyle);
 
+    // hely-jelölések (config.js -> items.places): tömb, ismert helyekkel
+    const knownPlaces = ((Game.data.config && Game.data.config.items) || {}).places || [];
+    const placesOk = (w, v) => {
+      if (!Array.isArray(v) || !v.length || v.some(x => typeof x !== 'string')) { bad(w + ': helyek tömbje, pl. ["crypt"]'); return; }
+      v.forEach(x => { if (knownPlaces.indexOf(x) < 0) bad(w + ': ismeretlen hely: ' + x + ' (config.js -> items.places)'); });
+    };
     // tárgyak: kategória (kind) és típus (type) a config.js -> items.kinds listából, ritkaság, ár, passzívok
     const rarities = Game.data.config && Game.data.config.rarities;
     const itemCfg = (Game.data.config && Game.data.config.items) || { kinds: {}, stats: {} };
@@ -144,6 +150,7 @@
       if (it.value !== undefined && !(Number.isInteger(it.value) && it.value >= 0)) bad(w + '.value: nemnegatív egész (ár aranyban)');
       if (it.stack !== undefined && typeof it.stack !== 'boolean') bad(w + '.stack: true / false');
       if (it.exclusive !== undefined && typeof it.exclusive !== 'boolean') bad(w + '.exclusive: true / false');
+      if (it.places !== undefined) placesOk(w + '.places', it.places);
       if (it.stats !== undefined) {
         if (!it.stats || typeof it.stats !== 'object' || Array.isArray(it.stats)) bad(w + '.stats: objektum, pl. {"maxHp": 10}');
         else Object.keys(it.stats).forEach(k => {
@@ -167,21 +174,28 @@
     if (Game.data.config && Game.data.config.loot && Game.data.config.loot.stars) starsOk('config.loot.stars', Game.data.config.loot.stars);
     // csomag ("pick"): kind / type / rarity szöveg vagy tömb, a listákból; legalább egy (nem különleges) tárgy illik rá
     const listOk = v => typeof v === 'string' || (Array.isArray(v) && v.length && v.every(x => typeof x === 'string'));
+    let tablePlaces = [];
     const pickOk = (w, p) => {
       if (!p || typeof p !== 'object' || Array.isArray(p)) { bad(w + ': objektum kell, pl. {"kind": "weapon", "rarity": ["common", "uncommon"]}'); return; }
-      Object.keys(p).forEach(k => { if (['kind', 'type', 'rarity'].indexOf(k) < 0) bad(w + '.' + k + ': csak kind / type / rarity lehet'); });
+      Object.keys(p).forEach(k => { if (['kind', 'type', 'rarity', 'place'].indexOf(k) < 0) bad(w + '.' + k + ': csak kind / type / rarity / place lehet'); });
       const kinds = Object.keys(itemCfg.kinds), types = [].concat(...kinds.map(k => itemCfg.kinds[k].types)), rs = (rarities || []).map(r => r.id);
       [['kind', kinds], ['type', types], ['rarity', rs]].forEach(([k, okList]) => {
         if (p[k] === undefined) return;
         if (!listOk(p[k])) { bad(w + '.' + k + ': szöveg vagy szövegek tömbje'); return; }
         [].concat(p[k]).forEach(x => { if (okList.indexOf(x) < 0) bad(w + '.' + k + ': ismeretlen: ' + x); });
       });
+      if (p.place !== undefined) { if (!listOk(p.place)) bad(w + '.place: szöveg vagy szövegek tömbje'); else [].concat(p.place).forEach(x => { if (knownPlaces.indexOf(x) < 0) bad(w + '.place: ismeretlen hely: ' + x); }); }
       const anyOf = (v, x) => v === undefined || [].concat(v).indexOf(x) >= 0;
-      if (!Object.values(byId.items).some(it => !it.exclusive && anyOf(p.kind, it.kind) && anyOf(p.type, it.type) && anyOf(p.rarity, it.rarity))) bad(w + ': egyetlen tárgy sem illik rá');
+      const meets = (a, b) => (a || []).some(x => b.indexOf(x) >= 0);
+      const own = p.place === undefined ? null : [].concat(p.place), allowed = (Array.isArray(tablePlaces) ? tablePlaces : []).concat(own || []);
+      if (!Object.values(byId.items).some(it => !it.exclusive && anyOf(p.kind, it.kind) && anyOf(p.type, it.type) && anyOf(p.rarity, it.rarity)
+        && (own ? meets(it.places, own) : (!it.places || meets(it.places, allowed))))) bad(w + ': egyetlen tárgy sem illik rá');
     };
     // loot táblák: always (mindig), rolls ([min, max] húzás), entries (súlyozott); egy tétel tárgy (qty), csomag vagy arany
     Object.values(byId.lootTables).forEach(t => {
       const w = 'lootTables.' + t.id;
+      tablePlaces = t.places || [];
+      if (t.places !== undefined) placesOk(w + '.places', t.places);
       const entry = (where, e, weighted) => {
         if (!e || typeof e !== 'object') { bad(where + ': objektum kell'); return; }
         if ([e.item, e.gold, e.pick].filter(x => x !== undefined).length !== 1) bad(where + ': vagy "item", vagy "gold", vagy "pick" kell (pontosan az egyik)');

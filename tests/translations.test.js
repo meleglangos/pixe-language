@@ -46,6 +46,7 @@ test('a tartalomból hivatkozott szövegek (helyszínek, típusok, rarity, tárg
   Game.data.config.rarities.forEach(r => keys.push('rarity.' + r.id));
   Object.keys(Game.data.config.items.kinds).forEach(k => keys.push('kind.' + k));
   Object.keys(Game.data.config.items.stats).forEach(k => keys.push('stat.' + k));
+  Game.data.config.items.places.forEach(k => keys.push('place.' + k));
   assert.deepEqual(keys.filter(k => !translations[k]), []);
 });
 

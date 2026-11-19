@@ -45,12 +45,18 @@
       || String(a.type).localeCompare(String(b.type)) || a.id.localeCompare(b.id);
   }
 
-  // szűrő egy "csomaghoz" (loot tábla "pick"): { kind, type, rarity } -- mindegyik szöveg vagy szövegek tömbje.
+  // szűrő egy "csomaghoz" (loot tábla "pick"): { kind, type, rarity, place } -- mindegyik szöveg vagy szövegek tömbje.
+  //   places: a tábla helyei (loot tábla "places"): a hely-jelölt tárgyak közül csak ezek jöhetnek.
+  // Általános tárgy (nincs "places"): bárhonnan. Hely-jelölt tárgy: csak ha a helyei közül valamelyik a tábláé
+  // (vagy a csomag "place" szűrőjéé). A csomag "place" szűrője csak az adott hely(ek) tárgyait adja (általánosat nem).
   // A különleges (exclusive) tárgyak soha nem kerülnek csomagba: csak az a tábla adja, amelyik név szerint felsorolja.
   const anyOf = (v, x) => v === undefined || (Array.isArray(v) ? v.indexOf(x) >= 0 : v === x);
-  function match(filter) {
-    const f = filter || {};
-    return all().filter(it => !it.exclusive && anyOf(f.kind, it.kind) && anyOf(f.type, it.type) && anyOf(f.rarity, it.rarity));
+  const meets = (a, b) => (a || []).some(x => (b || []).indexOf(x) >= 0);
+  function match(filter, places) {
+    const f = filter || {}, own = f.place === undefined ? null : [].concat(f.place);
+    const allowed = [].concat(places || [], own || []);
+    return all().filter(it => !it.exclusive && anyOf(f.kind, it.kind) && anyOf(f.type, it.type) && anyOf(f.rarity, it.rarity)
+      && (own ? meets(it.places, own) : (!it.places || !it.places.length || meets(it.places, allowed))));
   }
 
   // csoportosítás kategória szerint (config sorrend), azon belül rendezve

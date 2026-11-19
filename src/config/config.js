@@ -85,6 +85,9 @@ Game.data.config = {
       key:      { types: ['key'], stack: true },
       treasure: { types: ['treasure'], stack: true },
     },
+    // hely-jelölések: egy tárgy "places" mezője; az ilyen tárgy csak azokból a ládákból esik, amelyek loot táblája
+    // kéri a helyet ("places"); jelölés nélkül általános (bárhonnan eshet). Név (láda-labor): place.<id>
+    places: ['crypt', 'mine'],
     // passzívok (a tárgy "stats" mezője); unit: '%' = százalék. A hatásuk a felszerelés feature-rel jön.
     stats: {
       attack:    {},             // Angriff: erősebb a szörnyek ellen

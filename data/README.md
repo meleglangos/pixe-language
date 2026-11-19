@@ -196,6 +196,8 @@ Ha egy német szövegben nem vagy 100%-ig biztos: `{"de": "…", "hu": "…", "r
 - `value` (opcionális): ár aranyban; alapból a ritkaság ára (`rarities[].value`).
 - `stack` (opcionális): összeadódik-e a mennyiség; alapból a kategóriáé (`items.kinds[].stack`).
 - `exclusive` (opcionális): `true` = csak az a loot tábla adja, amelyik név szerint felsorolja (boss, egy adott hely).
+- `places` (opcionális): hely-jelölések (`config.js` → `items.places`), pl. `["crypt"]` vagy több: `["crypt", "mine"]`.
+  Az ilyen tárgy csak abból a ládából esik, amelyik loot táblája kéri a helyet; jelölés nélkül általános (bárhonnan).
 - `desc` (opcionális): leírás kulcsa; most egyik tárgynak sincs (később a küldetés-tárgyaké).
 - `icon`: `"it:<szám>"` = Items16 (`assets/items/item<szám>.png`), `"wp:<anyag> c<oszlop> r<sor>"` = Weapon Icons
   (anyag: bronze / iron / steel / gold); a választáshoz: `assets/ASSETS.md` és `assets/previews/`.
@@ -214,7 +216,9 @@ Egy tétel vagy `item` (+ `qty`: szám vagy `[min, max]`), vagy `gold` (szám va
 `{"pick": {"kind": "weapon", "rarity": ["common", "uncommon"]}, "weight": 3}` (a szűrőhöz illő tárgyak közül egy; az
 értékek szöveg vagy tömb: `kind`, `type`, `rarity`; a különleges tárgyak kimaradnak); a húzható tételeknek
 `weight` kell (nagyobb = gyakoribb). `rarityBoost` (opcionális): ritkaságonkénti szorzó a táblán, pl.
-`{"rare": 1.3, "epic": 1.6}` — a nehezebb dungeon így ad **nagyobb esélyt** a ritkább tárgyra. A dungeon ládája a `dungeons.json` → `lootTable` táblából sorsol.
+`{"rare": 1.3, "epic": 1.6}` — a nehezebb dungeon így ad **nagyobb esélyt** a ritkább tárgyra.
+`places` (opcionális): a tábla helyei, pl. `["crypt"]` (több is lehet): a csomagok az általános tárgyak mellett ezeknek
+a helyeknek a tárgyait is adják. A csomag `place` szűrője (`{"pick": {"place": "crypt"}}`) csak a hely tárgyait adja. A dungeon ládája a `dungeons.json` → `lootTable` táblából sorsol.
 
 **Láda-csillagok (1–5):** a láda minősége, nyitáskor sorsolódik. A csillag dönti el, hány tételt húz (`rolls`), az
 arany szorzóját (`gold`) és a ritkaság-csoportok szorzóit (`rarityFactor`: egy tétel esélye = súly × szorzó; bármi

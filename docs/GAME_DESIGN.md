@@ -29,6 +29,8 @@ Hét fokozat alulról felfelé: `common` (Gewöhnlich), `uncommon` (Ungewöhnlic
   túl erős a loot). A különleges (`exclusive`) tárgyak csak a saját helyükről jönnek.
 - Tárgy-kategóriák: fegyver, páncél, ékszer, ital, drágakő, anyag, kulcs, kincs (`config.js` → `items.kinds`).
   Leírás helyett passzívok (Angriff, Leben, Schild, Heilung, Gold, Glück, Hilfe); leírást a küldetés-tárgyak kapnak.
+- Helyhez kötött tárgyak: a tárgy hely-jelölése (`places`, több is lehet) dönti el, mely dungeonök ládáiból eshet;
+  egy dungeon ládája több helyet is kérhet. Jelölés nélkül a tárgy általános. Új dungeon = saját hely + témába illő tárgyak.
 - Spec: `docs/features/item_system.md`.
 
 ## 3. Jutalmak és loot

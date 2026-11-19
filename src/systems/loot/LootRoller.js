@@ -2,6 +2,7 @@
 // DOM és Phaser nélkül, tesztelhető. Leírás: README.md (ebben a mappában).
 //
 // Csomag tétel: {"pick": {kind, type, rarity}, weight} -- a szűrőhöz illő tárgyak közül húz (Game.items.match).
+// Helyek a táblán: "places": ["crypt"] -- a hely-jelölt tárgyak közül ezekéi jöhetnek (az általánosak mindig).
 // Ritkaság-szorzó a táblán: "rarityBoost": {"rare": 1.5, …} (nehezebb hely: nagyobb esély a ritkább tárgyra).
 //
 // Láda-csillagok (1–5, config.js -> loot.stars, a tábla "stars" mezője felülírhatja): a csillagszám dönti el,
@@ -41,7 +42,7 @@
     const out = [];
     (t.entries || []).filter(e => e.weight > 0).forEach(e => {
       if (!e.pick) { out.push(e); return; }
-      const items = Game.items.match(e.pick);
+      const items = Game.items.match(e.pick, t.places);
       items.forEach(it => out.push({ item: it.id, qty: e.qty, weight: e.weight / items.length }));
     });
     return out;
@@ -98,7 +99,7 @@
     const n = entries.length ? range(stars ? sc.rolls[stars - 1] : (t.rolls === undefined ? 1 : t.rolls), rnd) : 0;
     for (let i = 0; i < n; i++) picked.push(entries[weightedIndex(weights, rnd)]);
     // az "always" csomag-tételeiből egy véletlen illő tárgy
-    picked.forEach((e, i) => { if (e.pick) { const m = Game.items.match(e.pick); picked[i] = m.length ? { item: m[Math.floor(rnd() * m.length)].id, qty: e.qty } : { gold: 0 }; } });
+    picked.forEach((e, i) => { if (e.pick) { const m = Game.items.match(e.pick, t.places); picked[i] = m.length ? { item: m[Math.floor(rnd() * m.length)].id, qty: e.qty } : { gold: 0 }; } });
     let gold = 0;
     const items = [];
     picked.forEach(e => {

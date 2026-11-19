@@ -14,6 +14,8 @@ Spec: `docs/features/chest_opening.md`, `docs/features/item_system.md`. Adat: `d
 Csomag tétel a táblában: `{"pick": {"kind", "type", "rarity"}, "weight"}` — a szűrőhöz illő tárgyakra bomlik (a súly
 egyenlően oszlik meg), a különleges (`exclusive`) tárgyak kimaradnak. A tábla `rarityBoost` mezője (`{"rare": 1.5, …}`)
 a ritkaságonkénti esélyt szorozza (nehezebb hely = nagyobb esély a ritkább tárgyra), a csillag-szorzó mellett.
+Helyek: a tárgy `places` jelölése (`["crypt"]`, több is lehet) → csak abból a táblából jön, amelyiknek a `places`-e
+tartalmazza (egy tábla több helyet is kérhet); jelölés nélkül általános (bárhonnan).
 
 ## `Game.items`
 | Függvény | Mit csinál |
@@ -23,7 +25,7 @@ a ritkaságonkénti esélyt szorozza (nehezebb hely = nagyobb esély a ritkább 
 | `stackable(item)` | összeadódik-e a mennyiség (a tárgy `stack`-je, különben a kategóriáé) |
 | `stats(item)` | passzívok a config sorrendjében: `[{ id, value, unit }]` |
 | `compare(a, b)` | rendező függvény (ritkább elöl) |
-| `match({ kind, type, rarity })` | a szűrőhöz illő, nem különleges tárgyak (értékek: szöveg vagy tömb) |
+| `match({ kind, type, rarity, place }, places)` | a szűrőhöz illő, nem különleges tárgyak (értékek: szöveg vagy tömb); a hely-jelölt tárgyak csak a `places` (a tábla helyei) vagy a `place` szűrő helyeivel |
 | `byKind()` | `{ kategória: [tárgyak] }`, a config sorrendjében |
 | `rarity(id)`, `rarityIndex(id)` | a ritkaság beállítása; sorszáma a létrán (common = 0) |
 
