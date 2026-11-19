@@ -165,13 +165,28 @@
       Object.keys(s.rarityFactor || {}).forEach(g => { if (!five(s.rarityFactor[g], nonNeg)) bad(w + '.rarityFactor.' + g + ': 5 nemnegatív szorzó'); });
     };
     if (Game.data.config && Game.data.config.loot && Game.data.config.loot.stars) starsOk('config.loot.stars', Game.data.config.loot.stars);
-    // loot táblák: always (mindig), rolls ([min, max] húzás), entries (súlyozott); egy tétel tárgy (qty) vagy arany
+    // csomag ("pick"): kind / type / rarity szöveg vagy tömb, a listákból; legalább egy (nem különleges) tárgy illik rá
+    const listOk = v => typeof v === 'string' || (Array.isArray(v) && v.length && v.every(x => typeof x === 'string'));
+    const pickOk = (w, p) => {
+      if (!p || typeof p !== 'object' || Array.isArray(p)) { bad(w + ': objektum kell, pl. {"kind": "weapon", "rarity": ["common", "uncommon"]}'); return; }
+      Object.keys(p).forEach(k => { if (['kind', 'type', 'rarity'].indexOf(k) < 0) bad(w + '.' + k + ': csak kind / type / rarity lehet'); });
+      const kinds = Object.keys(itemCfg.kinds), types = [].concat(...kinds.map(k => itemCfg.kinds[k].types)), rs = (rarities || []).map(r => r.id);
+      [['kind', kinds], ['type', types], ['rarity', rs]].forEach(([k, okList]) => {
+        if (p[k] === undefined) return;
+        if (!listOk(p[k])) { bad(w + '.' + k + ': szöveg vagy szövegek tömbje'); return; }
+        [].concat(p[k]).forEach(x => { if (okList.indexOf(x) < 0) bad(w + '.' + k + ': ismeretlen: ' + x); });
+      });
+      const anyOf = (v, x) => v === undefined || [].concat(v).indexOf(x) >= 0;
+      if (!Object.values(byId.items).some(it => !it.exclusive && anyOf(p.kind, it.kind) && anyOf(p.type, it.type) && anyOf(p.rarity, it.rarity))) bad(w + ': egyetlen tárgy sem illik rá');
+    };
+    // loot táblák: always (mindig), rolls ([min, max] húzás), entries (súlyozott); egy tétel tárgy (qty), csomag vagy arany
     Object.values(byId.lootTables).forEach(t => {
       const w = 'lootTables.' + t.id;
       const entry = (where, e, weighted) => {
         if (!e || typeof e !== 'object') { bad(where + ': objektum kell'); return; }
-        if ((e.item === undefined) === (e.gold === undefined)) bad(where + ': vagy "item", vagy "gold" kell (pontosan az egyik)');
+        if ([e.item, e.gold, e.pick].filter(x => x !== undefined).length !== 1) bad(where + ': vagy "item", vagy "gold", vagy "pick" kell (pontosan az egyik)');
         if (e.item !== undefined) ref(where, 'items', e.item);
+        if (e.pick !== undefined) pickOk(where + '.pick', e.pick);
         if (e.gold !== undefined && !rangeOk(e.gold)) bad(where + '.gold: szám vagy [min, max]');
         if (e.qty !== undefined && !(rangeOk(e.qty) && (Array.isArray(e.qty) ? e.qty[0] : e.qty) >= 1)) bad(where + '.qty: legalább 1 (szám vagy [min, max])');
         if (weighted && !(typeof e.weight === 'number' && e.weight > 0)) bad(where + '.weight: pozitív szám kell');
@@ -181,6 +196,13 @@
       entries.forEach((e, i) => entry(w + '.entries[' + i + ']', e, true));
       if (t.rolls !== undefined && !rangeOk(t.rolls)) bad(w + '.rolls: szám vagy [min, max]');
       if (t.stars !== undefined) starsOk(w + '.stars', t.stars);
+      if (t.rarityBoost !== undefined) {
+        if (!t.rarityBoost || typeof t.rarityBoost !== 'object') bad(w + '.rarityBoost: objektum, pl. {"rare": 1.5}');
+        else Object.keys(t.rarityBoost).forEach(k => {
+          if (!(rarities || []).some(r => r.id === k)) bad(w + '.rarityBoost.' + k + ': ismeretlen ritkaság');
+          else if (!nonNeg(t.rarityBoost[k])) bad(w + '.rarityBoost.' + k + ': nemnegatív szám');
+        });
+      }
       if (!entries.length && !(t.always || []).length) bad(w + ': üres tábla');
     });
     Object.values(byId.shop).forEach(s => { if (s.item !== undefined) ref('shop.' + s.id, 'items', s.item); });

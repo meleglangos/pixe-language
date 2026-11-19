@@ -1,6 +1,9 @@
 // Loot sorsolás (Game.loot): egy loot tábla (data/loot_tables.json) alapján véletlen zsákmány.
 // DOM és Phaser nélkül, tesztelhető. Leírás: README.md (ebben a mappában).
 //
+// Csomag tétel: {"pick": {kind, type, rarity}, weight} -- a szűrőhöz illő tárgyak közül húz (Game.items.match).
+// Ritkaság-szorzó a táblán: "rarityBoost": {"rare": 1.5, …} (nehezebb hely: nagyobb esély a ritkább tárgyra).
+//
 // Láda-csillagok (1–5, config.js -> loot.stars, a tábla "stars" mezője felülírhatja): a csillagszám dönti el,
 // hány tételt húz (rolls), mennyi arany jön (gold szorzó), és a ritkaságok szorzóit (rarityFactor):
 // egy tétel esélye = súly × szorzó. Bármi bármelyik ládából jöhet, csak az esélyek mások.
@@ -32,12 +35,32 @@
     return it ? it.rarity : 'common';
   }
 
-  // egy húzás súlyai: csillag nélkül a tábla súlyai, csillaggal × a ritkaság szorzója
+  // A tábla húzható tételei: a "pick" (csomag) tételek szétbontva a hozzájuk illő tárgyakra (a súly egyenlően
+  // oszlik meg köztük; a qty a csomagé). Így a csillag- és ritkaság-szorzó tárgyanként érvényes.
+  function expand(t) {
+    const out = [];
+    (t.entries || []).filter(e => e.weight > 0).forEach(e => {
+      if (!e.pick) { out.push(e); return; }
+      const items = Game.items.match(e.pick);
+      items.forEach(it => out.push({ item: it.id, qty: e.qty, weight: e.weight / items.length }));
+    });
+    return out;
+  }
+
+  // egy húzás súlyai: súly × a tábla ritkaság-szorzója (rarityBoost: a nehezebb hely nagyobb esélyt ad a ritkább
+  // tárgyra) × csillaggal a csillag ritkaság-szorzója
   function drawWeights(t, stars) {
-    const entries = (t.entries || []).filter(e => e.weight > 0);
-    if (!stars) return { entries, weights: entries.map(e => e.weight) };
-    const f = starsCfg(t).rarityFactor;
-    return { entries, weights: entries.map(e => e.weight * ((f[group(e)] || [])[stars - 1] !== undefined ? f[group(e)][stars - 1] : 1)) };
+    const entries = expand(t), boost = t.rarityBoost || {};
+    const f = stars ? starsCfg(t).rarityFactor : null;
+    return {
+      entries,
+      weights: entries.map(e => {
+        const g = group(e);
+        let w = e.weight * (boost[g] !== undefined ? boost[g] : 1);
+        if (f && f[g] && f[g][stars - 1] !== undefined) w *= f[g][stars - 1];
+        return w;
+      }),
+    };
   }
 
   // Csillagszám sorsolása (1–5) a tábla / config súlyai szerint.
@@ -51,8 +74,13 @@
     if (!t) return [];
     const { entries, weights } = drawWeights(t, stars);
     const total = weights.reduce((a, b) => a + b, 0) || 1;
-    return entries.map((e, i) => Object.assign(e.gold !== undefined ? { gold: e.gold } : { item: e.item }, { p: weights[i] / total }))
-      .sort((a, b) => b.p - a.p);
+    // ugyanaz a tárgy több tételből is jöhet (név szerint és csomagból): összevonva
+    const out = [];
+    entries.forEach((e, i) => {
+      const p = weights[i] / total, same = e.item !== undefined && out.find(x => x.item === e.item);
+      if (same) same.p += p; else out.push(Object.assign(e.gold !== undefined ? { gold: e.gold } : { item: e.item }, { p }));
+    });
+    return out.sort((a, b) => b.p - a.p);
   }
 
   // Visszatér: [{ gold: szám } | { item: id, qty }] -- az arany egy tételbe összevonva elöl, az azonos tárgyak összevonva.
@@ -69,6 +97,8 @@
     const { entries, weights } = drawWeights(t, stars);
     const n = entries.length ? range(stars ? sc.rolls[stars - 1] : (t.rolls === undefined ? 1 : t.rolls), rnd) : 0;
     for (let i = 0; i < n; i++) picked.push(entries[weightedIndex(weights, rnd)]);
+    // az "always" csomag-tételeiből egy véletlen illő tárgy
+    picked.forEach((e, i) => { if (e.pick) { const m = Game.items.match(e.pick); picked[i] = m.length ? { item: m[Math.floor(rnd() * m.length)].id, qty: e.qty } : { gold: 0 }; } });
     let gold = 0;
     const items = [];
     picked.forEach(e => {

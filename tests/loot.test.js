@@ -108,7 +108,7 @@ test('a validátor kiszúrja a hibás tárgyakat és loot táblákat', () => {
     /item_bad2\.type: a\(z\) weapon típusai/, /item_bad2\.value/, /item_bad2\.stack/, /item_bad2\.exclusive/,
     /item_bad2\.stats\.power: ismeretlen passzív/, /item_bad2\.stats\.maxHp: pozitív szám/, /item_bad3\.stats: objektum/,
     /loot_bad\.rolls/, /loot_bad\.always\[0\]\.gold/, /loot_bad\.entries\[0\]: ismeretlen items id: ghost/,
-    /loot_bad\.entries\[1\]: vagy "item", vagy "gold"/, /loot_bad\.entries\[2\]\.weight/, /loot_bad\.entries\[3\]\.qty/, /loot_empty: üres tábla/,
+    /loot_bad\.entries\[1\]: vagy "item", vagy "gold", vagy "pick"/, /loot_bad\.entries\[2\]\.weight/, /loot_bad\.entries\[3\]\.qty/, /loot_empty: üres tábla/,
     /loot_stars\.stars\.weights/, /loot_stars\.stars\.gold/, /loot_stars\.stars\.rarityFactor\.rare/,
   ]) assert.match(issues, re);
 });
@@ -149,4 +149,52 @@ test('ritkaságok és tárgy-kategóriák: 7 fokozat alapárral és show-erővel
   }
   assert.equal(Game.loot.group({ item: 'sword_gold_01' }), 'legendary');
   assert.equal(Game.loot.group({ gold: 5 }), 'gold');
+});
+
+test('Game.items: ár, összeadódás, passzívok, rendezés, csomag-szűrő (a különleges tárgy kimarad)', () => {
+  const EX = { id: 'ex_test', kind: 'weapon', type: 'sword', rarity: 'common', icon: 'it:1', name: 'loot.gold', exclusive: true };
+  const { Game } = createGame({ content: raw => { raw.items = raw.items.concat(EX, LEG); } });
+  assert.equal(Game.items.value('bone'), 5);                       // a common alapára
+  assert.equal(Game.items.value({ rarity: 'rare', value: 7 }), 7); // a tárgy felülírja
+  assert.equal(Game.items.stackable('bone'), true);
+  assert.equal(Game.items.stackable('sword_bronze_01'), false);
+  assert.deepEqual(plain(Game.items.stats('amulet_01')), [{ id: 'maxHp', value: 15, unit: '' }, { id: 'goldBonus', value: 10, unit: '%' }]);
+  const list = Game.items.list();
+  for (let i = 1; i < list.length; i++) assert.ok(Game.items.rarityIndex(list[i - 1].rarity) >= Game.items.rarityIndex(list[i].rarity));
+  const swords = plain(Game.items.match({ kind: 'weapon', type: 'sword' }).map(it => it.id).sort());
+  assert.deepEqual(swords, ['sword_bronze_01', 'sword_gold_01']);
+  assert.ok(!Game.items.match({ kind: 'weapon' }).some(it => it.id === 'ex_test'));
+  assert.deepEqual(plain(Game.items.match({ rarity: ['legendary'], kind: 'treasure' }).map(it => it.id).sort()), ['crown_gold', 'leg_test']);
+  assert.ok(Game.items.byKind().weapon.length >= 3);
+});
+
+test('loot: csomag tétel (pick) és ritkaság-szorzó (rarityBoost); a különleges tárgy csak név szerint jön', () => {
+  const EX = { id: 'ex_test', kind: 'weapon', type: 'sword', rarity: 'common', icon: 'it:1', name: 'loot.gold', exclusive: true };
+  const { Game } = createGame({ content: raw => {
+    raw.items = raw.items.concat(EX);
+    raw.lootTables = raw.lootTables.concat(
+      { id: 'loot_pick', entries: [{ pick: { kind: 'weapon', type: 'sword' }, weight: 2 }, { item: 'bone', weight: 2 }] },
+      { id: 'loot_boost', rarityBoost: { legendary: 10 }, entries: [{ pick: { kind: 'weapon', type: 'sword' }, weight: 2 }, { item: 'bone', weight: 2 }] },
+      { id: 'loot_ex', entries: [{ item: 'ex_test', weight: 1 }] },
+    );
+  } });
+  const ch = id => Object.fromEntries(Game.loot.chances(id).map(c => [c.item, c.p]));
+  const a = ch('loot_pick');
+  assert.ok(Math.abs(a.bone - 0.5) < 1e-9 && Math.abs(a.sword_bronze_01 - 0.25) < 1e-9 && Math.abs(a.sword_gold_01 - 0.25) < 1e-9);
+  assert.equal(a.ex_test, undefined);
+  const b = ch('loot_boost');
+  assert.ok(b.sword_gold_01 > 5 * b.sword_bronze_01, 'a nehezebb hely nagyobb esélyt ad a ritkábbra');
+  assert.ok(b.bone > 0.1, '... de a közönséges is jön');
+  assert.deepEqual(plain(Game.loot.roll('loot_ex', { random: () => 0 })), [{ item: 'ex_test', qty: 1 }]);
+  const r = plain(Game.loot.roll('loot_pick', { random: () => 0 }));
+  assert.equal(r.length, 1); assert.ok(['sword_bronze_01', 'sword_gold_01'].includes(r[0].item));
+  // a validátor: ismeretlen szűrő-érték, üres csomag, hibás rarityBoost
+  const raw = readData();
+  raw.lootTables = raw.lootTables.concat({ id: 'loot_badpick', rarityBoost: { mythic: 2, rare: -1 }, entries: [
+    { pick: { kind: 'food' }, weight: 1 }, { pick: { kind: 'key', rarity: 'unreal' }, weight: 1 }, { pick: { color: 'red' }, weight: 1 }, { pick: { kind: 'gem' }, item: 'bone', weight: 1 },
+  ] });
+  const issues = Game.contentValidator.validate(raw).join('\n');
+  for (const re of [/loot_badpick\.entries\[0\]\.pick\.kind: ismeretlen: food/, /loot_badpick\.entries\[1\]\.pick: egyetlen tárgy sem illik rá/,
+    /loot_badpick\.entries\[2\]\.pick\.color/, /loot_badpick\.entries\[3\]: vagy "item", vagy "gold", vagy "pick"/,
+    /loot_badpick\.rarityBoost\.mythic: ismeretlen ritkaság/, /loot_badpick\.rarityBoost\.rare: nemnegatív/]) assert.match(issues, re);
 });

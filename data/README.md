@@ -210,8 +210,11 @@ Ha egy német szövegben nem vagy 100%-ig biztos: `{"de": "…", "hu": "…", "r
  "rolls": [1, 3],                         // ennyiszer húz (visszatevéssel) az entries-ből
  "entries": [{"item": "potion_small", "qty": [1, 2], "weight": 4}, {"item": "gem_red", "weight": 1}]}
 ```
-Egy tétel vagy `item` (+ `qty`: szám vagy `[min, max]`), vagy `gold` (szám vagy `[min, max]`); a húzható tételeknek
-`weight` kell (nagyobb = gyakoribb). A dungeon ládája a `dungeons.json` → `lootTable` táblából sorsol.
+Egy tétel vagy `item` (+ `qty`: szám vagy `[min, max]`), vagy `gold` (szám vagy `[min, max]`), vagy **csomag**:
+`{"pick": {"kind": "weapon", "rarity": ["common", "uncommon"]}, "weight": 3}` (a szűrőhöz illő tárgyak közül egy; az
+értékek szöveg vagy tömb: `kind`, `type`, `rarity`; a különleges tárgyak kimaradnak); a húzható tételeknek
+`weight` kell (nagyobb = gyakoribb). `rarityBoost` (opcionális): ritkaságonkénti szorzó a táblán, pl.
+`{"rare": 1.3, "epic": 1.6}` — a nehezebb dungeon így ad **nagyobb esélyt** a ritkább tárgyra. A dungeon ládája a `dungeons.json` → `lootTable` táblából sorsol.
 
 **Láda-csillagok (1–5):** a láda minősége, nyitáskor sorsolódik. A csillag dönti el, hány tételt húz (`rolls`), az
 arany szorzóját (`gold`) és a ritkaság-csoportok szorzóit (`rarityFactor`: egy tétel esélye = súly × szorzó; bármi
