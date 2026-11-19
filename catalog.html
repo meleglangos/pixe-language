@@ -181,7 +181,12 @@
 
   function render(reset) {
     const grid = document.getElementById('grid');
-    if (reset) { list = C.entries.filter(matches); shown = 0; grid.replaceChildren(); window.scrollTo(0, 0); }
+    if (reset) {
+      list = C.entries.filter(matches);
+      // keresésnél előre azok, amelyeknek a nevében is benne van a keresett szó
+      if (state.q) { const w = norm(state.q).split(/\s+/).filter(Boolean); const hit = e => w.every(x => norm(e.name).includes(x)) ? 0 : 1; list = list.map((e, i) => [hit(e), i, e]).sort((a, b) => a[0] - b[0] || a[1] - b[1]).map(x => x[2]); }
+      shown = 0; grid.replaceChildren(); window.scrollTo(0, 0);
+    }
     const frag = document.createDocumentFragment();
     list.slice(shown, shown + PAGE).forEach(e => frag.append(card(e)));
     grid.append(frag);

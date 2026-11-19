@@ -10,6 +10,7 @@ import re
 
 import notes
 from rules import PACKS, HIDDEN_CATEGORIES, HIDDEN_ITEM16
+from item16_names import NAMES as ITEM16_NAMES
 
 MATERIALS = {'bronze': 'bronz', 'iron': 'vas', 'steel': 'acél', 'gold': 'arany'}
 
@@ -75,8 +76,9 @@ def build(items, note_for, assets_dir):
                 if lo <= n <= hi:
                     name, tags = desc, t
                     break
-            e = {'id': 'it:%d' % n, 'pack': pack, 'cat': tags[0] if tags else 'egyéb', 'name': name,
-                 'tags': tags, 'src': 'assets/' + it['path'], 'w': 16, 'h': 16}
+            # pontos név ikononként (item16_names.py); a tartomány leírása a címkék közé kerül (keresni ebben is lehet)
+            e = {'id': 'it:%d' % n, 'pack': pack, 'cat': tags[0] if tags else 'egyéb', 'name': ITEM16_NAMES.get(n, name),
+                 'tags': tags + ([name] if n in ITEM16_NAMES else []), 'src': 'assets/' + it['path'], 'w': 16, 'h': 16}
             if any(lo <= n <= hi for lo, hi in HIDDEN_ITEM16):
                 e['hidden'] = True
             entries.append(e)
