@@ -5,6 +5,7 @@
 Végigmegy az assets/ mappán, és elkészíti:
   - assets/ASSETS.md        a katalógus (a gépi adatok + a notes.py kézi leírásai)
   - assets/previews/*.png   előnézeti lapok csomagonként és kategóriánként
+  - assets/catalog_data.js  a kereshető katalógus oldal (catalog.html) adatai
 
 Új asset feltöltése után: futtasd újra, nézd meg az új előnézeteket, és írd be a leírásukat
 a notes.py-ba (ami nincs leírva, azt a katalógus "LEÍRÁS HIÁNYZIK" jelzéssel listázza).
@@ -19,6 +20,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from scan import ASSETS, scan, slug  # noqa: E402
 from rules import CATEGORIES, PACKS, classify  # noqa: E402
 import previews as pv  # noqa: E402
+import catalog_page  # noqa: E402
 import notes  # noqa: E402
 
 PREV = os.path.join(ASSETS, 'previews')
@@ -181,8 +183,9 @@ def main():
     md = build_markdown(groups, prev_files, counts)
     with open(os.path.join(ASSETS, 'ASSETS.md'), 'w') as f:
         f.write(md)
+    n = catalog_page.build(items, note_for, ASSETS)
     missing = [it['path'] for it in items if it['mode'] != 'icons' and not note_for(it)[0]]
-    print('Képfájlok:', len(items), '| előnézetek:', sum(len(v) for v in prev_files.values()), '| leírás nélkül:', len(missing))
+    print('Képfájlok:', len(items), '| előnézetek:', sum(len(v) for v in prev_files.values()), '| katalógus oldal:', n, 'tétel', '| leírás nélkül:', len(missing))
     for m in missing[:40]:
         print('  hiányzik:', m)
 

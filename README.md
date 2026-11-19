@@ -35,6 +35,7 @@ Ez a projekt ütemterve. Claude minden feladat elején elolvassa, a végén fris
     - [x] láda-ablak háttér: egész ablakos erdei rom (szobor, vízesés, tó, tábortűz, gombák), rúnakör a ritkaság színében
     - [x] hat kép-háttér véletlenszerűen (tábortűz, vízesés, pagoda, völgy, tó, lovag), választható a láda-laborban; a lista mögött is háttér
   - [x] tárgyrendszer: kategóriák, 7 ritkaság, ár, passzívok (`docs/features/item_system.md`)
+    - [x] kiegészítés: hely-jelölések (`places`), egy tárgynak és egy ládának több hely is lehet
     - [x] 1. adatformátum: kind / type / value / stack / stats / exclusive, 7 ritkaság, validátor, tesztek; a mostani tárgyak újrasorolva
     - [x] 2. `Game.items` segéd + „csomag” tétel (`pick`) a loot táblákban, dungeon-szintű ritkaság-szorzó (`rarityBoost`)
     - [x] 3. 55 tárgy minden ritkaságból (fegyver 14, páncél 14, ékszer 7, ital 4, drágakő 6, anyag 5, kulcs 2, kincs 3), a loot táblák csomagokkal

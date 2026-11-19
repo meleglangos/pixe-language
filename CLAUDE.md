@@ -52,7 +52,7 @@ tartalom csak a felhasználó kifejezett jóváhagyásával kerülhet bele.
 | `src/ui/` | DOM felület: HUD, menü, ablakok, „?” buborék |
 | `src/debug/` | fejlesztői eszközök, csak `?debug=1`-gyel (láda-labor); a szövegük magyarul jelenik meg |
 | `src/gfx/placeholders.js` | a kódból rajzolt ideiglenes grafika |
-| `assets/` | grafikai csomagok, katalógus: `assets/ASSETS.md` (a Modern Interiors csak nem kereskedelmi célra használható) |
+| `assets/` | grafikai csomagok, katalógus: `assets/ASSETS.md`, kereshető oldal: `catalog.html` (a Modern Interiors csak nem kereskedelmi célra használható) |
 | `tests/` | tesztek; `tests/fixtures/`: valódi régi mentések a migrációs tesztekhez |
 | `tools/` | `build-data.js` (bundle + ellenőrzés), `asset_catalog/` (asset-katalógus generátor), `art/` (saját pixel art kódból: `assets/custom/`) |
 | `docs/` | játéktervezés, német szabályok, döntések, ötletek, feature specek (lásd lent) |
@@ -125,7 +125,8 @@ tartalom csak a felhasználó kifejezett jóváhagyásával kerülhet bele.
 
 Ha assetet keresel, először mindig az `assets/ASSETS.md` katalógusban és az `assets/previews` képeken keress. Csak akkor nyisd meg a nyers fájlokat, ha a katalógus alapján már tudod, melyik kell. Ha új assetet töltök fel, frissítsd a katalógust és az előnézeteket.
 
-- A katalógust és az előnézeteket a `python3 tools/asset_catalog/build.py` generálja; az `ASSETS.md`-t ne szerkeszd kézzel.
+- A katalógust, az előnézeteket és a kereshető katalógus oldal adatait (`assets/catalog_data.js`, oldal: `catalog.html`)
+  a `python3 tools/asset_catalog/build.py` generálja; az `ASSETS.md`-t és a `catalog_data.js`-t ne szerkeszd kézzel.
 - Új asset után: csomagold ki külön almappába az `assets/` alatt (a ZIP-et utána töröld), add hozzá a csomagot és a
   kategóriáit a `tools/asset_catalog/rules.py`-hoz, futtasd a buildet, nézd meg az új előnézeteket, és írd be a
   leírásokat a `tools/asset_catalog/notes.py`-ba, amíg a build nem jelez „leírás nélkül” tételt. Az új csomag
