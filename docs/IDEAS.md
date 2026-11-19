@@ -43,7 +43,7 @@ kéri, vagy ha új feature-t kell választani.
       `fantasy UI pixel art`, `pixel UI panel 9-slice`; az Anokolisa – Pixel Crawler szerzője – csomagjai illenek a
       legjobban; licenc: nyilvános repóba feltehető-e, kell-e credit) vagy saját rajz kódból (`tools/art/`, mint a
       `chest_royal.py`). Mérethez: 16 px-es rács, álló telefon (kb. 180×300 px, 2×), ne legyen zsúfolt — láda-ablak
-- [ ] Tárgyrendszer: tárgycsoportok, ritkaság csoportonként, érték / erő; a loot táblák ehhez igazodnak — adat + loot
+- [x] ~~Tárgyrendszer: tárgycsoportok, ritkaság csoportonként, érték / erő; a loot táblák ehhez igazodnak — adat + loot~~ → kész: `docs/features/item_system.md`
 - [ ] Többféle láda (a felhasználónak sok ötlete van) — `chest_styles.json` + loot táblák
 
 ## Haladás és motiváció

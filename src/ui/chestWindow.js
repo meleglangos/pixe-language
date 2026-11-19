@@ -529,7 +529,8 @@
           ? ui.el('div', 'cw-label', [ui.el('div', 'cw-name', [ui.tx('loot.gold')]), ui.el('div', 'cw-qty', ['+' + e.gold])])
           : ui.el('div', 'cw-label', [
             ui.el('div', 'cw-name', [ui.tx(item.name)]),
-            ui.el('div', 'cw-rarity', [ui.tx('rarity.' + item.rarity)]),
+            ui.el('div', 'cw-rarity', [ui.tx('kind.' + item.kind), ' · ', ui.tx('rarity.' + item.rarity)]),
+            item.stats ? ui.el('div', 'cw-stats', [Game.lootUI.stats(item)]) : '',
             e.qty > 1 ? ui.el('div', 'cw-qty', ['×' + e.qty]) : '',
           ]);
         const big = ui.el('div', 'cw-item cw-' + r.group, [icon, label]);

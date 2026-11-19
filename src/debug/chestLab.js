@@ -7,6 +7,7 @@
 //   - egy húzás esélyei a választott csillagnál (Game.loot.chances)
 //   - "Öffnen": a valódi láda-ablak a választott beállítással
 //   - "1000× szimulálás": csillag-eloszlás, átlagos tételszám, tárgyanként hány ládában volt és átlag mennyi
+//   - "Tárgyak": tárgy-katalógus kategóriánként (ikon, név, ritkaság, ár, passzívok, melyik ládából eshet)
 (function () {
   const ui = Game.ui;
   const hu = (key, vars) => Game.i18n.hu(key, vars);
@@ -109,10 +110,56 @@
       ui.el('label', 'lab-row', [el('span', '', hu('debug.table')), sel]),
       ui.el('div', 'lab-row', [el('span', '', hu('debug.stars')), starBtns]),
       ui.el('div', 'lab-row', [el('span', '', hu('debug.scene')), sceneBtns]),
-      ui.el('div', 'lab-actions', [openBtn, simBtn]),
+      ui.el('div', 'lab-actions', [openBtn, simBtn, huBtn('debug.items', () => catalog())]),
       result,
       chances,
     );
+  }
+
+  // ---------- tárgy-katalógus: minden tárgy kategóriánként, a legritkább elöl ----------
+  const short = key => hu(key).split(' (')[0];   // "Támadás (erősebb…)" -> "Támadás"
+  // melyik loot táblákból eshet: név szerint vagy csomagból
+  function sources(it) {
+    return Object.values(Game.data.lootTables).filter(t => [].concat(t.entries || [], t.always || []).some(e =>
+      e.item === it.id || (e.pick && Game.items.match(e.pick).some(m => m.id === it.id)))).map(t => t.id.replace(/^loot_|_chest$/g, ''));
+  }
+  let catKind = '';
+  function catalog() {
+    const body = ui.el('div', 'lab');
+    const p = ui.modal({ title: 'debug.items', body: [body], buttons: [huBtn('debug.back', () => Game.chestLab.panel())] });
+    p.classList.add('lab-panel');
+    const h = p.querySelector('h2 .de'); if (h) h.textContent = hu('debug.items') + ' ';
+    const draw = () => {
+      const groups = Game.items.byKind(), kinds = Object.keys(groups);
+      const btns = ui.el('div', 'lab-stars', [''].concat(kinds).map(k => {
+        const n = k ? groups[k].length : Object.values(groups).reduce((a, g) => a + g.length, 0);
+        const b = el('button', 'btn lab-star' + (catKind === k ? ' primary' : ''), (k ? short('kind.' + k) : hu('debug.itemsAll')) + ' ' + n);
+        b.type = 'button';
+        b.addEventListener('click', () => { catKind = k; draw(); });
+        return b;
+      }));
+      const blocks = kinds.filter(k => !catKind || k === catKind).map(k => ui.el('div', 'lab-block', [
+        el('h3', '', short('kind.' + k) + ' (' + groups[k].length + ')'),
+        ui.el('ul', 'lab-items', groups[k].map(it => {
+          const r = Game.items.rarity(it.rarity);
+          const st = Game.items.stats(it).map(x => '+' + x.value + x.unit + ' ' + short('stat.' + x.id)).join(', ');
+          const li = ui.el('li', 'lab-item', [
+            Game.lootUI.icon(it.icon, 2),
+            ui.el('span', 'lab-item-text', [
+              el('b', '', Game.i18n.de(it.name)), el('span', 'small', ' – ' + hu(it.name)),
+              el('span', 'lab-item-meta', [short('rarity.' + it.rarity), it.type, hu('debug.colValue') + ': ' + Game.items.value(it)].join(' · ')
+                + (it.exclusive ? ' · ' + hu('debug.exclusive') : '')),
+              st ? el('span', 'lab-item-stats', st) : '',
+              el('span', 'lab-item-meta', hu('debug.colSource') + ': ' + (sources(it).join(', ') || '–')),
+            ]),
+          ]);
+          if (r) li.style.setProperty('--rarity', r.color);
+          return li;
+        })),
+      ]));
+      body.replaceChildren(btns, ...blocks);
+    };
+    draw();
   }
 
   Game.chestLab = {

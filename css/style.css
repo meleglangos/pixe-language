@@ -252,6 +252,14 @@ html, body {
 .loot-row { border-left: 6px solid var(--rarity, #f2c040); }
 .loot-desc { font-size: 14px; }
 .loot-qty { font-weight: 700; font-size: 18px; min-width: 2.5ch; text-align: right; }
+.loot-kind, .loot-stats { font-size: 13px; color: var(--ink-soft); }
+.loot-kind .loot-rarity .de { font-weight: 700; color: color-mix(in srgb, var(--rarity) 65%, #3a2618); }
+.loot-stats { display: flex; flex-wrap: wrap; gap: 0 10px; }
+.loot-stat { font-weight: 700; color: #3d7a2a; white-space: nowrap; }
+.cw-stats { font-size: 14px; font-weight: 700; }
+.cw-scene .cw-stats { color: #b8f59a; text-shadow: 0 2px 0 #1a1210, 2px 0 0 #1a1210, -2px 0 0 #1a1210, 0 -2px 0 #1a1210; }
+.cw-scene .cw-stats .loot-stat { color: inherit; }
+.cw-stats .loot-stats { justify-content: center; font-size: 14px; color: inherit; }
 
 /* láda-ablak (src/ui/chestWindow.js) */
 .chest-window { text-align: center; }
@@ -345,6 +353,12 @@ html, body {
 .lab-select { width: 100%; }
 .lab-panel .modal-body { overflow-x: hidden; }
 .lab-star { min-width: 44px; padding: 6px 7px; }
+.lab-items { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.lab-item { display: flex; gap: 8px; align-items: flex-start; padding: 6px 8px; background: #fffaf0; border: 2px solid var(--parchment-dark); border-left: 6px solid var(--rarity, #b8b8b8); border-radius: 6px; }
+.lab-item .loot-icon { flex: none; }
+.lab-item-text { display: grid; min-width: 0; font-size: 14px; }
+.lab-item-meta { font-size: 12px; color: var(--ink-soft); }
+.lab-item-stats { font-size: 13px; font-weight: 700; color: #3d7a2a; }
 
 /* képernyő-effektek a láda-ablakhoz (a teljes képernyőn, a koppintást nem fogják meg) */
 .cw-screen { position: fixed; inset: 0; pointer-events: none; z-index: 90; overflow: hidden; }

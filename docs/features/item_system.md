@@ -1,6 +1,6 @@
 # Tárgyrendszer: kategóriák, ritkaság, érték
 
-**Állapot:** folyamatban (jóváhagyva 2026-11-19)
+**Állapot:** kész (jóváhagyva 2026-11-19)
 **Ötlet:** `docs/IDEAS.md` → „Tárgyrendszer: tárgycsoportok, ritkaság csoportonként, érték / erő; a loot táblák ehhez igazodnak”
 
 ## 1. Cél
@@ -106,14 +106,14 @@ Döntések (2026-11-18):
       Sehr selten (super rare) · Episch (epic) · Legendär (legendary) · Mythisch (unreal).
 
 ## 10. Kész, ha
-- [ ] minden tárgynak van kategóriája, típusa, ritkasága, ára; a kategóriák és típusok rögzített listából jönnek
-- [ ] a validátor és a tesztek ellenőrzik a tárgyakat és a `pick` tételeket
-- [ ] a loot táblák az új tárgyakra épülnek; a láda-labor szimulációja ésszerű eloszlást mutat
-- [ ] a láda-ablakban látszik a kategória, a „Beute” lista ritkaság szerint rendezett
-- [ ] a láda-laborban van tárgy-katalógus, telefonméretben is használható
-- [ ] a német tárgynevek névelővel, a bizonytalanok `review` jelöléssel
-- [ ] `node tools/build-data.js` és `npm test` zöld; egy régi mentés betöltése után is működik
-- [ ] README „Állapot”, `docs/GAME_DESIGN.md` (rarity létra, tárgycsoportok), `data/README.md` frissítve
+- [x] minden tárgynak van kategóriája, típusa, ritkasága, ára; a kategóriák és típusok rögzített listából jönnek
+- [x] a validátor és a tesztek ellenőrzik a tárgyakat és a `pick` tételeket
+- [x] a loot táblák az új tárgyakra épülnek; a láda-labor szimulációja ésszerű eloszlást mutat
+- [x] a láda-ablakban látszik a kategória és a passzívok, a „Beute” lista ritkaság szerint rendezett
+- [x] a láda-laborban van tárgy-katalógus, telefonméretben is használható
+- [x] a német tárgynevek névelővel, a bizonytalanok `review` jelöléssel
+- [x] `node tools/build-data.js` és `npm test` zöld; egy régi mentés betöltése után is működik
+- [x] README „Állapot”, `docs/GAME_DESIGN.md` (rarity létra, tárgycsoportok), `data/README.md` frissítve
 
 ## 11. Lépések
 1. Adatformátum: `kind` / `type` / `value` / `stack`, kategória-lista, validátor, tesztek; a mostani tárgyak besorolása.

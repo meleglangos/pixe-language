@@ -77,3 +77,10 @@ listában vannak (`data/questions/tags.json`), a fájlok csak rendezésre valók
 ## D16. Kérdésszám és sebzés rétegesen állítható (2026-11)
 Dungeon `monsterStats` > szörnytípus > kihívás > `config.js`. A nehezebb dungeonök és a bossok más értékeket
 kapnak, ehhez nem kell kód, csak adat.
+
+## D17. Hét ritkaság, tárgyszint nélkül; a nehezebb hely csak nagyobb esélyt ad (2026-11)
+common · uncommon · rare · super_rare · epic · legendary · unreal. Egy tárgy erejét csak a ritkasága adja (nincs
+külön szint), így egy tárgynál egy dolgot kell nézni. A nehezebb dungeon a loot tábla `rarityBoost` szorzójával
+**csak nagyobb esélyt** ad a ritkább tárgyra, a közönséges ott is gyakori marad (a loot ne legyen túl erős).
+A ládák csomagokból (`pick`) húznak, így egy új tárgy magától bekerül; a különleges tárgy (`exclusive`) csak név
+szerint. Spec: `docs/features/item_system.md`.
