@@ -58,3 +58,11 @@ kéri, vagy ha új feature-t kell választani.
 - [ ] Személyes easter eggek (közös emlékek, rejtett üzenetek) — adat + kis kód (lásd a fenti figyelmeztetést)
 - [ ] Térképdarabokból összeálló titkos dungeon — easter egg + feloldás
 - [ ] Ünnepi események (születésnap, Weihnachtsmarkt, Oktoberfest) — kérdés-motor + dátum (talán)
+
+## Fejlesztői eszközök
+- [ ] Aseprite MCP: olcsó animáció-készítés. Egy ingyenes, nyílt forrású MCP szerverrel (pl. `diivi/aseprite-mcp`)
+      Claude közvetlenül az Aseprite-ban rajzol, generálási limit nélkül; az egyetlen határ a Claude előfizetés
+      üzenetkerete (az animálás sok eszközhívás). Az Aseprite 19,99 $ egyszeri vásárlás, vagy a forráskódból
+      ingyen lefordítható (Visual Studio / CMake; saját használatra és kereskedelmi célra is szabad, továbbadni nem).
+      Az Aseprite-nak a felhasználó gépén kell futnia (felhős munkamenetből a gépet csatolni kell). A részleteket
+      beállítás előtt ellenőrizni (licenc, az MCP állapota). Addig: `tools/art/` szkriptek vagy Piskel.
