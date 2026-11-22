@@ -54,8 +54,31 @@
   }
   function hideBubble() { bubble.hidden = true; bubbleFor = null; }
 
+  // ---------- piros pixeles "X" (bezárás) ----------
+  // 11×11-es rács, kódból: két 3 pixel vastag piros átló sötét körvonallal és világos csúcsfénnyel; 3× nagyítva
+  let xUrl = null;
+  function closeIcon() {
+    if (!xUrl) {
+      const N = 11, c = document.createElement('canvas');
+      c.width = c.height = N;
+      const ctx = c.getContext('2d');
+      const red = (x, y) => x >= 1 && y >= 1 && x <= N - 2 && y <= N - 2 && (Math.abs(x - y) <= 1 || Math.abs(x + y - (N - 1)) <= 1);
+      for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+        let col = null;
+        if (red(x, y)) col = (x === y || x + y === N - 1) && y < N / 2 - 1 ? '#ff9aa8' : y > N / 2 + 1 ? '#b02e45' : '#d8455a';
+        else if ([[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => red(x + dx, y + dy))) col = '#4a1820';
+        if (col) { ctx.fillStyle = col; ctx.fillRect(x, y, 1, 1); }
+      }
+      xUrl = c.toDataURL();
+    }
+    const i = ui.el('span', 'modal-x-icon');
+    i.style.backgroundImage = 'url(' + xUrl + ')';
+    return i;
+  }
+
   // ---------- ablak ----------
-  // opts: { title: kulcs, body: [elemek], buttons: [elemek], closable: true }
+  // opts: { title: kulcs, body: [elemek], buttons: [elemek], closable: true, onClose }
+  //   closable: a háttérre koppintva és a piros "X"-szel bezárható; onClose: mit tegyen az "X" (alap: bezárja)
   ui.modal = function (opts) {
     ui.closeModal();
     const panel = ui.el('div', 'panel modal', [
@@ -64,7 +87,15 @@
       ui.el('div', 'modal-buttons', opts.buttons || []),
     ]);
     const backdrop = ui.el('div', 'backdrop', [panel]);
-    if (opts.closable !== false) backdrop.addEventListener('click', e => { if (e.target === backdrop) ui.closeModal(); });
+    if (opts.closable !== false) {
+      backdrop.addEventListener('click', e => { if (e.target === backdrop) ui.closeModal(); });
+      // piros pixeles "X" a jobb felső sarokban; görgetéskor is látszik (sticky), nem kell letekerni a gombig
+      const x = ui.el('button', 'modal-x', [closeIcon()]);
+      x.type = 'button';
+      x.setAttribute('aria-label', Game.i18n.de('common.close'));
+      x.addEventListener('click', () => (opts.onClose || ui.closeModal)());
+      panel.prepend(ui.el('div', 'modal-x-wrap', [x]));
+    }
     ui.root.append(backdrop);
     ui.modalEl = backdrop;
     return panel;
