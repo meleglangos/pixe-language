@@ -40,6 +40,8 @@
   "menu.title": {"de": "Menü", "hu": "Menü"},
   "menu.export": {"de": "Spielstand exportieren", "hu": "Mentés exportálása"},
   "menu.import": {"de": "Spielstand importieren", "hu": "Mentés importálása"},
+  "menu.helpHide": {"de": "Fragezeichen ausblenden", "hu": "A „?” gombok elrejtése (a fordítás a szövegre koppintva jön)"},
+  "menu.helpShow": {"de": "Fragezeichen einblenden", "hu": "A „?” gombok megjelenítése"},
   "menu.reset": {"de": "Neues Spiel beginnen", "hu": "Új játék kezdése"},
   "menu.credits": {"de": "Mitwirkende", "hu": "Közreműködők"},
   "menu.controls": {"de": "Steuerung", "hu": "Irányítás"},

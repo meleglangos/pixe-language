@@ -19,7 +19,12 @@
             ui.btn('menu.export', menu.exportDialog),
             ui.btn('menu.import', menu.importDialog),
             ui.btn('menu.credits', menu.creditsDialog),
-            ui.btn('menu.reset', menu.resetDialog, 'danger'),
+            ui.btn(Game.state.flag('hideHelp') ? 'menu.helpShow' : 'menu.helpHide', () => {
+              Game.state.setFlag('hideHelp', !Game.state.flag('hideHelp'));
+              menu.open();
+            }),
+            // új játék (minden haladás törlése): csak a fejlesztőnek, debug módban
+            Game.debug ? ui.btn('menu.reset', menu.resetDialog, 'danger') : '',
           ]),
           ui.el('h3', '', [ui.tx('menu.controls')]),
           p('menu.controlsText', 'small'),

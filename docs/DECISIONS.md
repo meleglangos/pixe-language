@@ -84,3 +84,10 @@ külön szint), így egy tárgynál egy dolgot kell nézni. A nehezebb dungeon a
 **csak nagyobb esélyt** ad a ritkább tárgyra, a közönséges ott is gyakori marad (a loot ne legyen túl erős).
 A ládák csomagokból (`pick`) húznak, így egy új tárgy magától bekerül; a különleges tárgy (`exclusive`) csak név
 szerint. Spec: `docs/features/item_system.md`.
+
+## D18. A „?” gombok elrejthetők; az „új játék” csak debug módban (2026-11)
+Sok „?” gomb zsúfolttá tette a felületet: a menüben elrejthetők („Fragezeichen ausblenden”, jelző: `hideHelp`, a
+mentésben marad). Elrejtve a fordítás magára a német szövegre koppintva jön (pontozott aláhúzás jelzi); a gombok
+feliratára nem (azok a gomb műveletét indítják). Az „új játék” (minden haladás törlése) csak `?debug=1`-gyel
+látszik a menüben, hogy a játékos véletlenül se törölje a haladását. A táskában a tárgy részletei felugró kártyán
+jelennek meg (nem a lista alján).

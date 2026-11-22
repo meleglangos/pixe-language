@@ -1,5 +1,6 @@
 // DOM-alapú felület a játék fölött. Minden szöveg a fordítási fájlból (data/translations.json) jön kulccsal,
-// és kap egy "?" gombot, ami a magyar fordítást mutatja.
+// és kap egy "?" gombot, ami a magyar fordítást mutatja. A "?" gombok a menüben elrejthetők (jelző: hideHelp);
+// ilyenkor magára a német szövegre koppintva jön a fordítás.
 (function () {
   const ui = Game.ui = { root: null, modalEl: null };
   let bubble = null, bubbleFor = null, toastEl = null, toastTimer = 0;
@@ -38,11 +39,12 @@
   };
 
   // ---------- fordítás-buborék ----------
-  function showBubble(anchor) {
+  // anchor: a "?" gomb (kulcs, változók); at: ami mellé a buborék kerül (alapból maga a gomb)
+  function showBubble(anchor, at) {
     bubble.textContent = Game.i18n.hu(anchor.dataset.key, anchor.dataset.vars ? JSON.parse(anchor.dataset.vars) : undefined);
     bubble.hidden = false;
     bubbleFor = anchor;
-    const a = anchor.getBoundingClientRect(), b = bubble.getBoundingClientRect();
+    const a = (at || anchor).getBoundingClientRect(), b = bubble.getBoundingClientRect();
     const vw = window.innerWidth, m = 8;
     const left = Math.max(m, Math.min(vw - b.width - m, a.left + a.width / 2 - b.width / 2));
     let top = a.top - b.height - 8;
@@ -115,9 +117,17 @@
 
     document.addEventListener('click', e => {
       const h = e.target.closest && e.target.closest('.help');
-      if (h) { e.stopPropagation(); if (bubbleFor === h && h.dataset.pinned) { delete h.dataset.pinned; hideBubble(); } else { showBubble(h); h.dataset.pinned = '1'; } }
-      else hideBubble();
+      if (h) { e.stopPropagation(); if (bubbleFor === h && h.dataset.pinned) { delete h.dataset.pinned; hideBubble(); } else { showBubble(h); h.dataset.pinned = '1'; } return; }
+      // elrejtett "?" gomboknál: magára a német szövegre koppintva jön a fordítás
+      const t = document.body.classList.contains('no-help') && e.target.closest && e.target.closest('.tx');
+      const th = t && t.querySelector(':scope > .help');
+      if (th) { if (bubbleFor === th) hideBubble(); else showBubble(th, t); return; }
+      hideBubble();
     }, true);
+    // a "?" gombok ki-be kapcsolása (menü): a jelző a mentésben van (Game.state flags: hideHelp)
+    const applyHelp = () => document.body.classList.toggle('no-help', !!(Game.state && Game.state.flag('hideHelp')));
+    ['state:flags', 'state:replaced'].forEach(ev => Game.events.on(ev, applyHelp));
+    applyHelp();
     // egérrel elég fölé vinni
     document.addEventListener('mouseover', e => {
       const h = e.target.closest && e.target.closest('.help');

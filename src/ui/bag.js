@@ -1,7 +1,7 @@
 // A „Tasche” ablak: a táska tartalma (Game.state.inventory). Spec: docs/features/inventory.md.
 //   fent: szűrő (Alle / kategóriák, darabszámmal) és rendezés (Seltenheit, Kategorie, Name, Wert, Anzahl)
 //   középen: rács — ikon a ritkaság színű kerettel, jobb alul a darabszám
-//   alul: a kiválasztott tárgy részletei (név, kategória · ritkaság, passzívok, érték, darabszám) és a műveletei:
+//   koppintásra felugró kártya: a kiválasztott tárgy részletei (név, kategória · ritkaság, passzívok, érték, darabszám) és a műveletei:
 //         italnál „Trinken” (később: felvenni, eladni)
 //   Game.bag.open()
 (function () {
@@ -61,8 +61,17 @@
     return out;
   }
 
+  // a kiválasztott tárgy kártyája: felugrik a táska fölé (nem a lista alján), a háttérre vagy a gombra koppintva bezárul
+  function popup(e) {
+    const close = () => { view.selected = null; render(); };
+    const card = details(e);
+    card.append(ui.el('div', 'bag-actions bag-close', [ui.btn('common.close', close)]));
+    const back = ui.el('div', 'bag-pop', [card]);
+    back.addEventListener('click', ev => { if (ev.target === back) close(); });
+    return back;
+  }
+
   function details(e) {
-    if (!e) return ui.el('p', 'small bag-hint', [ui.tx('bag.hint')]);
     const r = Game.items.rarity(e.it.rarity);
     const box = ui.el('div', 'bag-detail', [
       ui.el('div', 'bag-detail-head', [Game.lootUI.icon(e.it.icon, 3), ui.el('div', 'bag-detail-text', [
@@ -100,7 +109,8 @@
       ]),
     ]);
     const sel = all.find(e => e.it.id === view.selected);
-    body.replaceChildren(controls, ui.el('div', 'bag-grid', list.map(slot)), details(sel));
+    body.replaceChildren(controls, ui.el('div', 'bag-grid', list.map(slot)), ui.el('p', 'small bag-hint', [ui.tx('bag.hint')]));
+    if (sel) body.append(popup(sel));
   }
 
   Game.bag = {

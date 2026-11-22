@@ -53,6 +53,9 @@ html, body {
   cursor: pointer; flex: none;
 }
 .help::after { content: ''; position: absolute; inset: -9px; } /* nagyobb érintési terület */
+/* elrejtett "?" gombok (menü): a fordítás a szövegre koppintva jön */
+.no-help .help { display: none; }
+.no-help .tx > .de { text-decoration: underline dotted rgba(91, 143, 208, .7); text-underline-offset: 3px; cursor: help; }
 .help:hover, .help[data-pinned] { background: #7aa9e4; }
 
 .bubble {
@@ -115,6 +118,12 @@ html, body {
 .bag-meta { font-size: 14px; color: var(--ink-soft); }
 .bag-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
 .bag-hint, .bag-empty { text-align: center; margin-top: 12px; }
+.bag-pop {
+  position: fixed; inset: 0; z-index: 60; background: rgba(20, 30, 45, .45); display: flex; align-items: flex-end; justify-content: center;
+  padding: 12px max(12px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+}
+.bag-pop .bag-detail { width: min(420px, 100%); margin: 0; background: var(--parchment); border: 3px solid var(--border); border-left: 8px solid var(--rarity, var(--border)); box-shadow: 0 6px 0 rgba(0,0,0,.25); }
+.bag-close { justify-content: flex-end; }
 
 
 /* dungeon: név + kijárat */
