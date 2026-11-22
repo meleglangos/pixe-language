@@ -7,12 +7,13 @@
 //   - egy húzás esélyei a választott csillagnál (Game.loot.chances)
 //   - "Öffnen": a valódi láda-ablak a választott beállítással
 //   - "1000× szimulálás": csillag-eloszlás, átlagos tételszám, tárgyanként hány ládában volt és átlag mennyi
+//   - „A zsákmány a táskába kerül” (alapból ki), „Táska ürítése”: teszteléshez
 //   - "Tárgyak": tárgy-katalógus kategóriánként (ikon, név, ritkaság, ár, passzívok, melyik ládából eshet)
 (function () {
   const ui = Game.ui;
   const hu = (key, vars) => Game.i18n.hu(key, vars);
   const pct = x => (x * 100).toFixed(x < 0.01 ? 2 : 1) + '%';
-  const state = { table: null, stars: 0, scene: '' }; // stars 0 / scene '' = Zufall
+  const state = { table: null, stars: 0, scene: '', store: false }; // stars 0 / scene '' = Zufall; store: a zsákmány a táskába kerül-e
 
   const name = e => (e.gold !== undefined ? hu('loot.gold') : Game.i18n.de(Game.data.items[e.item].name) + ' – ' + hu(Game.data.items[e.item].name));
   const rarityOf = e => (e.gold !== undefined ? 'gold' : Game.data.items[e.item].rarity);
@@ -101,16 +102,21 @@
         table: state.table,
         stars: state.stars || undefined,
         scene: state.scene || undefined,
-        onDone: () => { if (scene && scene.scene.isActive()) Game.chestLab.panel(); },
+        onDone: loot => { if (state.store) Game.loot.collect(loot); if (scene && scene.scene.isActive()) Game.chestLab.panel(); },
       });
     }, 'primary');
     const simBtn = huBtn('debug.simulate', runSim);
+    const storeBox = el('input'); storeBox.type = 'checkbox'; storeBox.checked = state.store;
+    storeBox.addEventListener('change', () => { state.store = storeBox.checked; });
+    // a táska ürítése (teszteléshez): minden tárgy ki a Game.state metódusán át
+    const clearBag = () => { Game.state.inventory.forEach(e => Game.state.removeItem(e.id, e.qty)); Game.ui.toast('debug.bagCleared'); };
 
     panelBody.replaceChildren(
       ui.el('label', 'lab-row', [el('span', '', hu('debug.table')), sel]),
       ui.el('div', 'lab-row', [el('span', '', hu('debug.stars')), starBtns]),
       ui.el('div', 'lab-row', [el('span', '', hu('debug.scene')), sceneBtns]),
-      ui.el('div', 'lab-actions', [openBtn, simBtn, huBtn('debug.items', () => catalog())]),
+      ui.el('label', 'lab-check', [storeBox, el('span', '', hu('debug.storeLoot'))]),
+      ui.el('div', 'lab-actions', [openBtn, simBtn, huBtn('debug.items', () => catalog()), huBtn('debug.clearBag', clearBag)]),
       result,
       chances,
     );

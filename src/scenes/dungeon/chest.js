@@ -1,7 +1,7 @@
 // A dungeon ládája: (ha a config így kéri) zárva, amíg él szörny. "Öffnen"-re a láda-ablak nyílik meg
 // (src/ui/chestWindow.js: csillagok, kinyílás, kieső loot, lista); utána a pályán is kinyílik és üres marad.
-// A zsákmány a loot táblából jön (Game.loot), és most még nem tárolódik
-// (spec: docs/features/chest_opening.md, docs/features/chest_stars.md).
+// A zsákmány a loot táblából jön (Game.loot), és a „Super!” után eltevődik (Game.loot.collect)
+// (spec: docs/features/chest_opening.md, docs/features/chest_stars.md, docs/features/inventory.md).
 //
 // A láda kinézete adatból jön: data/chest_styles.json (a dungeon "chestStyle" mezője, alapból config.loot.chestStyle).
 //   képkockás: { closed: kivágás-név, open: kivágás-név }              (src/config/assets.js: frames)
@@ -55,7 +55,7 @@
       Game.chestWindow.open({
         style: ch.style,
         table: this.def.lootTable,
-        onDone: () => this.chestOpenInWorld(),
+        onDone: loot => { Game.loot.collect(loot); this.chestOpenInWorld(); }, // a zsákmány a táskába, az arany a pénztárcába
       });
     },
 

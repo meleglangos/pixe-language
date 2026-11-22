@@ -9,6 +9,7 @@ Spec: `docs/features/chest_opening.md`, `docs/features/item_system.md`. Adat: `d
 | `roll(tableId, { stars, random })` | `[{ gold }, { item, qty }, …]`: az `always` tételek + húzások a súlyozott `entries`-ből (visszatevéssel); csillaggal a húzásszám, az arany-szorzó és a ritkaság-szorzók a `loot.stars` szerint, csillag nélkül a tábla `rolls`-a; az arany egy tételbe összevonva elöl, az azonos tárgyak összevonva |
 | `rollStars(tableId, random)` | 1–5 csillag a `loot.stars.weights` szerint |
 | `chances(tableId, stars)` | egy húzás esélyei `[{ item \| gold, p }]`, csökkenő sorrendben (hangoláshoz) |
+| `collect(loot)` | a zsákmány eltevése: arany → `Game.state.addGold`, tárgyak → `Game.state.addItem`; visszatér: `{ gold, items }` |
 | `range(v, random)` | `[min, max]` → egész a határokkal együtt; szám → önmaga |
 
 Csomag tétel a táblában: `{"pick": {"kind", "type", "rarity"}, "weight"}` — a szűrőhöz illő tárgyakra bomlik (a súly
@@ -30,7 +31,7 @@ tartalmazza (egy tábla több helyet is kérhet); jelölés nélkül általános
 | `rarity(id)`, `rarityIndex(id)` | a ritkaság beállítása; sorszáma a létrán (common = 0) |
 
 A láda-ablak: `src/ui/chestWindow.js` (`Game.chestWindow.open({ style, table, onDone })`).
-A sorsolás most nem ír állapotot (a ládából kapott loot csak látvány; a tárolás az inventory feature-rel jön).
+A sorsolás nem ír állapotot; a zsákmányt a `collect` teszi el (a dungeon ládája a „Super!” után; spec: `docs/features/inventory.md`).
 
 ## `Game.itemIcons`
 | Függvény | Mit csinál |

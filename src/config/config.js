@@ -12,7 +12,7 @@ Game.data.config = {
     goldIcon: 'it:1163',
     coinIcon: 'it:1159',      // egyetlen aranyérme: ez záporozik a láda robbanásakor
     chestStyle: 'royal',  // a láda alap kinézete (data/chest_styles.json); a dungeon "chestStyle"-ja felülírja
-    lockChestUntilCleared: false, // true: a láda zárva, amíg él szörny a dungeonben (most kikapcsolva)
+    lockChestUntilCleared: true, // a láda zárva, amíg él szörny a dungeonben: minden láda kérdésekbe kerül (inventory spec)
     // Láda-csillagok (1–5): a láda minősége. Egy loot tábla "stars" mezője bármelyik részt felülírhatja.
     stars: {
       weights: [30, 30, 20, 13, 7],                     // 1…5 csillag esélye

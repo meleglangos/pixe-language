@@ -111,5 +111,16 @@
     return (gold > 0 ? [{ gold }] : []).concat(items);
   }
 
-  Game.loot = { roll, rollStars, chances, range, group };
+  // A zsákmány eltevése: az arany a pénztárcába, a tárgyak a táskába (Game.state metódusain át, a state:gold és
+  // state:inventory eseménnyel; a mentés a szokásos automatikus mentéssel). Visszatér: { gold, items } (eltett darabszám).
+  function collect(loot) {
+    let gold = 0, items = 0;
+    (loot || []).forEach(e => {
+      if (e.gold !== undefined) { if (e.gold > 0) { Game.state.addGold(e.gold); gold += e.gold; } return; }
+      if (Game.state.addItem(e.item, e.qty || 1)) items += e.qty || 1;
+    });
+    return { gold, items };
+  }
+
+  Game.loot = { roll, rollStars, chances, range, group, collect };
 })();

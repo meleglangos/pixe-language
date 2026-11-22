@@ -45,6 +45,7 @@ kéri, vagy ha új feature-t kell választani.
       `chest_royal.py`). Mérethez: 16 px-es rács, álló telefon (kb. 180×300 px, 2×), ne legyen zsúfolt — láda-ablak
 - [x] ~~Tárgyrendszer: tárgycsoportok, ritkaság csoportonként, érték / erő; a loot táblák ehhez igazodnak — adat + loot~~ → kész: `docs/features/item_system.md`
 - [ ] Többféle láda (a felhasználónak sok ötlete van) — `chest_styles.json` + loot táblák
+- [ ] Korlátos táska, nagyobb táska jutalomként (egy dungeon vagy küldetés jutalma) — inventory + mentés
 
 ## Haladás és motiváció
 - [ ] Achievementek és címek, hozzá rangrendszer — achievement rendszer + mentés

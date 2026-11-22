@@ -351,6 +351,8 @@ html, body {
 .lab-stars { display: flex; flex-wrap: wrap; gap: 6px; }
 .lab-star { min-width: 48px; padding: 6px 8px; font-size: 15px; }
 .lab-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.lab-check { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 700; }
+.lab-check input { width: 24px; height: 24px; }
 .lab-block h3 { margin: 6px 0 4px; font-size: 16px; }
 .lab-table { width: 100%; border-collapse: collapse; font-size: 14px; }
 .lab-table th, .lab-table td { padding: 4px 4px; border-bottom: 1px solid var(--parchment-dark); text-align: left; vertical-align: top; white-space: nowrap; }

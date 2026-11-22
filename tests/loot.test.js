@@ -245,3 +245,21 @@ test('helyek: a hely-jelölt tárgy csak abból a táblából jön, amelyik kér
   const issues = Game.contentValidator.validate(raw).join('\n');
   for (const re of [/bad_place\.places: ismeretlen hely: mars/, /loot_badplace\.places: helyek tömbje/, /loot_badplace\.entries\[0\]\.pick\.place: ismeretlen hely: venus/]) assert.match(issues, re);
 });
+
+test('collect: a zsákmány a táskába, az arany a pénztárcába kerül (Game.state metódusain át, eseménnyel)', () => {
+  const { Game } = createGame();
+  Game.saveManager.load();
+  const seen = [];
+  Game.events.on('state:inventory', () => seen.push('inv'));
+  Game.events.on('state:gold', () => seen.push('gold'));
+  const gold0 = Game.state.gold;
+  const r = plain(Game.loot.collect([{ gold: 12 }, { item: 'potion_small', qty: 2 }, { item: 'sword_iron_01', qty: 1 }, { item: 'nincs_ilyen', qty: 1 }]));
+  assert.deepEqual(r, { gold: 12, items: 3 });
+  assert.equal(Game.state.gold, gold0 + 12);
+  assert.equal(Game.state.itemCount('potion_small'), 2);
+  assert.equal(Game.state.itemCount('sword_iron_01'), 1);
+  Game.loot.collect([{ item: 'potion_small', qty: 1 }]);
+  assert.equal(Game.state.itemCount('potion_small'), 3);
+  assert.ok(seen.includes('inv') && seen.includes('gold'));
+  assert.deepEqual(plain(Game.loot.collect([])), { gold: 0, items: 0 });
+});
