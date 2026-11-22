@@ -28,6 +28,7 @@ tartalmazza (egy tábla több helyet is kérhet); jelölés nélkül általános
 | `compare(a, b)` | rendező függvény (ritkább elöl) |
 | `match({ kind, type, rarity, place }, places)` | a szűrőhöz illő, nem különleges tárgyak (értékek: szöveg vagy tömb); a hely-jelölt tárgyak csak a `places` (a tábla helyei) vagy a `place` szűrő helyeivel |
 | `byKind()` | `{ kategória: [tárgyak] }`, a config sorrendjében |
+| `use(id)` | tárgy használata a táskából (most: ital → élet; `Game.state` metódusain át): `{ ok, heal }` / `{ ok: false, reason: 'none' \| 'cannot' \| 'full' }` |
 | `rarity(id)`, `rarityIndex(id)` | a ritkaság beállítása; sorszáma a létrán (common = 0) |
 
 A láda-ablak: `src/ui/chestWindow.js` (`Game.chestWindow.open({ style, table, onDone })`).

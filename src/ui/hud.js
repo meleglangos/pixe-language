@@ -1,4 +1,4 @@
-// Állandó kijelzők: élet, arany, menü gomb.
+// Állandó kijelzők: élet, arany; jobb felül táska és menü (☰) ikon-gomb.
 (function () {
   const ui = Game.ui;
   let hpFill, hpNum, goldNum;
@@ -12,7 +12,19 @@
         ui.el('div', 'hud-row', [ui.el('span', 'icon heart'), ui.tx('hud.hp'), ui.el('div', 'bar', [hpFill]), hpNum]),
         ui.el('div', 'hud-row', [ui.el('span', 'icon coin'), ui.tx('hud.gold'), goldNum]),
       ]);
-      const menu = ui.el('div', 'hud-menu', [ui.btn('hud.menu', () => Game.menu.open())]);
+      // jobb felül két ikon-gomb, felirat nélkül (helytakarékos): táska és menü (☰)
+      const iconBtn = (cls, key, kids, fn) => {
+        const b = ui.el('button', 'hud-icon ' + cls, kids);
+        b.type = 'button';
+        b.setAttribute('aria-label', Game.i18n.de(key));
+        b.title = Game.i18n.de(key);
+        b.addEventListener('click', fn);
+        return b;
+      };
+      const menu = ui.el('div', 'hud-menu', [
+        iconBtn('bag', 'hud.bag', [Game.lootUI.icon(Game.data.config.items.bagIcon, 2)], () => Game.bag.open()),
+        iconBtn('burger', 'hud.menu', [ui.el('span'), ui.el('span'), ui.el('span')], () => Game.menu.open()),
+      ]);
       ui.root.append(hud, menu);
       // dungeonben: a hely neve + kijárat gomb
       let bar = null;

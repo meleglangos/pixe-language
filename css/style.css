@@ -88,7 +88,34 @@ html, body {
 .icon { width: 14px; height: 14px; flex: none; display: inline-block; }
 .icon.heart { background: #e2495f; clip-path: polygon(50% 100%, 0 45%, 0 15%, 15% 0, 35% 0, 50% 18%, 65% 0, 85% 0, 100% 15%, 100% 45%); }
 .icon.coin { background: #f2c040; border: 2px solid #b5851f; border-radius: 50%; }
-.hud-menu { position: absolute; top: calc(8px + env(safe-area-inset-top)); right: calc(8px + env(safe-area-inset-right)); }
+.hud-menu { position: absolute; top: calc(8px + env(safe-area-inset-top)); right: calc(8px + env(safe-area-inset-right)); display: flex; gap: 6px; }
+.hud-icon {
+  width: 48px; height: 48px; display: grid; place-items: center; padding: 0; cursor: pointer;
+  background: var(--parchment); border: 3px solid var(--border); border-radius: 8px; box-shadow: 0 3px 0 rgba(0,0,0,.25);
+  -webkit-tap-highlight-color: transparent;
+}
+.hud-icon:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,.25); }
+.hud-icon.burger { gap: 4px; align-content: center; }
+.hud-icon.burger span { display: block; width: 22px; height: 4px; background: var(--ink); border-radius: 1px; }
+
+/* „Tasche” ablak (src/ui/bag.js) */
+.bag-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.bag-control { display: flex; align-items: center; gap: 4px; flex: 1 1 140px; min-width: 0; }
+.bag-select { flex: 1; min-width: 0; min-height: 44px; font: 600 16px var(--font); color: var(--ink); padding: 6px 8px; border: 2px solid var(--border); border-radius: 6px; background: #fffaf0; }
+.bag-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); gap: 6px; }
+.bag-slot {
+  position: relative; aspect-ratio: 1; display: grid; place-items: center; padding: 0; cursor: pointer;
+  background: #fffaf0; border: 3px solid var(--rarity, var(--parchment-dark)); border-radius: 6px;
+}
+.bag-slot.on { box-shadow: 0 0 0 3px var(--ink); }
+.bag-qty { position: absolute; right: 3px; bottom: 1px; font-weight: 700; font-size: 14px; text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff; }
+.bag-detail { margin-top: 12px; padding: 10px; background: #fffaf0; border: 2px solid var(--parchment-dark); border-left: 6px solid var(--rarity, var(--parchment-dark)); border-radius: 6px; }
+.bag-detail-head { display: flex; gap: 10px; align-items: flex-start; }
+.bag-detail-text { display: grid; gap: 2px; min-width: 0; }
+.bag-meta { font-size: 14px; color: var(--ink-soft); }
+.bag-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.bag-hint, .bag-empty { text-align: center; margin-top: 12px; }
+
 
 /* dungeon: név + kijárat */
 .place-bar {

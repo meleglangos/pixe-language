@@ -67,5 +67,18 @@
     return out;
   }
 
-  Game.items = { get, list: () => all().slice().sort(compare), value, stackable, stats, compare, match, byKind, rarity, rarityIndex };
+  // Egy tárgy használata a táskából (most: ital ivása). Visszatér: { ok, heal } vagy { ok: false, reason }
+  //   reason: 'none' (nincs a táskában), 'cannot' (nem használható), 'full' (teli élet)
+  function use(id) {
+    const it = get(id);
+    if (!it || !Game.state.hasItem(id)) return { ok: false, reason: 'none' };
+    const heal = it.kind === 'potion' && it.stats && it.stats.heal;
+    if (!heal) return { ok: false, reason: 'cannot' };
+    if (Game.state.hp >= Game.state.maxHp) return { ok: false, reason: 'full' };
+    Game.state.removeItem(id, 1);
+    Game.state.heal(heal);
+    return { ok: true, heal };
+  }
+
+  Game.items = { use, get, list: () => all().slice().sort(compare), value, stackable, stats, compare, match, byKind, rarity, rarityIndex };
 })();

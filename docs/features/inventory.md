@@ -1,6 +1,6 @@
 # Inventory: a loot tárolása és a „Tasche” ablak
 
-**Állapot:** folyamatban (jóváhagyva 2026-11-22)
+**Állapot:** kész (jóváhagyva 2026-11-22)
 **Ötlet:** README „Állapot” → 3. szakasz: inventory, gear a karakteren, shop, gold, HP-ital (az első darab)
 
 ## 1. Cél
@@ -61,14 +61,14 @@ Döntések (2026-11-22):
 - [x] **„Új” jelölés:** most nem.
 
 ## 10. Kész, ha
-- [ ] a láda zsákmánya a táskába, az arany a pénztárcába kerül, és újratöltés után is megvan
-- [ ] a „Tasche” ablak kategóriánként, ritkaság szerint mutatja a tárgyakat, részletekkel
-- [ ] a gyógyital a táskából megihatható, az élet nő, a darabszám csökken
-- [ ] a HUD-on ☰ és táska ikon (felirat nélkül), a láda csak a szörnyek legyőzése után nyílik
-- [ ] a láda-laborban a tárolás ki-be kapcsolható, a táska üríthető
-- [ ] tesztek: `collect`, ital, régi mentés betöltése; `node tools/build-data.js` és `npm test` zöld
-- [ ] telefonméretben (érintéssel) kipróbálva
-- [ ] README „Állapot”, `docs/GAME_DESIGN.md` (a loot már tárolódik) frissítve
+- [x] a láda zsákmánya a táskába, az arany a pénztárcába kerül, és újratöltés után is megvan
+- [x] a „Tasche” ablak kategóriánként, ritkaság szerint mutatja a tárgyakat, részletekkel
+- [x] a gyógyital a táskából megihatható, az élet nő, a darabszám csökken
+- [x] a HUD-on ☰ és táska ikon (felirat nélkül), a láda csak a szörnyek legyőzése után nyílik
+- [x] a láda-laborban a tárolás ki-be kapcsolható, a táska üríthető
+- [x] tesztek: `collect`, ital, régi mentés betöltése; `node tools/build-data.js` és `npm test` zöld
+- [x] telefonméretben (érintéssel) kipróbálva
+- [x] README „Állapot”, `docs/GAME_DESIGN.md` (a loot már tárolódik) frissítve
 
 ## 11. Lépések
 1. `Game.loot.collect`, a láda-ablak és a dungeon láda eltárolja a zsákmányt; láda-labor kapcsoló; tesztek.

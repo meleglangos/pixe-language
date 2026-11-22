@@ -74,6 +74,7 @@ Game.data.config = {
 
   // Tárgyak (data/items.json; spec: docs/features/item_system.md). A nevek: kind.<id>, stat.<id>.
   items: {
+    bagIcon: 'it:674', // a HUD táska-gombjának ikonja (hátizsák)
     // kategóriák: a megengedett típusok, a felszerelés-hely (később), és hogy összeadódik-e a mennyiség
     kinds: {
       weapon:   { types: ['sword', 'dagger', 'axe', 'mace', 'spear', 'bow', 'staff'], slot: 'weapon', stack: false },

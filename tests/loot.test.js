@@ -263,3 +263,19 @@ test('collect: a zsákmány a táskába, az arany a pénztárcába kerül (Game.
   assert.ok(seen.includes('inv') && seen.includes('gold'));
   assert.deepEqual(plain(Game.loot.collect([])), { gold: 0, items: 0 });
 });
+
+test('tárgy használata: az ital életet ad és fogy; teli életnél, nem italnál, hiányzó tárgynál nem', () => {
+  const { Game } = createGame();
+  Game.saveManager.load();
+  Game.loot.collect([{ item: 'potion_small', qty: 2 }, { item: 'sword_iron_01', qty: 1 }]);
+  assert.deepEqual(plain(Game.items.use('potion_small')), { ok: false, reason: 'full' });
+  Game.state.damage(8);
+  const hp = Game.state.hp;
+  assert.deepEqual(plain(Game.items.use('potion_small')), { ok: true, heal: 5 });
+  assert.equal(Game.state.hp, hp + 5);
+  assert.equal(Game.state.itemCount('potion_small'), 1);
+  assert.deepEqual(plain(Game.items.use('sword_iron_01')), { ok: false, reason: 'cannot' });
+  assert.deepEqual(plain(Game.items.use('elixir_life')), { ok: false, reason: 'none' });
+  Game.items.use('potion_small');
+  assert.equal(Game.state.hasItem('potion_small'), false);
+});
